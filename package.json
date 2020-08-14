@@ -1,0 +1,19 @@
+{
+  "name": "candidate-forum-timer",
+  "version": "1.0.0",
+  "description": "A Simple Timer for our Candidate Forum.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrJKL/candidate-forum-timer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DrJKL/candidate-forum-timer/issues"
+  },
+  "homepage": "https://github.com/DrJKL/candidate-forum-timer#readme"
+}
