@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel serve index.html",
-    "build": "cross-env NODE_ENV=production parcel build index.html --public-url .",
+    "build": "cross-env NODE_ENV=production parcel build index.html --public-url /candidate-forum-timer/",
     "deploy": "gh-pages -d dist"
   },
   "repository": {
@@ -23,6 +23,7 @@
     "src/"
   ],
   "dependencies": {
+    "babel-types": "^6.26.0",
     "cross-env": "^7.0.2",
     "gh-pages": "^3.1.0",
     "moment": "^2.27.0",
