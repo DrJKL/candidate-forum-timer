@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Candidate Timer</title>
+    <meta name="description" content="A timer for the MVMHA candidate forum">
+    <meta name="author" content="Alex">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="/styles.237c716e.css">
+    <link rel="stylesheet" href="/materialize.02861d82.css">
+    <link rel="stylesheet" href="/mystyles.185bb399.css">
+
+    <script src="/materialize.327eec83.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+
+  <script src="/styles.237c716e.js"></script><script src="/materialize.02861d82.js"></script><script src="/mystyles.185bb399.js"></script></head>
+
+  <body>
+    <header class="nav-wrapper">
+      <h1 class="brand-logo center">
+        <div>Mountain View Mobile Home Alliance</div>
+        <div>City Council Candidate Forum</div>
+      </h1>
+    </header>
+
+    <main class="container">
+      <div class="row">
+        <div v-for="candidate of allCandidates" class="col s4">
+          <div class="candidate-card card blue-grey z-depth-2">
+            <div class="card-content white-text">
+              <div class="card-title">{{candidate.name}}</div>
+              <div>
+                {{candidate.getTimeLeft()}} {{candidate.isTimeUp() ? 'over' :
+                'remaining'}}
+              </div>
+              <div class="spacer"></div>
+              <div>
+              <div class="progress" v-bind:class="{'time-up': candidate.isTimeUp()}">
+                <div class="determinate" v-bind:style="{width: candidate.getProgressPercent()}"></div>
+              </div>
+            </div>
+            </div>
+            <div class="card-action">
+              <a href="#" class="btn startstop" v-on:click.prevent="candidate.toggleTimer();">{{candidate.isRunning() ? 'Stop': 'Start'}} Timer</a>
+              <div class="spacer"></div>
+
+              <a href="#" class="btn" v-on:click.prevent="candidate.addTime()">
+                <i class="material-icons">add</i>
+              </a>
+              <a href="#" class="btn" v-on:click.prevent="candidate.removeTime()">
+                <i class="material-icons">remove</i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="text/javascript" src="/materialize.min.6aef4300.js"></script>
+    <script src="/candidates.42656750.js"></script>
+    <script src="/vue-app.ddfc8642.js"></script>
+  </body>
+</html>
