@@ -11,4 +11,4 @@ var e,t=arguments[3];!function(t,n){"object"==typeof exports&&"undefined"!=typeo
 },{}],"LYWM":[function(require,module,exports) {
 "use strict";var e=require("./candidates"),a=d(require("vue/dist/vue.js"));function d(e){return e&&e.__esModule?e:{default:e}}var t=new a.default({el:"main",data:{allCandidates:e.allCandidates}});
 },{"./candidates":"lJwZ","vue/dist/vue.js":"BZji"}]},{},["LYWM"], null)
-//# sourceMappingURL=candidate-forum-timer/vue-app.7fead716.js.map
+//# sourceMappingURL=/candidate-forum-timer/vue-app.7fead716.js.map
