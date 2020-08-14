@@ -26,6 +26,7 @@
     "@types/vue": "^2.0.0",
     "app.vue": "^0.1.10",
     "babel-types": "^6.26.0",
+    "buefy": "^0.8.20",
     "cross-env": "^7.0.2",
     "moment": "^2.27.0",
     "typescript": "^3.9.7",
