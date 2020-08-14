@@ -2,3 +2,5 @@ node_modules
 dist/*
 .cache
 .yarn
+.pnp.js
+yarn.lock
