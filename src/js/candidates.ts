@@ -70,5 +70,5 @@ export const allCandidates = [
 ].map(candidateName => new Candidate(candidateName));
 
 export function totalTimeLeft() {
-    return allCandidates.map(candidate => candidate.timeLeft);
+    return allCandidates.map(candidate => candidate.timer.timeLeft);
 }
