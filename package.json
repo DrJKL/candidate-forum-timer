@@ -4,7 +4,10 @@
   "description": "A Simple Timer for our Candidate Forum.",
   "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel serve src/index.html",
+    "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url .",
+    "deploy": "gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -16,6 +19,9 @@
     "url": "https://github.com/DrJKL/candidate-forum-timer/issues"
   },
   "homepage": "https://github.com/DrJKL/candidate-forum-timer#readme",
+  "files": [
+    "src/"
+  ],
   "dependencies": {
     "cross-env": "^7.0.2",
     "gh-pages": "^3.1.0",
