@@ -2,13 +2,20 @@ import Config from './global_config';
 import moment from 'moment';
 
 export class Candidate {
-
-
-    public timeLeft: moment.Duration;
-    public countingDown: number|null;
+    public readonly timer: Timer;
 
     constructor(public readonly name: string) {
         this.name = name;
+        this.timer = new Timer();
+    }
+
+}
+
+export class Timer {
+    public timeLeft: moment.Duration;
+    public countingDown: number|null;
+
+    constructor() {
         this.timeLeft = Config.timeLimitTotal.clone();
         this.countingDown = null;
     }
@@ -36,9 +43,9 @@ export class Candidate {
 
     getTimeLeft() {
         const timeToUse = this.isTimeUp() ? moment.duration().subtract(this.timeLeft) : this.timeLeft;
-        return `${timeToUse.minutes().toString().padStart(2, 0)}:` +
-            `${timeToUse.seconds().toString().padStart(2, 0)}:` +
-            `${timeToUse.milliseconds().toString().padStart(3,0)}`;
+        return `${timeToUse.minutes().toString().padStart(2, '0')}:` +
+            `${timeToUse.seconds().toString().padStart(2, '0')}:` +
+            `${timeToUse.milliseconds().toString().padStart(3,'0')}`;
     }
 
     getProgressPercent() {
@@ -48,7 +55,6 @@ export class Candidate {
     isTimeUp() {
         return this.timeLeft.asMilliseconds() <= 0;
     }
-
 }
 
 export const allCandidates = [
