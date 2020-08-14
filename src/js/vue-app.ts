@@ -5,5 +5,5 @@ import App from "./app.vue";
 
 new Vue({
   el: "#app",
-  render: (h) => h(App),
+  render: (h: (arg0: any) => any) => h(App),
 });
