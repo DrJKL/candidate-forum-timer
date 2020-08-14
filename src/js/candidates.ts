@@ -1,16 +1,15 @@
+import Config from './global_config';
 import moment from 'moment';
 
 export class Candidate {
-    static timeLimitTotal = moment.duration(10, 's');
-    static timeGranularity = 50;
-    static timeDelta = moment.duration(1, 's');
+
 
     public timeLeft: moment.Duration;
     public countingDown: number|null;
 
     constructor(public readonly name: string) {
         this.name = name;
-        this.timeLeft = Candidate.timeLimitTotal.clone();
+        this.timeLeft = Config.timeLimitTotal.clone();
         this.countingDown = null;
     }
 
@@ -22,16 +21,16 @@ export class Candidate {
             return;
         }
         this.countingDown = setInterval(() => {
-            this.timeLeft.subtract(Candidate.timeGranularity, 'ms');
-        }, Candidate.timeGranularity);
+            this.timeLeft.subtract(Config.timeGranularity, 'ms');
+        }, Config.timeGranularity);
     }
 
     addTime() {
-        this.timeLeft.add(Candidate.timeDelta);
+        this.timeLeft.add(Config.timeDelta);
     }
 
     removeTime() {
-        this.timeLeft.subtract(Candidate.timeDelta);
+        this.timeLeft.subtract(Config.timeDelta);
     }
 
     isRunning() { return !!this.countingDown; }
