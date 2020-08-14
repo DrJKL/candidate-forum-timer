@@ -1,8 +1,14 @@
-class Candidate {
+import moment from 'moment';
+
+export class Candidate {
     static timeLimitTotal = moment.duration(10, 's');
     static timeGranularity = 50;
     static timeDelta = moment.duration(1, 's');
-    constructor(name) {
+
+    public timeLeft: moment.Duration;
+    public countingDown: number|null;
+
+    constructor(public readonly name: string) {
         this.name = name;
         this.timeLeft = Candidate.timeLimitTotal.clone();
         this.countingDown = null;
@@ -47,7 +53,7 @@ class Candidate {
 
 }
 
-const allCandidates = [
+export const allCandidates = [
     'Margaret Abe-Koga',
     'Jose Gutierrez',
     'John Lashlee',
@@ -59,6 +65,6 @@ const allCandidates = [
     'Lenny Siegel',
 ].map(candidateName => new Candidate(candidateName));
 
-function totalTimeLeft() {
+export function totalTimeLeft() {
     return allCandidates.map(candidate => candidate.timeLeft);
 }
