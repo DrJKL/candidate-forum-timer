@@ -14,7 +14,6 @@ export class Candidate {
     }
 
     toggleTimer() {
-        console.log("Toggling", this.name);
         if (this.countingDown) {
             clearInterval(this.countingDown);
             this.countingDown = null;
@@ -43,7 +42,7 @@ export class Candidate {
     }
 
     getProgressPercent() {
-        return `${100*(this.timeLeft.asMilliseconds() / Candidate.timeLimitTotal.asMilliseconds())}%`;
+        return `${100*(this.timeLeft.asMilliseconds() / Config.timeLimitTotal.asMilliseconds())}%`;
     }
 
     isTimeUp() {
