@@ -5821,7 +5821,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.totalTimeLeft = totalTimeLeft;
-exports.allCandidates = exports.Candidate = void 0;
+exports.allCandidates = exports.Timer = exports.Candidate = void 0;
 
 var _global_config = _interopRequireDefault(require("./global_config"));
 
@@ -5835,11 +5835,23 @@ function () {
   function Candidate(name) {
     this.name = name;
     this.name = name;
+    this.timer = new Timer();
+  }
+
+  return Candidate;
+}();
+
+exports.Candidate = Candidate;
+
+var Timer =
+/** @class */
+function () {
+  function Timer() {
     this.timeLeft = _global_config.default.timeLimitTotal.clone();
     this.countingDown = null;
   }
 
-  Candidate.prototype.toggleTimer = function () {
+  Timer.prototype.toggleTimer = function () {
     var _this = this;
 
     if (this.countingDown) {
@@ -5853,35 +5865,35 @@ function () {
     }, _global_config.default.timeGranularity);
   };
 
-  Candidate.prototype.addTime = function () {
+  Timer.prototype.addTime = function () {
     this.timeLeft.add(_global_config.default.timeDelta);
   };
 
-  Candidate.prototype.removeTime = function () {
+  Timer.prototype.removeTime = function () {
     this.timeLeft.subtract(_global_config.default.timeDelta);
   };
 
-  Candidate.prototype.isRunning = function () {
+  Timer.prototype.isRunning = function () {
     return !!this.countingDown;
   };
 
-  Candidate.prototype.getTimeLeft = function () {
+  Timer.prototype.getTimeLeft = function () {
     var timeToUse = this.isTimeUp() ? _moment.default.duration().subtract(this.timeLeft) : this.timeLeft;
-    return timeToUse.minutes().toString().padStart(2, 0) + ":" + (timeToUse.seconds().toString().padStart(2, 0) + ":") + ("" + timeToUse.milliseconds().toString().padStart(3, 0));
+    return timeToUse.minutes().toString().padStart(2, '0') + ":" + (timeToUse.seconds().toString().padStart(2, '0') + ":") + ("" + timeToUse.milliseconds().toString().padStart(3, '0'));
   };
 
-  Candidate.prototype.getProgressPercent = function () {
+  Timer.prototype.getProgressPercent = function () {
     return 100 * (this.timeLeft.asMilliseconds() / _global_config.default.timeLimitTotal.asMilliseconds()) + "%";
   };
 
-  Candidate.prototype.isTimeUp = function () {
+  Timer.prototype.isTimeUp = function () {
     return this.timeLeft.asMilliseconds() <= 0;
   };
 
-  return Candidate;
+  return Timer;
 }();
 
-exports.Candidate = Candidate;
+exports.Timer = Timer;
 var allCandidates = ['Margaret Abe-Koga', 'Jose Gutierrez', 'John Lashlee', 'Sally Lieber', 'Lisa Matichak', 'Alex Nunez', 'Paul Roales', 'Pat Showalter', 'Lenny Siegel'].map(function (candidateName) {
   return new Candidate(candidateName);
 });
@@ -5889,7 +5901,7 @@ exports.allCandidates = allCandidates;
 
 function totalTimeLeft() {
   return allCandidates.map(function (candidate) {
-    return candidate.timeLeft;
+    return candidate.timer.timeLeft;
   });
 }
 },{"./global_config":"src/js/global_config.ts","moment":"node_modules/moment/moment.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -5920,7 +5932,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "7014" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "10565" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
