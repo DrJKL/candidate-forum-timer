@@ -23,6 +23,7 @@
     "src/"
   ],
   "dependencies": {
+    "@types/vue": "^2.0.0",
     "app.vue": "^0.1.10",
     "babel-types": "^6.26.0",
     "cross-env": "^7.0.2",
@@ -31,7 +32,8 @@
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.5",
     "vue-loader": "^15.9.3",
-    "vue-property-decorator": "^9.0.0"
+    "vue-property-decorator": "^9.0.0",
+    "vuetype": "^0.3.2"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.2.0",
