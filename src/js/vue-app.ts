@@ -1,10 +1,9 @@
-import {allCandidates} from './candidates';
+import { allCandidates } from "./candidates";
 
-import Vue from 'vue/dist/vue.js';
+import Vue from "vue/dist/vue.js";
+import App from "./app.vue";
 
-var example1 = new Vue({
-    el: 'main',
-    data: {
-        allCandidates,
-    },
-})
+new Vue({
+  el: "#app",
+  render: (h) => h(App),
+});
