@@ -1,13 +1,15 @@
 import { allCandidates } from "./candidates";
 
-import Vue from "vue/dist/vue.js";
-import Buefy from 'buefy';
+import Vue from "vue";
 import App from "./app.vue";
+import Buefy from 'buefy';
 
 import 'buefy/dist/buefy.css';
 
-new Vue({
-  el: "#app",
-  render: (h: (arg0: any) => any) => h(App),
-});
 Vue.use(Buefy);
+
+Vue.config.productionTip = false;
+
+const vue1 = new Vue({
+  render: h => h(App),
+}).$mount('#app');

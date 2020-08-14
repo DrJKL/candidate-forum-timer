@@ -49,7 +49,7 @@ export class Timer {
     }
 
     getProgressPercent() {
-        return `${100*(this.timeLeft.asMilliseconds() / Config.timeLimitTotal.asMilliseconds())}%`;
+        return 100*(this.timeLeft.asMilliseconds() / Config.timeLimitTotal.asMilliseconds());
     }
 
     isTimeUp() {

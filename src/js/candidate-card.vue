@@ -8,9 +8,11 @@
       </div>
       <div class="spacer"></div>
       <div>
-        <div class="progress" v-bind:class="{'time-up': candidate.timer.isTimeUp()}">
-          <div class="determinate" v-bind:style="{width: candidate.timer.getProgressPercent()}"></div>
-        </div>
+        <b-progress 
+          v-bind:value="candidate.timer.getProgressPercent()"
+          size="is-large"
+          type="is-info"
+          ></b-progress>
       </div>
     </div>
     <div class="card-action">
