@@ -5789,7 +5789,32 @@ var global = arguments[3];
 
 })));
 
-},{}],"src/js/candidates.ts":[function(require,module,exports) {
+},{}],"src/js/global_config.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _moment = _interopRequireDefault(require("moment"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Config =
+/** @class */
+function () {
+  function Config() {}
+
+  Config.timeLimitTotal = _moment.default.duration(10, 's');
+  Config.timeGranularity = 50;
+  Config.timeDelta = _moment.default.duration(1, 's');
+  return Config;
+}();
+
+var _default = Config;
+exports.default = _default;
+},{"moment":"node_modules/moment/moment.js"}],"src/js/candidates.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5797,6 +5822,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.totalTimeLeft = totalTimeLeft;
 exports.allCandidates = exports.Candidate = void 0;
+
+var _global_config = _interopRequireDefault(require("./global_config"));
 
 var _moment = _interopRequireDefault(require("moment"));
 
@@ -5808,14 +5835,12 @@ function () {
   function Candidate(name) {
     this.name = name;
     this.name = name;
-    this.timeLeft = Candidate.timeLimitTotal.clone();
+    this.timeLeft = _global_config.default.timeLimitTotal.clone();
     this.countingDown = null;
   }
 
   Candidate.prototype.toggleTimer = function () {
     var _this = this;
-
-    console.log("Toggling", this.name);
 
     if (this.countingDown) {
       clearInterval(this.countingDown);
@@ -5824,16 +5849,16 @@ function () {
     }
 
     this.countingDown = setInterval(function () {
-      _this.timeLeft.subtract(Candidate.timeGranularity, 'ms');
-    }, Candidate.timeGranularity);
+      _this.timeLeft.subtract(_global_config.default.timeGranularity, 'ms');
+    }, _global_config.default.timeGranularity);
   };
 
   Candidate.prototype.addTime = function () {
-    this.timeLeft.add(Candidate.timeDelta);
+    this.timeLeft.add(_global_config.default.timeDelta);
   };
 
   Candidate.prototype.removeTime = function () {
-    this.timeLeft.subtract(Candidate.timeDelta);
+    this.timeLeft.subtract(_global_config.default.timeDelta);
   };
 
   Candidate.prototype.isRunning = function () {
@@ -5846,16 +5871,13 @@ function () {
   };
 
   Candidate.prototype.getProgressPercent = function () {
-    return 100 * (this.timeLeft.asMilliseconds() / Candidate.timeLimitTotal.asMilliseconds()) + "%";
+    return 100 * (this.timeLeft.asMilliseconds() / _global_config.default.timeLimitTotal.asMilliseconds()) + "%";
   };
 
   Candidate.prototype.isTimeUp = function () {
     return this.timeLeft.asMilliseconds() <= 0;
   };
 
-  Candidate.timeLimitTotal = _moment.default.duration(10, 's');
-  Candidate.timeGranularity = 50;
-  Candidate.timeDelta = _moment.default.duration(1, 's');
   return Candidate;
 }();
 
@@ -5870,7 +5892,7 @@ function totalTimeLeft() {
     return candidate.timeLeft;
   });
 }
-},{"moment":"node_modules/moment/moment.js"}],"node_modules/vue/dist/vue.js":[function(require,module,exports) {
+},{"./global_config":"src/js/global_config.ts","moment":"node_modules/moment/moment.js"}],"node_modules/vue/dist/vue.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
 /*!
@@ -17882,7 +17904,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "13457" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "7014" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
