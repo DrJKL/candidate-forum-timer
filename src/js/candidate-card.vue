@@ -7,8 +7,12 @@
         'remaining'}}
       </div>
       <div class="spacer"></div>
-      <div>
-        <b-progress :value="progressPercent" size="is-large" type="is-info"></b-progress>
+      <div v-bind:class="{'time-up': candidate.timer.isTimeUp}">
+        <b-progress
+          :value="candidate.timer.isTimeUp ? undefined : progressPercent"
+          size="is-large"
+          :type="candidate.timer.isTimeUp ? 'is-danger' : 'is-info'"
+        ></b-progress>
       </div>
     </div>
     <div class="card-action rows">
@@ -66,11 +70,6 @@ export default class CandidateCard extends Vue {
     }
   }
 }
-
-.time-up .progress {
-  background-color: red;
-}
-
 
 .startstop.btn {
   width: 9em;
