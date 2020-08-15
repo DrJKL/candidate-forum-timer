@@ -14961,8 +14961,8 @@ var Config =
 function () {
   function Config() {}
 
-  Config.timeLimitTotal = _moment.default.duration(10, 's');
-  Config.timeGranularity = 50;
+  Config.timeLimitTotal = _moment.default.duration(90, 's');
+  Config.timeGranularity = 100;
   Config.timeDelta = _moment.default.duration(1, 's');
   return Config;
 }();
@@ -34923,7 +34923,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "1790" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11867" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
