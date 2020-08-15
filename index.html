@@ -1,45 +1,77 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
 
-    <title>Candidate Timer</title>
-    <meta name="description" content="A timer for the MVMHA candidate forum" />
-    <meta name="author" content="Alex" />
+<head>
+  <meta charset="utf-8" />
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
-    
-    <link rel="stylesheet" href="src/css/styles.css" />
-    <link rel="stylesheet" href="src/materialize/css/materialize.css" />
+  <title>Candidate Timer</title>
+  <meta name="description"
+        content="A timer for the MVMHA candidate forum" />
+  <meta name="author"
+        content="Alex" />
 
-    <script src="src/materialize/js/materialize.js"></script>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet"
+        href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
+  <link rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 
-  </head>
+  <link rel="stylesheet"
+        href="src/css/styles.css" />
+  <link rel="stylesheet"
+        href="src/materialize/css/materialize.css" />
 
-  <body>
+  <script src="src/materialize/js/materialize.js"></script>
+  <style>
+    .logo-img img {
+      height: 5em;
+      width: auto;
+    }
+    .our-header > div.logo-img {
+      flex: 0 1 auto;
+      margin-right:2em;
+    }
 
-    <section class=" is-primary is-bold">
-      <div class="hero-body">
-        <div class="container">
+    .our-header {
+      display: flex;
+    }
+
+    .our-header>div {
+      flex: 1;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <section class=" is-primary is-bold">
+    <div class="hero-body">
+      <div class="our-header container">
+        <div class="logo-img">
+          <img src="./src/assets/just_homes_logo.png"
+               alt="MVMHA logo">
+        </div>
+        <div>
           <h1 class="title">
             2020 Mountain View City Council Candidate Forum
           </h1>
           <h2 class="subtitle">
             Hosted by the Mountain View Mobile Home Alliance
           </h2>
+
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <div id="app"></div>
+  <div id="app"></div>
 
-    <script
-      type="text/javascript"
-      src="src/materialize/js/materialize.min.js"
-    ></script>
-    <script src="src/js/vue-app.ts"></script>
-  </body>
+  <script type="text/javascript"
+          src="src/materialize/js/materialize.min.js"></script>
+  <script src="src/js/vue-app.ts"></script>
+</body>
+
 </html>
