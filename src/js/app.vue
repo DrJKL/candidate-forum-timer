@@ -3,7 +3,6 @@
     <div class="row">
       <div v-for="candidate of allCandidates" :key="candidate.name" class="col s4">
         <candidate-card :candidate="candidate"></candidate-card>
-        
       </div>
     </div>
   </main>
