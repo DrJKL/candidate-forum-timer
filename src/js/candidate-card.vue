@@ -69,22 +69,36 @@ export default class CandidateCard extends Vue {
   }
   .card-action {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 6px;
 
     .action-row {
       flex: 1;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
       
       div {
         flex: 0 1 auto;
       }
+      a {
+        margin: 4px;
+      }
       .inc-dec-buttons {
         display:flex;
+        justify-content: space-between;
         a {
           flex: 0 1 1em;
         }
+      }
+    }
+    .time-setters {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      a {
+        flex: 1 1 calc(50% - 8px);
+        width: calc(50% - 8px);
       }
     }
   }
