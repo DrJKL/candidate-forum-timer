@@ -15813,6 +15813,23 @@ exports.default = _default;
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("main", { staticClass: "container" }, [
+      _c("section", { staticClass: "buttons" }, [
+        _c(
+          "a",
+          {
+            staticClass: "btn",
+            attrs: { href: "#" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.shuffleCandidates()
+              }
+            }
+          },
+          [_vm._v("Shuffle")]
+        )
+      ]),
+      _vm._v(" "),
       _c(
         "div",
         { staticClass: "candidates-container" },
@@ -15825,23 +15842,6 @@ exports.default = _default;
           )
         }),
         0
-      )
-    ]),
-    _vm._v(" "),
-    _c("section", [
-      _c(
-        "a",
-        {
-          staticClass: "btn",
-          attrs: { href: "#" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.shuffleCandidates()
-            }
-          }
-        },
-        [_vm._v("Shuffle")]
       )
     ])
   ])
@@ -35039,7 +35039,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8854" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "10536" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
