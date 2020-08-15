@@ -1,7 +1,7 @@
 <template>
   <main class="container">
     <div class="row">
-      <div v-for="candidate of allCandidates" :key="candidate.name" class="col s4">
+      <div v-for="candidate of allCandidates" :key="candidate.name" class="col s6 m4">
         <candidate-card :candidate="candidate"></candidate-card>
       </div>
     </div>
