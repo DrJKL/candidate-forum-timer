@@ -9,22 +9,36 @@
 }
 .candidate-card .card-action[data-v-03db96] {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 6px;
 }
 .candidate-card .card-action .action-row[data-v-03db96] {
     flex: 1;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
 }
 .candidate-card .card-action .action-row div[data-v-03db96] {
       flex: 0 1 auto;
 }
+.candidate-card .card-action .action-row a[data-v-03db96] {
+      margin: 4px;
+}
 .candidate-card .card-action .action-row .inc-dec-buttons[data-v-03db96] {
       display: flex;
+      justify-content: space-between;
 }
 .candidate-card .card-action .action-row .inc-dec-buttons a[data-v-03db96] {
         flex: 0 1 1em;
+}
+.candidate-card .card-action .time-setters[data-v-03db96] {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.candidate-card .card-action .time-setters a[data-v-03db96] {
+      flex: 1 1 calc(50% - 8px);
+      width: calc(50% - 8px);
 }
 .startstop.btn[data-v-03db96] {
   width: 9em;
