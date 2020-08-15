@@ -17,14 +17,14 @@
         class="btn startstop col"
         v-on:click.prevent="candidate.timer.toggleTimer();"
       >{{candidate.timer.isRunning() ? 'Stop': 'Start'}}</a>
-      <div class="spacer col"></div>
-      <div class="col">
-      <a href="#" class="btn" v-on:click.prevent="candidate.timer.addTime()">
-        <i class="material-icons">add</i>
-      </a>
-      <a href="#" class="btn" v-on:click.prevent="candidate.timer.removeTime()">
-        <i class="material-icons">remove</i>
-      </a>
+      <div class="spacer col hide-on-small-and-down"></div>
+      <div class="col inc-dec-buttons">
+        <a href="#" class="btn" v-on:click.prevent="candidate.timer.addTime()">
+          <i class="material-icons">add</i>
+        </a>
+        <a href="#" class="btn" v-on:click.prevent="candidate.timer.removeTime()">
+          <i class="material-icons">remove</i>
+        </a>
       </div>
     </div>
   </div>
@@ -46,42 +46,33 @@ export default class CandidateCard extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.card-content .timer {
-    width: 100%;
-    height: 1em;
-    background-color: blanchedalmond;
-}
-
-.candidate-card .card-content {
+.candidate-card {
+  .card-content {
     display: flex;
     flex-direction: column;
-}
-
-.candidate-card .card-title {
+  }
+  .card-title {
     overflow: hidden;
     word-wrap: normal;
     white-space: nowrap;
-}
-
-.candidate-card .card-action {
+  }
+  .card-action {
     display: flex;
-}
-.candidate-card .card-action > * {
-    flex: 0 1 auto;
-}
-.candidate-card .card-action > .spacer {
-    flex-grow: 1;
-}
-
-.time-up.progress {
-    background-color: red;
+    > * {
+      flex: 0 1 auto;
+    }
+    > .spacer {
+      flex-grow: 1;
+    }
+  }
 }
 
-.candidate-card .progress {
-    height: 8px;
+.time-up .progress {
+  background-color: red;
 }
+
 
 .startstop.btn {
-    width: 9em;
+  width: 9em;
 }
 </style>
