@@ -31,7 +31,8 @@
           </a>
         </div>
       </div>
-      <div class="action-row action-row-2">
+      <div class="action-row time-setters">
+        <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(0,'s')">0</a>
         <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(30,'s')">30</a>
         <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(60,'s')">60</a>
         <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(90,'s')">90</a>
@@ -70,11 +71,9 @@ export default class CandidateCard extends Vue {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    > div {
-      flex: 1;
-    }
 
     .action-row {
+      flex: 1;
       display: flex;
       justify-content: space-between;
       
@@ -86,12 +85,6 @@ export default class CandidateCard extends Vue {
         a {
           flex: 0 1 1em;
         }
-      }
-    }
-    .action-row-2 {
-      gap: 1em;
-      a {
-        flex-basis: 2em;
       }
     }
   }
