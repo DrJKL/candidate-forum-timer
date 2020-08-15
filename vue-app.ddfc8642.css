@@ -40,8 +40,14 @@
       flex: 1 1 calc(50% - 8px);
       width: calc(50% - 8px);
 }
-.startstop.btn[data-v-03db96] {
-  width: 9em;
+
+.candidates-container[data-v-cd5f52] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.candidates-container > div[data-v-cd5f52] {
+    margin: 0 .5em;
 }
 
 /*! Buefy v0.8.20 | MIT License | github.com/buefy/buefy */

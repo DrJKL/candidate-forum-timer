@@ -15815,11 +15815,11 @@ exports.default = _default;
     _c("main", { staticClass: "container" }, [
       _c(
         "div",
-        { staticClass: "row" },
+        { staticClass: "candidates-container" },
         _vm._l(_vm.allCandidates, function(candidate) {
           return _c(
             "div",
-            { key: candidate.name, staticClass: "col s6 m4" },
+            { key: candidate.name },
             [_c("candidate-card", { attrs: { candidate: candidate } })],
             1
           )
@@ -35039,7 +35039,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "7663" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8854" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
