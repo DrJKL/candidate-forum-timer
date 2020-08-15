@@ -15488,6 +15488,17 @@ function (_super) {
     enumerable: false,
     configurable: true
   });
+  Object.defineProperty(CandidateCard.prototype, "progressValue", {
+    get: function get() {
+      if (this.candidate.timer.isTimeUp) {
+        return this.candidate.timer.isRunning() ? undefined : 100;
+      }
+
+      return this.progressPercent;
+    },
+    enumerable: false,
+    configurable: true
+  });
 
   var _a;
 
@@ -15537,9 +15548,7 @@ exports.default = _default;
         [
           _c("b-progress", {
             attrs: {
-              value: _vm.candidate.timer.isTimeUp
-                ? undefined
-                : _vm.progressPercent,
+              value: _vm.progressValue,
               size: "is-large",
               type: _vm.candidate.timer.isTimeUp ? "is-danger" : "is-info"
             }
