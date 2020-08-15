@@ -111,7 +111,4 @@ export default class CandidateCard extends Vue {
   }
 }
 
-.startstop.btn {
-  width: 9em;
-}
 </style>
