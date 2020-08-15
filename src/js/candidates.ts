@@ -42,18 +42,22 @@ export class Timer {
     isRunning() { return !!this.countingDown; }
 
     getTimeLeft() {
-        const timeToUse = this.isTimeUp() ? moment.duration().subtract(this.timeLeft) : this.timeLeft;
+        const timeToUse = this.isTimeUp ? moment.duration().subtract(this.timeLeft) : this.timeLeft;
         return `${timeToUse.minutes().toString().padStart(2, '0')}:` +
             `${timeToUse.seconds().toString().padStart(2, '0')}:` +
             `${timeToUse.milliseconds().toString().padStart(3,'0')}`;
     }
 
-    getProgressPercent() {
-        return 100*(this.timeLeft.asMilliseconds() / Config.timeLimitTotal.asMilliseconds());
+    get millisLeft() {
+        return this.timeLeft.asMilliseconds();
     }
 
-    isTimeUp() {
-        return this.timeLeft.asMilliseconds() <= 0;
+    get progressPercent() {
+        return 100*(this.millisLeft / Config.timeLimitTotal.asMilliseconds());
+    }
+
+    get isTimeUp() {
+        return this.millisLeft <= 0;
     }
 }
 

@@ -3,13 +3,13 @@
     <div class="card-content white-text">
       <div class="card-title">{{candidate.name}}</div>
       <div>
-        {{candidate.timer.getTimeLeft()}} {{candidate.timer.isTimeUp() ? 'over' :
+        {{candidate.timer.getTimeLeft()}} {{candidate.timer.isTimeUp ? 'over' :
         'remaining'}}
       </div>
       <div class="spacer"></div>
       <div>
         <b-progress 
-          v-bind:value="candidate.timer.getProgressPercent()"
+          :value="progressPercent"
           size="is-large"
           type="is-info"
           ></b-progress>
@@ -40,6 +40,10 @@ import { Candidate } from "./candidates";
 @Component({})
 export default class CandidateCard extends Vue {
   @Prop({ required: true })
-  candidate: Candidate;
+  candidate!: Candidate;
+  
+  get progressPercent() {
+    return this.candidate.timer.progressPercent;
+  }
 }
 </script>
