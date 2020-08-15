@@ -3,9 +3,12 @@
   flex-direction: column;
 }
 .candidate-card .card-title[data-v-03db96] {
-  overflow: hidden;
   word-wrap: normal;
   white-space: nowrap;
+  font-size: 26pt;
+}
+.candidate-card .time-left[data-v-03db96] {
+  font-size: 20pt;
 }
 .candidate-card .card-action[data-v-03db96] {
   display: flex;

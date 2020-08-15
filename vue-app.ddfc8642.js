@@ -15530,7 +15530,7 @@ exports.default = _default;
         _vm._v(_vm._s(_vm.candidate.name))
       ]),
       _vm._v(" "),
-      _c("div", [
+      _c("div", { staticClass: "time-left" }, [
         _vm._v(
           "\n      " +
             _vm._s(_vm.candidate.timer.getTimeLeft()) +
@@ -35039,7 +35039,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "10536" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11272" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
