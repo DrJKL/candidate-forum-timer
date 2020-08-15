@@ -15,20 +15,26 @@
         ></b-progress>
       </div>
     </div>
-    <div class="card-action rows">
-      <a
-        href="#"
-        class="btn startstop col"
-        v-on:click.prevent="candidate.timer.toggleTimer();"
-      >{{candidate.timer.isRunning() ? 'Stop': 'Start'}}</a>
-      <div class="spacer col hide-on-med-and-down"></div>
-      <div class="col inc-dec-buttons">
-        <a href="#" class="btn" v-on:click.prevent="candidate.timer.addTime()">
-          <i class="material-icons">add</i>
-        </a>
-        <a href="#" class="btn" v-on:click.prevent="candidate.timer.removeTime()">
-          <i class="material-icons">remove</i>
-        </a>
+    <div class="card-action">
+      <div class="action-row">
+        <a
+          href="#"
+          class="btn startstop"
+          v-on:click.prevent="candidate.timer.toggleTimer();"
+        >{{candidate.timer.isRunning() ? 'Stop': 'Start'}}</a>
+        <div class="inc-dec-buttons">
+          <a href="#" class="btn" v-on:click.prevent="candidate.timer.addTime()">
+            <i class="material-icons">add</i>
+          </a>
+          <a href="#" class="btn" v-on:click.prevent="candidate.timer.removeTime()">
+            <i class="material-icons">remove</i>
+          </a>
+        </div>
+      </div>
+      <div class="action-row action-row-2">
+        <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(30,'s')">30</a>
+        <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(60,'s')">60</a>
+        <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(90,'s')">90</a>
       </div>
     </div>
   </div>
@@ -62,11 +68,31 @@ export default class CandidateCard extends Vue {
   }
   .card-action {
     display: flex;
-    > * {
-      flex: 0 1 auto;
+    flex-direction: column;
+    gap: 6px;
+    > div {
+      flex: 1;
     }
-    > .spacer {
-      flex-grow: 1;
+
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      
+      div {
+        flex: 0 1 auto;
+      }
+      .inc-dec-buttons {
+        display:flex;
+        a {
+          flex: 0 1 1em;
+        }
+      }
+    }
+    .action-row-2 {
+      gap: 1em;
+      a {
+        flex-basis: 2em;
+      }
     }
   }
 }

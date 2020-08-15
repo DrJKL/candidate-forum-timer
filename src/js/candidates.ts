@@ -1,5 +1,6 @@
 import Config from './global_config';
 import moment from 'moment';
+import {DurationInputArg1, DurationInputArg2} from 'moment';
 
 export class Candidate {
     public readonly timer: Timer;
@@ -37,6 +38,10 @@ export class Timer {
 
     removeTime() {
         this.timeLeft.subtract(Config.timeDelta);
+    }
+
+    setTime(num: DurationInputArg1, unit: DurationInputArg2) {
+        this.timeLeft = moment.duration(num, unit);
     }
 
     isRunning() { return !!this.countingDown; }
