@@ -15608,6 +15608,21 @@ exports.default = _default;
             on: {
               click: function($event) {
                 $event.preventDefault()
+                return _vm.candidate.timer.setTime(0, "s")
+              }
+            }
+          },
+          [_vm._v("0")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "btn",
+            attrs: { href: "#" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
                 return _vm.candidate.timer.setTime(30, "s")
               }
             }
@@ -15747,6 +15762,24 @@ function (_super) {
     return _this;
   }
 
+  App.prototype.shuffleCandidates = function () {
+    var tempCandidates = this.allCandidates.slice();
+    var currentIndex = tempCandidates.length;
+    var temporaryValue, randomIndex; // While there remain elements to shuffle...
+
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1; // And swap it with the current element.
+
+      temporaryValue = tempCandidates[currentIndex];
+      tempCandidates[currentIndex] = tempCandidates[randomIndex];
+      tempCandidates[randomIndex] = temporaryValue;
+    }
+
+    this.allCandidates = tempCandidates;
+  };
+
   App = __decorate([(0, _vuePropertyDecorator.Component)({
     components: {
       CandidateCard: _candidateCard.default
@@ -15769,20 +15802,39 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("main", { staticClass: "container" }, [
-    _c(
-      "div",
-      { staticClass: "row" },
-      _vm._l(_vm.allCandidates, function(candidate) {
-        return _c(
-          "div",
-          { key: candidate.name, staticClass: "col s6 m4" },
-          [_c("candidate-card", { attrs: { candidate: candidate } })],
-          1
-        )
-      }),
-      0
-    )
+  return _c("div", [
+    _c("main", { staticClass: "container" }, [
+      _c(
+        "div",
+        { staticClass: "row" },
+        _vm._l(_vm.allCandidates, function(candidate) {
+          return _c(
+            "div",
+            { key: candidate.name, staticClass: "col s6 m4" },
+            [_c("candidate-card", { attrs: { candidate: candidate } })],
+            1
+          )
+        }),
+        0
+      )
+    ]),
+    _vm._v(" "),
+    _c("section", [
+      _c(
+        "a",
+        {
+          staticClass: "btn",
+          attrs: { href: "#" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.shuffleCandidates()
+            }
+          }
+        },
+        [_vm._v("Shuffle")]
+      )
+    ])
   ])
 }
 var staticRenderFns = []
@@ -34978,7 +35030,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "6175" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8250" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
