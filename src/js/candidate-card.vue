@@ -17,7 +17,7 @@
         class="btn startstop col"
         v-on:click.prevent="candidate.timer.toggleTimer();"
       >{{candidate.timer.isRunning() ? 'Stop': 'Start'}}</a>
-      <div class="spacer col hide-on-small-and-down"></div>
+      <div class="spacer col hide-on-med-and-down"></div>
       <div class="col inc-dec-buttons">
         <a href="#" class="btn" v-on:click.prevent="candidate.timer.addTime()">
           <i class="material-icons">add</i>
