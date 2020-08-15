@@ -1,3 +1,35 @@
+.candidate-card .card-content[data-v-03db96] {
+  display: flex;
+  flex-direction: column;
+}
+.candidate-card .card-title[data-v-03db96] {
+  overflow: hidden;
+  word-wrap: normal;
+  white-space: nowrap;
+}
+.candidate-card .card-action[data-v-03db96] {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.candidate-card .card-action .action-row[data-v-03db96] {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+}
+.candidate-card .card-action .action-row div[data-v-03db96] {
+      flex: 0 1 auto;
+}
+.candidate-card .card-action .action-row .inc-dec-buttons[data-v-03db96] {
+      display: flex;
+}
+.candidate-card .card-action .action-row .inc-dec-buttons a[data-v-03db96] {
+        flex: 0 1 1em;
+}
+.startstop.btn[data-v-03db96] {
+  width: 9em;
+}
+
 /*! Buefy v0.8.20 | MIT License | github.com/buefy/buefy */
 .is-noscroll {
   position: fixed;

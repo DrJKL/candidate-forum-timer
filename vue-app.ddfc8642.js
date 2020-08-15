@@ -15028,6 +15028,10 @@ function () {
     this.timeLeft.subtract(_global_config.default.timeDelta);
   };
 
+  Timer.prototype.setTime = function (num, unit) {
+    this.timeLeft = _moment.default.duration(num, unit);
+  };
+
   Timer.prototype.isRunning = function () {
     return !!this.countingDown;
   };
@@ -15072,7 +15076,74 @@ function totalTimeLeft() {
     return candidate.timer.timeLeft;
   });
 }
-},{"./global_config":"src/js/global_config.ts","moment":"node_modules/moment/moment.js"}],"node_modules/vue-hot-reload-api/dist/index.js":[function(require,module,exports) {
+},{"./global_config":"src/js/global_config.ts","moment":"node_modules/moment/moment.js"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"node_modules/vue-hot-reload-api/dist/index.js":[function(require,module,exports) {
 var Vue // late bind
 var version
 var map = Object.create(null)
@@ -15462,12 +15533,15 @@ exports.default = _default;
       _vm._v(" "),
       _c(
         "div",
+        { class: { "time-up": _vm.candidate.timer.isTimeUp } },
         [
           _c("b-progress", {
             attrs: {
-              value: _vm.progressPercent,
+              value: _vm.candidate.timer.isTimeUp
+                ? undefined
+                : _vm.progressPercent,
               size: "is-large",
-              type: "is-info"
+              type: _vm.candidate.timer.isTimeUp ? "is-danger" : "is-info"
             }
           })
         ],
@@ -15476,57 +15550,101 @@ exports.default = _default;
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "card-action" }, [
-      _c(
-        "a",
-        {
-          staticClass: "btn startstop",
-          attrs: { href: "#" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.candidate.timer.toggleTimer()
+      _c("div", { staticClass: "action-row" }, [
+        _c(
+          "a",
+          {
+            staticClass: "btn startstop",
+            attrs: { href: "#" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.candidate.timer.toggleTimer()
+              }
             }
-          }
-        },
-        [
-          _vm._v(
-            _vm._s(_vm.candidate.timer.isRunning() ? "Stop" : "Start") +
-              " Timer"
+          },
+          [_vm._v(_vm._s(_vm.candidate.timer.isRunning() ? "Stop" : "Start"))]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "inc-dec-buttons" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.candidate.timer.addTime()
+                }
+              }
+            },
+            [_c("i", { staticClass: "material-icons" }, [_vm._v("add")])]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.candidate.timer.removeTime()
+                }
+              }
+            },
+            [_c("i", { staticClass: "material-icons" }, [_vm._v("remove")])]
           )
-        ]
-      ),
+        ])
+      ]),
       _vm._v(" "),
-      _c("div", { staticClass: "spacer" }),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass: "btn",
-          attrs: { href: "#" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.candidate.timer.addTime()
+      _c("div", { staticClass: "action-row time-setters" }, [
+        _c(
+          "a",
+          {
+            staticClass: "btn",
+            attrs: { href: "#" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.candidate.timer.setTime(30, "s")
+              }
             }
-          }
-        },
-        [_c("i", { staticClass: "material-icons" }, [_vm._v("add")])]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass: "btn",
-          attrs: { href: "#" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.candidate.timer.removeTime()
+          },
+          [_vm._v("30")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "btn",
+            attrs: { href: "#" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.candidate.timer.setTime(60, "s")
+              }
             }
-          }
-        },
-        [_c("i", { staticClass: "material-icons" }, [_vm._v("remove")])]
-      )
+          },
+          [_vm._v("60")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "btn",
+            attrs: { href: "#" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.candidate.timer.setTime(90, "s")
+              }
+            }
+          },
+          [_vm._v("90")]
+        )
+      ])
     ])
   ])
 }
@@ -15537,7 +15655,7 @@ render._withStripped = true
             render: render,
             staticRenderFns: staticRenderFns,
             _compiled: true,
-            _scopeId: null,
+            _scopeId: "data-v-03db96",
             functional: undefined
           };
         })());
@@ -15557,76 +15675,13 @@ render._withStripped = true
         }
 
         
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
-
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
-
-  return bundleURL;
-}
-
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
-  }
-
-  return '/';
-}
-
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
-  };
-
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
-  }
-
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
-
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
-
-    cssTimeout = null;
-  }, 50);
-}
-
-module.exports = reloadCSS;
-},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"src/js/app.vue":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/app.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15721,7 +15776,7 @@ exports.default = _default;
       _vm._l(_vm.allCandidates, function(candidate) {
         return _c(
           "div",
-          { key: candidate.name, staticClass: "col s4" },
+          { key: candidate.name, staticClass: "col s6 m4" },
           [_c("candidate-card", { attrs: { candidate: candidate } })],
           1
         )
@@ -34923,7 +34978,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11867" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "6175" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
