@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel serve index.html",
     "build": "cross-env NODE_ENV=production parcel build index.html --public-url /candidate-forum-timer/",
-    "deploy": "gh-pages -d dist"
+    "deploy": "npm run build & gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/DrJKL/candidate-forum-timer#readme",
   "files": [
-    "src/"
+    "src/",
+    "index.html"
   ],
   "dependencies": {
     "@mdi/font": "^5.5.55",
