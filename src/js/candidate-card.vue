@@ -9,7 +9,7 @@
       <div class="spacer"></div>
       <div v-bind:class="{'time-up': candidate.timer.isTimeUp}">
         <b-progress
-          :value="candidate.timer.isTimeUp ? undefined : progressPercent"
+          :value="progressValue"
           size="is-large"
           :type="candidate.timer.isTimeUp ? 'is-danger' : 'is-info'"
         ></b-progress>
@@ -53,6 +53,13 @@ export default class CandidateCard extends Vue {
   get progressPercent() {
     return this.candidate.timer.progressPercent;
   }
+
+  get progressValue() {
+    if (this.candidate.timer.isTimeUp) {
+      return this.candidate.timer.isRunning() ? undefined : 100;
+    }
+    return this.progressPercent;
+  }
 }
 </script>
 
@@ -77,7 +84,7 @@ export default class CandidateCard extends Vue {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      
+
       div {
         flex: 0 1 auto;
       }
@@ -85,7 +92,7 @@ export default class CandidateCard extends Vue {
         margin: 4px;
       }
       .inc-dec-buttons {
-        display:flex;
+        display: flex;
         justify-content: space-between;
         a {
           flex: 0 1 1em;
