@@ -1,8 +1,8 @@
 <template>
   <div>
     <main class="container">
-      <div class="row">
-        <div v-for="candidate of allCandidates" :key="candidate.name" class="col s6 m4">
+      <div class="candidates-container">
+        <div v-for="candidate of allCandidates" :key="candidate.name" class="">
           <candidate-card :candidate="candidate"></candidate-card>
         </div>
       </div>
@@ -44,6 +44,13 @@ export default class App extends Vue {
   }
 }
 </script>
-<style lang="sass" scoped>
-
+<style lang="scss" scoped>
+.candidates-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  > div {
+    margin: 0 .5em;
+  }
+}
 </style>
