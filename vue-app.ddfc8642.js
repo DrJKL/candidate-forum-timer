@@ -15038,7 +15038,7 @@ function () {
 
   Timer.prototype.getTimeLeft = function () {
     var timeToUse = this.isTimeUp ? _moment.default.duration().subtract(this.timeLeft) : this.timeLeft;
-    return timeToUse.minutes().toString().padStart(2, '0') + ":" + (timeToUse.seconds().toString().padStart(2, '0') + ":") + ("" + timeToUse.milliseconds().toString().padStart(3, '0'));
+    return timeToUse.minutes().toString().padStart(2, '0') + ":" + (timeToUse.seconds().toString().padStart(2, '0') + ".") + ("" + timeToUse.milliseconds().toString().substr(0, 1));
   };
 
   Object.defineProperty(Timer.prototype, "millisLeft", {
@@ -15820,93 +15820,103 @@ exports.default = _default;
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("main", { staticClass: "container" }, [
-      _c("section", { staticClass: "buttons" }, [
-        _c("div", { staticClass: "container" }, [
-          _c(
-            "a",
-            {
-              staticClass: "btn",
-              attrs: { href: "#" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.shuffleCandidates()
-                }
-              }
-            },
-            [
-              _vm._v("\n          Shuffle\n          "),
-              _c("i", { staticClass: "material-icons right" }, [
-                _vm._v("shuffle")
-              ])
-            ]
-          ),
+    _c("header", { staticClass: "is-primary is-bold container" }, [
+      _c("div", { staticClass: "hero-body" }, [
+        _c("div", { staticClass: "our-header container" }, [
+          _vm._m(0),
           _vm._v(" "),
-          _c("div", { staticClass: "time-setters-global" }, [
-            _c(
-              "a",
-              {
-                staticClass: "btn",
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.setTime(30)
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "buttons" }, [
+            _c("div", { staticClass: "container" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "btn",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.shuffleCandidates()
+                    }
                   }
-                }
-              },
-              [
-                _vm._v("\n            30\n            "),
-                _c("i", { staticClass: "material-icons left" }, [
-                  _vm._v("timer")
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn",
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.setTime(60)
-                  }
-                }
-              },
-              [
-                _vm._v("\n            60\n            "),
-                _c("i", { staticClass: "material-icons left" }, [
-                  _vm._v("timer")
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn",
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.setTime(90)
-                  }
-                }
-              },
-              [
-                _vm._v("\n            90\n            "),
-                _c("i", { staticClass: "material-icons left" }, [
-                  _vm._v("timer")
-                ])
-              ]
-            )
+                },
+                [
+                  _vm._v("\n              Shuffle\n              "),
+                  _c("i", { staticClass: "material-icons right" }, [
+                    _vm._v("shuffle")
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "time-setters-global" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.setTime(30)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v("\n                30\n                "),
+                    _c("i", { staticClass: "material-icons left" }, [
+                      _vm._v("timer")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.setTime(60)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v("\n                60\n                "),
+                    _c("i", { staticClass: "material-icons left" }, [
+                      _vm._v("timer")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn",
+                    attrs: { href: "#" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.setTime(90)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v("\n                90\n                "),
+                    _c("i", { staticClass: "material-icons left" }, [
+                      _vm._v("timer")
+                    ])
+                  ]
+                )
+              ])
+            ])
           ])
         ])
-      ]),
-      _vm._v(" "),
+      ])
+    ]),
+    _vm._v(" "),
+    _c("main", { staticClass: "container" }, [
       _c(
         "div",
         { staticClass: "candidates-container" },
@@ -15923,7 +15933,35 @@ exports.default = _default;
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "logo-img" }, [
+      _c("img", {
+        attrs: {
+          src: "/just_homes_logo.5f11e9bb.png",
+          alt: "MVMHA logo"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c("h1", { staticClass: "title" }, [
+        _vm._v("2020 Mountain View City Council Candidate Forum")
+      ]),
+      _vm._v(" "),
+      _c("h2", { staticClass: "subtitle" }, [
+        _vm._v("Hosted by the Mountain View Mobile Home Alliance")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 
           return {
@@ -15956,7 +15994,7 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-1fafdf15.js":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","./..\\assets\\just_homes_logo.png":[["just_homes_logo.5f11e9bb.png","src/assets/just_homes_logo.png"],"src/assets/just_homes_logo.png"],"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-1fafdf15.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35116,7 +35154,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14842" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8125" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

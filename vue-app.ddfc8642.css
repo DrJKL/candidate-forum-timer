@@ -47,7 +47,7 @@
 .buttons .container[data-v-cd5f52] {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   margin: 0;
 }
 .buttons .container > a[data-v-cd5f52] {
@@ -61,7 +61,8 @@
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
-.candidates-container > div[data-v-cd5f52] {
+.candidates-container > div[data-v-cd5f52],
+  .candidates-container > candidate-card[data-v-cd5f52] {
     margin: 0 0.5em;
 }
 
