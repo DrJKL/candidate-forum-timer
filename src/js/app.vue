@@ -1,31 +1,44 @@
 <template>
   <div>
-    <main class="container">
-      <section class="buttons">
-        <div class="container">
-          <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
-            Shuffle
-            <i class="material-icons right">shuffle</i>
-          </a>
+    <header class="is-primary is-bold container">
+      <div class="hero-body">
+        <div class="our-header container">
+          <div class="logo-img">
+            <img src="../assets/just_homes_logo.png" alt="MVMHA logo" />
+          </div>
+          <div>
+            <h1 class="title">2020 Mountain View City Council Candidate Forum</h1>
+            <h2 class="subtitle">Hosted by the Mountain View Mobile Home Alliance</h2>
+          </div>
+          <div class="buttons">
+            <div class="container">
+              <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
+                Shuffle
+                <i class="material-icons right">shuffle</i>
+              </a>
 
-          <div class="time-setters-global">
-            <a href="#" class="btn" v-on:click.prevent="setTime(30)">
-              30
-              <i class="material-icons left">timer</i>
-            </a>
-            <a href="#" class="btn" v-on:click.prevent="setTime(60)">
-              60
-              <i class="material-icons left">timer</i>
-            </a>
-            <a href="#" class="btn" v-on:click.prevent="setTime(90)">
-              90
-              <i class="material-icons left">timer</i>
-            </a>
+              <div class="time-setters-global">
+                <a href="#" class="btn" v-on:click.prevent="setTime(30)">
+                  30
+                  <i class="material-icons left">timer</i>
+                </a>
+                <a href="#" class="btn" v-on:click.prevent="setTime(60)">
+                  60
+                  <i class="material-icons left">timer</i>
+                </a>
+                <a href="#" class="btn" v-on:click.prevent="setTime(90)">
+                  90
+                  <i class="material-icons left">timer</i>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </header>
+    <main class="container">
       <div class="candidates-container">
-        <div v-for="candidate of allCandidates" :key="candidate.name" class>
+        <div v-for="candidate of allCandidates" :key="candidate.name">
           <candidate-card :candidate="candidate"></candidate-card>
         </div>
       </div>
@@ -77,7 +90,7 @@ export default class App extends Vue {
   .container {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     margin: 0;
     > a {
       flex: 0 1 auto;
@@ -92,7 +105,8 @@ export default class App extends Vue {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  > div {
+  > div,
+  > candidate-card {
     margin: 0 0.5em;
   }
 }
