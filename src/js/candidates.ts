@@ -49,8 +49,8 @@ export class Timer {
     getTimeLeft() {
         const timeToUse = this.isTimeUp ? moment.duration().subtract(this.timeLeft) : this.timeLeft;
         return `${timeToUse.minutes().toString().padStart(2, '0')}:` +
-            `${timeToUse.seconds().toString().padStart(2, '0')}:` +
-            `${timeToUse.milliseconds().toString().padStart(3,'0')}`;
+            `${timeToUse.seconds().toString().padStart(2, '0')}.` +
+            `${timeToUse.milliseconds().toString().substr(0,1)}`;
     }
 
     get millisLeft() {
