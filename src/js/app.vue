@@ -2,12 +2,26 @@
   <div>
     <main class="container">
       <section class="buttons">
-        <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">Shuffle</a>
+        <div class="container">
+          <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
+            Shuffle
+            <i class="material-icons right">shuffle</i>
+          </a>
 
-        <div class="time-setters-global">
-          <a href="#" class="btn" v-on:click.prevent="setTime(30)">30</a>
-          <a href="#" class="btn" v-on:click.prevent="setTime(60)">60</a>
-          <a href="#" class="btn" v-on:click.prevent="setTime(90)">90</a>
+          <div class="time-setters-global">
+            <a href="#" class="btn" v-on:click.prevent="setTime(30)">
+              30
+              <i class="material-icons left">timer</i>
+            </a>
+            <a href="#" class="btn" v-on:click.prevent="setTime(60)">
+              60
+              <i class="material-icons left">timer</i>
+            </a>
+            <a href="#" class="btn" v-on:click.prevent="setTime(90)">
+              90
+              <i class="material-icons left">timer</i>
+            </a>
+          </div>
         </div>
       </section>
       <div class="candidates-container">
@@ -60,12 +74,16 @@ export default class App extends Vue {
 </script>
 <style lang="scss" scoped>
 .buttons {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: flex-end;
-  margin: 0;
-  a {
-    flex: 0 1 auto;
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    > a {
+      flex: 0 1 auto;
+      margin-right: 4px;
+      margin-bottom: 8px;
+    }
   }
 }
 
