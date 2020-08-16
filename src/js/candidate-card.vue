@@ -2,7 +2,7 @@
   <div class="candidate-card card blue-grey z-depth-2">
     <div class="card-content white-text">
       <div class="card-title">{{candidate.name}}</div>
-      <div>
+      <div class="time-left">
         {{candidate.timer.getTimeLeft()}} {{candidate.timer.isTimeUp ? 'over' :
         'remaining'}}
       </div>
@@ -70,9 +70,12 @@ export default class CandidateCard extends Vue {
     flex-direction: column;
   }
   .card-title {
-    overflow: hidden;
     word-wrap: normal;
     white-space: nowrap;
+    font-size: 26pt;
+  }
+  .time-left {
+    font-size: 20pt;
   }
   .card-action {
     display: flex;
