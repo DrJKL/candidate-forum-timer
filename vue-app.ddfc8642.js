@@ -15789,6 +15789,14 @@ function (_super) {
     this.allCandidates = tempCandidates;
   };
 
+  App.prototype.setTime = function (time) {
+    this.allCandidates.map(function (candidate) {
+      return candidate.timer;
+    }).forEach(function (timer) {
+      timer.setTime(time, "s");
+    });
+  };
+
   App = __decorate([(0, _vuePropertyDecorator.Component)({
     components: {
       CandidateCard: _candidateCard.default
@@ -15814,20 +15822,89 @@ exports.default = _default;
   return _c("div", [
     _c("main", { staticClass: "container" }, [
       _c("section", { staticClass: "buttons" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn",
-            attrs: { href: "#" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.shuffleCandidates()
+        _c("div", { staticClass: "container" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.shuffleCandidates()
+                }
               }
-            }
-          },
-          [_vm._v("Shuffle")]
-        )
+            },
+            [
+              _vm._v("\n          Shuffle\n          "),
+              _c("i", { staticClass: "material-icons right" }, [
+                _vm._v("shuffle")
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "time-setters-global" }, [
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.setTime(30)
+                  }
+                }
+              },
+              [
+                _vm._v("\n            30\n            "),
+                _c("i", { staticClass: "material-icons left" }, [
+                  _vm._v("timer")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.setTime(60)
+                  }
+                }
+              },
+              [
+                _vm._v("\n            60\n            "),
+                _c("i", { staticClass: "material-icons left" }, [
+                  _vm._v("timer")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.setTime(90)
+                  }
+                }
+              },
+              [
+                _vm._v("\n            90\n            "),
+                _c("i", { staticClass: "material-icons left" }, [
+                  _vm._v("timer")
+                ])
+              ]
+            )
+          ])
+        ])
       ]),
       _vm._v(" "),
       _c(
@@ -35039,7 +35116,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11272" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14842" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

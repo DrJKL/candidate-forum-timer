@@ -44,25 +44,25 @@
       width: calc(50% - 8px);
 }
 
-.buttons[data-v-cd5f52] {
+.buttons .container[data-v-cd5f52] {
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  position: absolute;
-  left: -6em;
-  top: 8px;
+  flex-direction: column;
+  align-items: center;
   margin: 0;
 }
-.buttons a[data-v-cd5f52] {
+.buttons .container > a[data-v-cd5f52] {
     flex: 0 1 auto;
+    margin-right: 4px;
+    margin-bottom: 8px;
 }
 .candidates-container[data-v-cd5f52] {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 }
 .candidates-container > div[data-v-cd5f52] {
-    margin: 0 .5em;
+    margin: 0 0.5em;
 }
 
 /*! Buefy v0.8.20 | MIT License | github.com/buefy/buefy */
