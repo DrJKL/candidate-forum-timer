@@ -35,10 +35,20 @@
       </div>
     </header>
     <main class="container">
+      <b-taglist class="time-out-container">
+        <b-tag
+          class="is-primary minimized-candidate"
+          v-for="candidate of minimizedCandidates"
+          :key="candidate.name"
+          v-on:click.native="minimizeCandidate(candidate)"
+        >{{candidate.name}}</b-tag>
+      </b-taglist>
       <div class="candidates-container">
-        <div v-for="candidate of allCandidates" :key="candidate.name">
+        <transition-group name="squish" tag="div" class="transition-container">
+        <div v-for="candidate of visibleCandidates" :key="candidate.name" class="squish-item">
           <candidate-card :candidate="candidate"></candidate-card>
         </div>
+        </transition-group>
       </div>
     </main>
   </div>
@@ -46,7 +56,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import moment from "moment";
-import { allCandidates as listOfCandidates } from "./candidates";
+import { allCandidates as listOfCandidates, Candidate } from "./candidates";
 import CandidateCard from "./candidate-card.vue";
 
 @Component({
@@ -74,6 +84,18 @@ export default class App extends Vue {
     this.allCandidates = tempCandidates;
   }
 
+  get visibleCandidates() {
+    return this.allCandidates.filter((candidate) => !candidate.isMinimized);
+  }
+  get minimizedCandidates() {
+    return this.allCandidates.filter((candidate) => candidate.isMinimized);
+  }
+
+  minimizeCandidate(candidate: Candidate) {
+    console.log("FFFF", candidate);
+    candidate.toggleMinimized();
+  }
+
   setTime(time: number) {
     this.allCandidates
       .map((candidate) => candidate.timer)
@@ -84,8 +106,8 @@ export default class App extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-
-header .hero-body {}
+header .hero-body {
+}
 
 .buttons {
   display: flex;
@@ -99,7 +121,7 @@ header .hero-body {}
   }
 }
 
-.candidates-container {
+.candidates-container .transition-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -108,5 +130,23 @@ header .hero-body {}
   > candidate-card {
     margin: 0 0.5em;
   }
+}
+
+.squish-item {
+  transition: all .5s;
+  opacity: 1;
+  
+}
+.squish-enter, .squish-leave-to {
+  opacity: 0;
+  max-width:0;
+  flex-grow: 0.0000001;
+}
+.squish-leave-active {
+  position: absolute;
+}
+
+.squish-move {
+  transition: transform .5s;
 }
 </style>

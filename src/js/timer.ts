@@ -1,3 +1,7 @@
+import Config from "./global_config";
+import moment from "moment";
+import { DurationInputArg1, DurationInputArg2 } from "moment";
+
 export default class Timer {
     public timeLeft: moment.Duration;
     public countingDown: number|null;

@@ -1,7 +1,12 @@
 <template>
   <div class="candidate-card card blue-grey z-depth-2">
     <div class="card-content white-text">
-      <div class="card-title">{{candidate.name}}</div>
+      <div class="card-title">
+        <span>{{candidate.name}}</span>
+        <a href="#" class="btn-floating btn-flat" v-on:click.prevent="candidate.toggleMinimized()">
+          <i class="material-icons white-text">minimize</i>
+        </a>
+      </div>
       <div class="time-left">
         {{candidate.timer.getTimeLeft()}} {{candidate.timer.isTimeUp ? 'over' :
         'remaining'}}
@@ -73,6 +78,11 @@ export default class CandidateCard extends Vue {
     word-wrap: normal;
     white-space: nowrap;
     font-size: 26pt;
+    display: flex;
+    justify-content: space-between;
+    > * {
+      flex: 0 1 auto;
+    }
   }
   .time-left {
     font-size: 20pt;
@@ -113,5 +123,4 @@ export default class CandidateCard extends Vue {
     }
   }
 }
-
 </style>
