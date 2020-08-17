@@ -14969,34 +14969,19 @@ function () {
 
 var _default = Config;
 exports.default = _default;
-},{"moment":"node_modules/moment/moment.js"}],"src/js/candidates.ts":[function(require,module,exports) {
+},{"moment":"node_modules/moment/moment.js"}],"src/js/timer.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.totalTimeLeft = totalTimeLeft;
-exports.allCandidates = exports.Timer = exports.Candidate = void 0;
+exports.default = void 0;
 
 var _global_config = _interopRequireDefault(require("./global_config"));
 
 var _moment = _interopRequireDefault(require("moment"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Candidate =
-/** @class */
-function () {
-  function Candidate(name) {
-    this.name = name;
-    this.name = name;
-    this.timer = new Timer();
-  }
-
-  return Candidate;
-}();
-
-exports.Candidate = Candidate;
 
 var Timer =
 /** @class */
@@ -15065,8 +15050,40 @@ function () {
   return Timer;
 }();
 
-exports.Timer = Timer;
-var allCandidates = ['Margaret Abe-Koga', 'Jose Gutierrez', 'John Lashlee', 'Sally Lieber', 'Lisa Matichak', 'Alex Nunez', 'Paul Roales', 'Pat Showalter', 'Lenny Siegel'].map(function (candidateName) {
+var _default = Timer;
+exports.default = _default;
+},{"./global_config":"src/js/global_config.ts","moment":"node_modules/moment/moment.js"}],"src/js/candidates.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.totalTimeLeft = totalTimeLeft;
+exports.allCandidates = exports.Candidate = void 0;
+
+var _timer = _interopRequireDefault(require("./timer"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Candidate =
+/** @class */
+function () {
+  function Candidate(name) {
+    this.name = name;
+    this.timer = new _timer.default();
+    this.isMinimized = false;
+    this.name = name;
+  }
+
+  Candidate.prototype.toggleMinimized = function () {
+    this.isMinimized = !this.isMinimized;
+  };
+
+  return Candidate;
+}();
+
+exports.Candidate = Candidate;
+var allCandidates = ["Margaret Abe-Koga", "Jose Gutierrez", "John Lashlee", "Sally Lieber", "Lisa Matichak", "Alex Nunez", "Paul Roales", "Pat Showalter", "Lenny Siegel"].map(function (candidateName) {
   return new Candidate(candidateName);
 });
 exports.allCandidates = allCandidates;
@@ -15076,7 +15093,7 @@ function totalTimeLeft() {
     return candidate.timer.timeLeft;
   });
 }
-},{"./global_config":"src/js/global_config.ts","moment":"node_modules/moment/moment.js"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"./timer":"src/js/timer.ts"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -15527,7 +15544,26 @@ exports.default = _default;
   return _c("div", { staticClass: "candidate-card card blue-grey z-depth-2" }, [
     _c("div", { staticClass: "card-content white-text" }, [
       _c("div", { staticClass: "card-title" }, [
-        _vm._v(_vm._s(_vm.candidate.name))
+        _c("span", [_vm._v(_vm._s(_vm.candidate.name))]),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "btn-floating btn-flat",
+            attrs: { href: "#" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.candidate.toggleMinimized()
+              }
+            }
+          },
+          [
+            _c("i", { staticClass: "material-icons white-text" }, [
+              _vm._v("minimize")
+            ])
+          ]
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "time-left" }, [
@@ -15789,6 +15825,30 @@ function (_super) {
     this.allCandidates = tempCandidates;
   };
 
+  Object.defineProperty(App.prototype, "visibleCandidates", {
+    get: function get() {
+      return this.allCandidates.filter(function (candidate) {
+        return !candidate.isMinimized;
+      });
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(App.prototype, "minimizedCandidates", {
+    get: function get() {
+      return this.allCandidates.filter(function (candidate) {
+        return candidate.isMinimized;
+      });
+    },
+    enumerable: false,
+    configurable: true
+  });
+
+  App.prototype.minimizeCandidate = function (candidate) {
+    console.log("FFFF", candidate);
+    candidate.toggleMinimized();
+  };
+
   App.prototype.setTime = function (time) {
     this.allCandidates.map(function (candidate) {
       return candidate.timer;
@@ -15819,7 +15879,7 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "app-container" }, [
     _c("header", { staticClass: "is-primary is-bold container" }, [
       _c("div", { staticClass: "hero-body" }, [
         _c("div", { staticClass: "our-header container" }, [
@@ -15827,8 +15887,28 @@ exports.default = _default;
           _vm._v(" "),
           _vm._m(1),
           _vm._v(" "),
-          _c("div", { staticClass: "buttons" }, [
-            _c("div", { staticClass: "container" }, [
+          _c("div", { staticClass: "buttons box" }, [
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.shuffleCandidates()
+                  }
+                }
+              },
+              [
+                _vm._v("\n            Shuffle\n            "),
+                _c("i", { staticClass: "material-icons right" }, [
+                  _vm._v("shuffle")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "time-setters-global" }, [
               _c(
                 "a",
                 {
@@ -15837,100 +15917,114 @@ exports.default = _default;
                   on: {
                     click: function($event) {
                       $event.preventDefault()
-                      return _vm.shuffleCandidates()
+                      return _vm.setTime(30)
                     }
                   }
                 },
                 [
-                  _vm._v("\n              Shuffle\n              "),
-                  _c("i", { staticClass: "material-icons right" }, [
-                    _vm._v("shuffle")
+                  _vm._v("\n              30\n              "),
+                  _c("i", { staticClass: "material-icons left" }, [
+                    _vm._v("timer")
                   ])
                 ]
               ),
               _vm._v(" "),
-              _c("div", { staticClass: "time-setters-global" }, [
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn",
-                    attrs: { href: "#" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.setTime(30)
-                      }
+              _c(
+                "a",
+                {
+                  staticClass: "btn",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.setTime(60)
                     }
-                  },
-                  [
-                    _vm._v("\n                30\n                "),
-                    _c("i", { staticClass: "material-icons left" }, [
-                      _vm._v("timer")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn",
-                    attrs: { href: "#" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.setTime(60)
-                      }
+                  }
+                },
+                [
+                  _vm._v("\n              60\n              "),
+                  _c("i", { staticClass: "material-icons left" }, [
+                    _vm._v("timer")
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "btn",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.setTime(90)
                     }
-                  },
-                  [
-                    _vm._v("\n                60\n                "),
-                    _c("i", { staticClass: "material-icons left" }, [
-                      _vm._v("timer")
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn",
-                    attrs: { href: "#" },
-                    on: {
-                      click: function($event) {
-                        $event.preventDefault()
-                        return _vm.setTime(90)
-                      }
-                    }
-                  },
-                  [
-                    _vm._v("\n                90\n                "),
-                    _c("i", { staticClass: "material-icons left" }, [
-                      _vm._v("timer")
-                    ])
-                  ]
-                )
-              ])
+                  }
+                },
+                [
+                  _vm._v("\n              90\n              "),
+                  _c("i", { staticClass: "material-icons left" }, [
+                    _vm._v("timer")
+                  ])
+                ]
+              )
             ])
           ])
         ])
       ])
     ]),
     _vm._v(" "),
-    _c("main", { staticClass: "container" }, [
-      _c(
-        "div",
-        { staticClass: "candidates-container" },
-        _vm._l(_vm.allCandidates, function(candidate) {
-          return _c(
-            "div",
-            { key: candidate.name },
-            [_c("candidate-card", { attrs: { candidate: candidate } })],
-            1
-          )
-        }),
-        0
-      )
-    ])
+    _c(
+      "main",
+      { staticClass: "container" },
+      [
+        _c(
+          "b-taglist",
+          { staticClass: "time-out-container" },
+          _vm._l(_vm.minimizedCandidates, function(candidate) {
+            return _c(
+              "b-tag",
+              {
+                key: candidate.name,
+                staticClass: "is-primary minimized-candidate",
+                nativeOn: {
+                  click: function($event) {
+                    return _vm.minimizeCandidate(candidate)
+                  }
+                }
+              },
+              [_vm._v(_vm._s(candidate.name))]
+            )
+          }),
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "candidates-container" },
+          [
+            _c(
+              "transition-group",
+              {
+                staticClass: "transition-container",
+                attrs: { name: "squish", tag: "div" }
+              },
+              _vm._l(_vm.visibleCandidates, function(candidate) {
+                return _c(
+                  "div",
+                  { key: candidate.name, staticClass: "squish-item" },
+                  [_c("candidate-card", { attrs: { candidate: candidate } })],
+                  1
+                )
+              }),
+              0
+            )
+          ],
+          1
+        )
+      ],
+      1
+    )
   ])
 }
 var staticRenderFns = [
@@ -15951,7 +16045,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
+    return _c("div", { staticClass: "header-text" }, [
       _c("h1", { staticClass: "title" }, [
         _vm._v("2020 Mountain View City Council Candidate Forum")
       ]),
@@ -35154,7 +35248,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8125" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11934" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

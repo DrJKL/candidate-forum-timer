@@ -6,6 +6,11 @@
   word-wrap: normal;
   white-space: nowrap;
   font-size: 26pt;
+  display: flex;
+  justify-content: space-between;
+}
+.candidate-card .card-title > *[data-v-03db96] {
+    flex: 0 1 auto;
 }
 .candidate-card .time-left[data-v-03db96] {
   font-size: 20pt;
@@ -44,26 +49,50 @@
       width: calc(50% - 8px);
 }
 
-.buttons .container[data-v-cd5f52] {
+.app-container[data-v-cd5f52] {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin: 0;
+  height: 100%;
+  flex: 1;
 }
-.buttons .container > a[data-v-cd5f52] {
+.app-container > header[data-v-cd5f52] {
     flex: 0 1 auto;
-    margin-right: 4px;
+}
+.buttons[data-v-cd5f52] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex: 0 1 auto;
+  width: fit-content;
+}
+.buttons > a[data-v-cd5f52] {
+    flex: 0 1 auto;
     margin-bottom: 8px;
 }
-.candidates-container[data-v-cd5f52] {
+.candidates-container .transition-container[data-v-cd5f52] {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
-.candidates-container > div[data-v-cd5f52],
-  .candidates-container > candidate-card[data-v-cd5f52] {
+.candidates-container .transition-container > div[data-v-cd5f52],
+  .candidates-container .transition-container > candidate-card[data-v-cd5f52] {
     margin: 0 0.5em;
+}
+.squish-item[data-v-cd5f52] {
+  transition: all .5s;
+  opacity: 1;
+}
+.squish-enter[data-v-cd5f52], .squish-leave-to[data-v-cd5f52] {
+  opacity: 0;
+  max-width: 0;
+  flex-grow: 0.0000001;
+}
+.squish-leave-active[data-v-cd5f52] {
+  position: absolute;
+}
+.squish-move[data-v-cd5f52] {
+  transition: transform .5s;
 }
 
 /*! Buefy v0.8.20 | MIT License | github.com/buefy/buefy */
