@@ -6,31 +6,29 @@
           <div class="logo-img">
             <img src="../assets/just_homes_logo.png" alt="MVMHA logo" />
           </div>
-          <div>
+          <div class="header-text">
             <h1 class="title">2020 Mountain View City Council Candidate Forum</h1>
             <h2 class="subtitle">Hosted by the Mountain View Mobile Home Alliance</h2>
           </div>
-          <div class="buttons">
-            <div class="container">
-              <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
-                Shuffle
-                <i class="material-icons right">shuffle</i>
-              </a>
+          <div class="buttons box">
+            <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
+              Shuffle
+              <i class="material-icons right">shuffle</i>
+            </a>
 
-              <div class="time-setters-global">
-                <a href="#" class="btn" v-on:click.prevent="setTime(30)">
-                  30
-                  <i class="material-icons left">timer</i>
-                </a>
-                <a href="#" class="btn" v-on:click.prevent="setTime(60)">
-                  60
-                  <i class="material-icons left">timer</i>
-                </a>
-                <a href="#" class="btn" v-on:click.prevent="setTime(90)">
-                  90
-                  <i class="material-icons left">timer</i>
-                </a>
-              </div>
+            <div class="time-setters-global">
+              <a href="#" class="btn" v-on:click.prevent="setTime(30)">
+                30
+                <i class="material-icons left">timer</i>
+              </a>
+              <a href="#" class="btn" v-on:click.prevent="setTime(60)">
+                60
+                <i class="material-icons left">timer</i>
+              </a>
+              <a href="#" class="btn" v-on:click.prevent="setTime(90)">
+                90
+                <i class="material-icons left">timer</i>
+              </a>
             </div>
           </div>
         </div>
@@ -86,17 +84,18 @@ export default class App extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+
+header .hero-body {}
+
 .buttons {
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin: 0;
-    > a {
-      flex: 0 1 auto;
-      margin-right: 4px;
-      margin-bottom: 8px;
-    }
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex: 0 1 auto;
+  width: fit-content;
+  > a {
+    flex: 0 1 auto;
+    margin-bottom: 8px;
   }
 }
 
