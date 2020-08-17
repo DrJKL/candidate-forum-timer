@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-container">
     <header class="is-primary is-bold container">
       <div class="hero-body">
         <div class="our-header container">
@@ -106,7 +106,15 @@ export default class App extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-header .hero-body {
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  flex:1;
+  > header {
+    flex: 0 1 auto;
+  }
 }
 
 .buttons {
