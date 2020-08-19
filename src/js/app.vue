@@ -7,8 +7,9 @@
             <img src="../assets/just_homes_logo.png" alt="MVMHA logo" />
           </div>
           <div class="header-text">
-            <h1 class="title">2020 Mountain View City Council Candidate Forum</h1>
-            <h2 class="subtitle">Hosted by the Mountain View Mobile Home Alliance</h2>
+            <h1 class="title">
+              2020 <span>Mountain View</span> <span>City Council</span> <span>Candidate Forum</span></h1>
+            <h2 class="subtitle">Hosted by the <span>Mountain View Mobile Home Alliance</span></h2>
           </div>
           <div class="buttons box">
             <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
@@ -106,6 +107,9 @@ export default class App extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+.title span, .subtitle span {
+  display: inline-block;
+}
 
 .app-container {
   display: flex;
