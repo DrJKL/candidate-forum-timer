@@ -75,6 +75,7 @@ export default class CandidateCard extends Vue {
 .candidate-card {
   background-color: #607d8b;
   color: #FFFFFF;
+  width: 100%;
   .card-content {
     display: flex;
     flex-direction: column;

@@ -24,7 +24,13 @@
                 Shuffle
                 <i class="material-icons right">shuffle</i>
               </a>
-              <b-switch v-model="galleryMode">Focus</b-switch>
+              <div class="switch">
+                <label>
+                  <input type="checkbox" v-model="galleryMode" />
+                  <span class="lever"></span>
+                  Show All
+                </label>
+              </div>
             </div>
 
             <div class="time-setters-global">
@@ -56,7 +62,7 @@
         </div>
       </div>
     </header>
-    <main class="container" v-bind:class="{'gallery-mode': galleryMode}">
+    <div class="container time-out-container-container">
       <b-taglist class="time-out-container">
         <b-tag
           class="is-primary minimized-candidate"
@@ -65,6 +71,8 @@
           v-on:click.native="minimizeCandidate(candidate)"
         >{{candidate.name}}</b-tag>
       </b-taglist>
+    </div>
+    <main class="container" v-bind:class="{'gallery-mode': galleryMode}">
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
           <div
@@ -212,11 +220,10 @@ export default class App extends Vue {
       }
     }
   }
-}
-
-.our-header .title span,
-.subtitle span {
-  display: inline-block;
+  .title span,
+  .subtitle span {
+    display: inline-block;
+  }
 }
 
 .app-container {
@@ -254,6 +261,11 @@ export default class App extends Vue {
       /deep/ .card-action {
         display: none !important;
       }
+      /deep/ .card-content {
+        > :not(.card-title) {
+          display:none;
+        }
+      }
     }
   }
 }
@@ -263,7 +275,7 @@ export default class App extends Vue {
     content: ">";
     color: red;
     position: absolute;
-    left: -1px;
+    left: 5px;
   }
 }
 
