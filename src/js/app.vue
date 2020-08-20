@@ -19,10 +19,13 @@
             </h2>
           </div>
           <div class="buttons box">
-            <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
-              Shuffle
-              <i class="material-icons right">shuffle</i>
-            </a>
+            <div>
+              <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
+                Shuffle
+                <i class="material-icons right">shuffle</i>
+              </a>
+              <b-switch v-model="galleryMode">Focus</b-switch>
+            </div>
 
             <div class="time-setters-global">
               <a href="#" class="btn" v-on:click.prevent="setTime(30)">
@@ -38,11 +41,22 @@
                 <i class="material-icons left">timer</i>
               </a>
             </div>
+            <div>
+              <a href="#" class="btn" v-on:click.prevent="focusPrevious()">
+                Prev
+                <i class="material-icons left">navigate_before</i>
+              </a>
+              <span>{{focusedCandidate}}</span>
+              <a href="#" class="btn" v-on:click.prevent="focusNext()">
+                Next
+                <i class="material-icons right">navigate_next</i>
+              </a>
+            </div>
           </div>
         </div>
       </div>
     </header>
-    <main class="container">
+    <main class="container" v-bind:class="{'gallery-mode': galleryMode}">
       <b-taglist class="time-out-container">
         <b-tag
           class="is-primary minimized-candidate"
@@ -53,8 +67,16 @@
       </b-taglist>
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
-          <div v-for="candidate of visibleCandidates" :key="candidate.name" class="squish-item">
-            <candidate-card :candidate="candidate"></candidate-card>
+          <div
+            v-for="(candidate, index) of visibleCandidates"
+            :key="candidate.name"
+            class="squish-item"
+          >
+            <candidate-card
+              :candidate="candidate"
+              v-bind:class="getCardClasses(index)"
+              v-on:minimize-candidate="minimizeCandidate(candidate)"
+            ></candidate-card>
           </div>
         </transition-group>
       </div>
@@ -72,6 +94,47 @@ import CandidateCard from "./candidate-card.vue";
 })
 export default class App extends Vue {
   allCandidates = listOfCandidates;
+  focusedCandidate = 0;
+  galleryMode = false;
+
+  checkFocus() {
+    const limit = this.visibleCandidates.length - 1;
+    this.checkFocusNaN();
+    this.focusedCandidate = Math.max(Math.min(this.focusedCandidate, limit), 0);
+  }
+  checkFocusNaN() {
+    if (isNaN(this.focusedCandidate)) {
+      this.focusedCandidate = 0;
+    }
+  }
+  focusNext() {
+    this.checkFocusNaN();
+    this.focusedCandidate++;
+    this.focusedCandidate %= this.visibleCandidates.length;
+  }
+  focusPrevious() {
+    this.checkFocusNaN();
+    this.focusedCandidate--;
+    this.focusedCandidate += this.visibleCandidates.length;
+    this.focusedCandidate %= this.visibleCandidates.length;
+  }
+  isFocused(index: number) {
+    return this.focusedCandidate === index;
+  }
+  isNext(index: number) {
+    return this.focusedCandidate === index - 1;
+  }
+  isPrev(index: number) {
+    return this.focusedCandidate === index + 1;
+  }
+
+  getCardClasses(index: number) {
+    return {
+      "focused-item": this.isFocused(index),
+      "previous-item": this.isPrev(index),
+      "on-deck": this.isNext(index),
+    };
+  }
 
   shuffleCandidates() {
     const tempCandidates = this.allCandidates.slice();
@@ -102,6 +165,7 @@ export default class App extends Vue {
   minimizeCandidate(candidate: Candidate) {
     console.log("FFFF", candidate);
     candidate.toggleMinimized();
+    this.checkFocus();
   }
 
   setTime(time: number) {
@@ -136,9 +200,16 @@ export default class App extends Vue {
     align-items: flex-end;
     flex: 0 1 auto;
     width: fit-content;
-    > a {
+    > div {
       flex: 0 1 auto;
       margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      > * {
+        flex: 0 1 auto;
+        margin-right: 4px;
+      }
     }
   }
 }
@@ -158,14 +229,41 @@ export default class App extends Vue {
   }
 }
 
-.candidates-container .transition-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  > div,
-  > candidate-card {
-    margin: 0 0.5em;
+.container.gallery-mode {
+  .candidates-container .transition-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    > div,
+    > candidate-card {
+      margin: 0 0.5em;
+      visibility: visible;
+    }
+  }
+}
+.container:not(.gallery-mode) {
+  .candidate-card {
+    display: none;
+    &.focused-item {
+      display: inline-block;
+    }
+    &.is-previous,
+    &.on-deck {
+      display: inline-block;
+      /deep/ .card-action {
+        display: none !important;
+      }
+    }
+  }
+}
+
+.focused-item {
+  /deep/ .card-title::before {
+    content: ">";
+    color: red;
+    position: absolute;
+    left: -1px;
   }
 }
 

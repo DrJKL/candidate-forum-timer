@@ -1,10 +1,10 @@
 <template>
-  <div class="candidate-card card blue-grey z-depth-2">
-    <div class="card-content white-text">
+  <div class="candidate-card card z-depth-2">
+    <div class="card-content">
       <div class="card-title">
         <span>{{candidate.name}}</span>
-        <a href="#" class="btn-floating btn-flat" v-on:click.prevent="candidate.toggleMinimized()">
-          <i class="material-icons white-text">minimize</i>
+        <a href="#" class="btn-floating btn-flat" v-on:click.prevent="minimizeCandidate()">
+          <i class="material-icons">minimize</i>
         </a>
       </div>
       <div class="time-left">
@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 import { Candidate } from "./candidates";
 
 @Component({})
@@ -65,11 +65,16 @@ export default class CandidateCard extends Vue {
     }
     return this.progressPercent;
   }
+
+  @Emit()
+  minimizeCandidate() {}
 }
 </script>
 
 <style lang="scss" scoped>
 .candidate-card {
+  background-color: #607d8b;
+  color: #FFFFFF;
   .card-content {
     display: flex;
     flex-direction: column;
