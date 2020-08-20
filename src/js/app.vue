@@ -261,10 +261,8 @@ export default class App extends Vue {
       /deep/ .card-action {
         display: none !important;
       }
-      /deep/ .card-content {
-        > :not(.card-title) {
-          display:none;
-        }
+      /deep/ .card-content > :not(.card-title) {
+        display: none;
       }
     }
   }
