@@ -89,6 +89,9 @@
         </transition-group>
       </div>
     </main>
+    <footer>
+      <a href="#" v-on:click.prevent="showCandidateDialog()">Set New Candidates</a>
+    </footer>
   </div>
 </template>
 <script lang="ts">
@@ -182,6 +185,24 @@ export default class App extends Vue {
       .forEach((timer) => {
         timer.setTime(time, "s");
       });
+  }
+
+  showCandidateDialog() {
+    this.$buefy.dialog.prompt({
+      message: `List the candidates, comma separated`,
+      inputAttrs: {
+        placeholder: "e.g. Joe, Jan, Jill, Jazz",
+      },
+      trapFocus: true,
+      onConfirm: (value) => {
+        this.setCandidates(value.split(','));
+        // this.$buefy.toast.open(`Your name is: ${value}`);
+      },
+    });
+  }
+
+  setCandidates(candidateNames: string[]) {
+    this.allCandidates = candidateNames.map((name) => new Candidate(name));
   }
 }
 </script>
