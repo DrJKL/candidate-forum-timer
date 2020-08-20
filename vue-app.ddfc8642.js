@@ -15905,6 +15905,28 @@ function (_super) {
     });
   };
 
+  App.prototype.showCandidateDialog = function () {
+    var _this = this;
+
+    this.$buefy.dialog.prompt({
+      message: "List the candidates, comma separated",
+      inputAttrs: {
+        placeholder: "e.g. Joe, Jan, Jill, Jazz"
+      },
+      trapFocus: true,
+      onConfirm: function onConfirm(value) {
+        _this.setCandidates(value.split(',')); // this.$buefy.toast.open(`Your name is: ${value}`);
+
+      }
+    });
+  };
+
+  App.prototype.setCandidates = function (candidateNames) {
+    this.allCandidates = candidateNames.map(function (name) {
+      return new _candidates.Candidate(name);
+    });
+  };
+
   App = __decorate([(0, _vuePropertyDecorator.Component)({
     components: {
       CandidateCard: _candidateCard.default
@@ -16179,7 +16201,23 @@ exports.default = _default;
           1
         )
       ]
-    )
+    ),
+    _vm._v(" "),
+    _c("footer", [
+      _c(
+        "a",
+        {
+          attrs: { href: "#" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.showCandidateDialog()
+            }
+          }
+        },
+        [_vm._v("Set New Candidates")]
+      )
+    ])
   ])
 }
 var staticRenderFns = [
@@ -35409,7 +35447,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11144" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "9524" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
