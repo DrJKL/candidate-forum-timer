@@ -15517,11 +15517,15 @@ function (_super) {
     configurable: true
   });
 
+  CandidateCard.prototype.minimizeCandidate = function () {};
+
   var _a;
 
   __decorate([(0, _vuePropertyDecorator.Prop)({
     required: true
   }), __metadata("design:type", typeof (_a = typeof _candidates.Candidate !== "undefined" && _candidates.Candidate) === "function" ? _a : Object)], CandidateCard.prototype, "candidate", void 0);
+
+  __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], CandidateCard.prototype, "minimizeCandidate", null);
 
   CandidateCard = __decorate([(0, _vuePropertyDecorator.Component)({})], CandidateCard);
   return CandidateCard;
@@ -15541,8 +15545,8 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "candidate-card card blue-grey z-depth-2" }, [
-    _c("div", { staticClass: "card-content white-text" }, [
+  return _c("div", { staticClass: "candidate-card card z-depth-2" }, [
+    _c("div", { staticClass: "card-content" }, [
       _c("div", { staticClass: "card-title" }, [
         _c("span", [_vm._v(_vm._s(_vm.candidate.name))]),
         _vm._v(" "),
@@ -15554,15 +15558,11 @@ exports.default = _default;
             on: {
               click: function($event) {
                 $event.preventDefault()
-                return _vm.candidate.toggleMinimized()
+                return _vm.minimizeCandidate()
               }
             }
           },
-          [
-            _c("i", { staticClass: "material-icons white-text" }, [
-              _vm._v("minimize")
-            ])
-          ]
+          [_c("i", { staticClass: "material-icons" }, [_vm._v("minimize")])]
         )
       ]),
       _vm._v(" "),
@@ -15804,8 +15804,55 @@ function (_super) {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
     _this.allCandidates = _candidates.allCandidates;
+    _this.focusedCandidate = 0;
+    _this.galleryMode = false;
     return _this;
   }
+
+  App.prototype.checkFocus = function () {
+    var limit = this.visibleCandidates.length - 1;
+    this.checkFocusNaN();
+    this.focusedCandidate = Math.max(Math.min(this.focusedCandidate, limit), 0);
+  };
+
+  App.prototype.checkFocusNaN = function () {
+    if (isNaN(this.focusedCandidate)) {
+      this.focusedCandidate = 0;
+    }
+  };
+
+  App.prototype.focusNext = function () {
+    this.checkFocusNaN();
+    this.focusedCandidate++;
+    this.focusedCandidate %= this.visibleCandidates.length;
+  };
+
+  App.prototype.focusPrevious = function () {
+    this.checkFocusNaN();
+    this.focusedCandidate--;
+    this.focusedCandidate += this.visibleCandidates.length;
+    this.focusedCandidate %= this.visibleCandidates.length;
+  };
+
+  App.prototype.isFocused = function (index) {
+    return this.focusedCandidate === index;
+  };
+
+  App.prototype.isNext = function (index) {
+    return this.focusedCandidate === index - 1;
+  };
+
+  App.prototype.isPrev = function (index) {
+    return this.focusedCandidate === index + 1;
+  };
+
+  App.prototype.getCardClasses = function (index) {
+    return {
+      "focused-item": this.isFocused(index),
+      "previous-item": this.isPrev(index),
+      "on-deck": this.isNext(index)
+    };
+  };
 
   App.prototype.shuffleCandidates = function () {
     var tempCandidates = this.allCandidates.slice();
@@ -15847,6 +15894,7 @@ function (_super) {
   App.prototype.minimizeCandidate = function (candidate) {
     console.log("FFFF", candidate);
     candidate.toggleMinimized();
+    this.checkFocus();
   };
 
   App.prototype.setTime = function (time) {
@@ -15888,25 +15936,72 @@ exports.default = _default;
           _vm._m(1),
           _vm._v(" "),
           _c("div", { staticClass: "buttons box" }, [
-            _c(
-              "a",
-              {
-                staticClass: "btn",
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.shuffleCandidates()
+            _c("div", [
+              _c(
+                "a",
+                {
+                  staticClass: "btn",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.shuffleCandidates()
+                    }
                   }
-                }
-              },
-              [
-                _vm._v("\n            Shuffle\n            "),
-                _c("i", { staticClass: "material-icons right" }, [
-                  _vm._v("shuffle")
+                },
+                [
+                  _vm._v("\n              Shuffle\n              "),
+                  _c("i", { staticClass: "material-icons right" }, [
+                    _vm._v("shuffle")
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "switch" }, [
+                _c("label", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.galleryMode,
+                        expression: "galleryMode"
+                      }
+                    ],
+                    attrs: { type: "checkbox" },
+                    domProps: {
+                      checked: Array.isArray(_vm.galleryMode)
+                        ? _vm._i(_vm.galleryMode, null) > -1
+                        : _vm.galleryMode
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.galleryMode,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.galleryMode = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.galleryMode = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.galleryMode = $$c
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "lever" }),
+                  _vm._v("\n                Show All\n              ")
                 ])
-              ]
-            ),
+              ])
+            ]),
             _vm._v(" "),
             _c("div", { staticClass: "time-setters-global" }, [
               _c(
@@ -15968,6 +16063,50 @@ exports.default = _default;
                   ])
                 ]
               )
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c(
+                "a",
+                {
+                  staticClass: "btn",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.focusPrevious()
+                    }
+                  }
+                },
+                [
+                  _vm._v("\n              Prev\n              "),
+                  _c("i", { staticClass: "material-icons left" }, [
+                    _vm._v("navigate_before")
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("span", [_vm._v(_vm._s(_vm.focusedCandidate))]),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "btn",
+                  attrs: { href: "#" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      return _vm.focusNext()
+                    }
+                  }
+                },
+                [
+                  _vm._v("\n              Next\n              "),
+                  _c("i", { staticClass: "material-icons right" }, [
+                    _vm._v("navigate_next")
+                  ])
+                ]
+              )
             ])
           ])
         ])
@@ -15975,8 +16114,8 @@ exports.default = _default;
     ]),
     _vm._v(" "),
     _c(
-      "main",
-      { staticClass: "container" },
+      "div",
+      { staticClass: "container time-out-container-container" },
       [
         _c(
           "b-taglist",
@@ -15997,8 +16136,15 @@ exports.default = _default;
             )
           }),
           1
-        ),
-        _vm._v(" "),
+        )
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "main",
+      { staticClass: "container", class: { "gallery-mode": _vm.galleryMode } },
+      [
         _c(
           "div",
           { staticClass: "candidates-container" },
@@ -16009,11 +16155,21 @@ exports.default = _default;
                 staticClass: "transition-container",
                 attrs: { name: "squish", tag: "div" }
               },
-              _vm._l(_vm.visibleCandidates, function(candidate) {
+              _vm._l(_vm.visibleCandidates, function(candidate, index) {
                 return _c(
                   "div",
                   { key: candidate.name, staticClass: "squish-item" },
-                  [_c("candidate-card", { attrs: { candidate: candidate } })],
+                  [
+                    _c("candidate-card", {
+                      class: _vm.getCardClasses(index),
+                      attrs: { candidate: candidate },
+                      on: {
+                        "minimize-candidate": function($event) {
+                          return _vm.minimizeCandidate(candidate)
+                        }
+                      }
+                    })
+                  ],
                   1
                 )
               }),
@@ -16022,8 +16178,7 @@ exports.default = _default;
           ],
           1
         )
-      ],
-      1
+      ]
     )
   ])
 }
@@ -16047,11 +16202,17 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "header-text" }, [
       _c("h1", { staticClass: "title" }, [
-        _vm._v("2020 Mountain View City Council Candidate Forum")
+        _vm._v("\n            2020\n            "),
+        _c("span", [_vm._v("Mountain View")]),
+        _vm._v(" "),
+        _c("span", [_vm._v("City Council")]),
+        _vm._v(" "),
+        _c("span", [_vm._v("Candidate Forum")])
       ]),
       _vm._v(" "),
       _c("h2", { staticClass: "subtitle" }, [
-        _vm._v("Hosted by the Mountain View Mobile Home Alliance")
+        _vm._v("\n            Hosted by the\n            "),
+        _c("span", [_vm._v("Mountain View Mobile Home Alliance")])
       ])
     ])
   }
@@ -35248,7 +35409,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11934" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11144" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
