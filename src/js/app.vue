@@ -8,8 +8,15 @@
           </div>
           <div class="header-text">
             <h1 class="title">
-              2020 <span>Mountain View</span> <span>City Council</span> <span>Candidate Forum</span></h1>
-            <h2 class="subtitle">Hosted by the <span>Mountain View Mobile Home Alliance</span></h2>
+              2020
+              <span>Mountain View</span>
+              <span>City Council</span>
+              <span>Candidate Forum</span>
+            </h1>
+            <h2 class="subtitle">
+              Hosted by the
+              <span>Mountain View Mobile Home Alliance</span>
+            </h2>
           </div>
           <div class="buttons box">
             <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
@@ -46,9 +53,9 @@
       </b-taglist>
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
-        <div v-for="candidate of visibleCandidates" :key="candidate.name" class="squish-item">
-          <candidate-card :candidate="candidate"></candidate-card>
-        </div>
+          <div v-for="candidate of visibleCandidates" :key="candidate.name" class="squish-item">
+            <candidate-card :candidate="candidate"></candidate-card>
+          </div>
         </transition-group>
       </div>
     </main>
@@ -107,7 +114,37 @@ export default class App extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-.title span, .subtitle span {
+.our-header {
+  display: flex;
+  > div {
+    flex: 1;
+  }
+  > div.logo-img {
+    flex: 0 1 auto;
+    margin-right: 2em;
+    img {
+      height: 5em;
+      width: auto;
+    }
+  }
+  .header-text {
+    padding-right: 1em;
+  }
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex: 0 1 auto;
+    width: fit-content;
+    > a {
+      flex: 0 1 auto;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.our-header .title span,
+.subtitle span {
   display: inline-block;
 }
 
@@ -115,21 +152,9 @@ export default class App extends Vue {
   display: flex;
   flex-direction: column;
   height: 100%;
-  flex:1;
+  flex: 1;
   > header {
     flex: 0 1 auto;
-  }
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  flex: 0 1 auto;
-  width: fit-content;
-  > a {
-    flex: 0 1 auto;
-    margin-bottom: 8px;
   }
 }
 
@@ -145,13 +170,13 @@ export default class App extends Vue {
 }
 
 .squish-item {
-  transition: all .5s;
+  transition: all 0.5s;
   opacity: 1;
-  
 }
-.squish-enter, .squish-leave-to {
+.squish-enter,
+.squish-leave-to {
   opacity: 0;
-  max-width:0;
+  max-width: 0;
   flex-grow: 0.0000001;
 }
 .squish-leave-active {
@@ -159,6 +184,6 @@ export default class App extends Vue {
 }
 
 .squish-move {
-  transition: transform .5s;
+  transition: transform 0.5s;
 }
 </style>
