@@ -15741,7 +15741,375 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/app.vue":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/header.vue":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _vuePropertyDecorator = require("vue-property-decorator");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var __extends = void 0 && (void 0).__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+      }
+    };
+
+    return _extendStatics(d, b);
+  };
+
+  return function (d, b) {
+    _extendStatics(d, b);
+
+    function __() {
+      this.constructor = d;
+    }
+
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+
+var __decorate = void 0 && (void 0).__decorate || function (decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if ((typeof Reflect === "undefined" ? "undefined" : _typeof(Reflect)) === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) {
+    if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  }
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+var __metadata = void 0 && (void 0).__metadata || function (k, v) {
+  if ((typeof Reflect === "undefined" ? "undefined" : _typeof(Reflect)) === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var Header =
+/** @class */
+function (_super) {
+  __extends(Header, _super);
+
+  function Header() {
+    return _super !== null && _super.apply(this, arguments) || this;
+  }
+
+  Header.prototype.shuffleCandidates = function () {};
+
+  Header.prototype.focusChange = function (num) {
+    return num;
+  };
+
+  Header.prototype.updateGalleryMode = function () {
+    return !this.galleryMode;
+  };
+
+  Header.prototype.setTime = function (time) {
+    var _a;
+
+    (_a = this.candidatesList) === null || _a === void 0 ? void 0 : _a.map(function (candidate) {
+      return candidate.timer;
+    }).forEach(function (timer) {
+      timer.setTime(time, "s");
+    });
+  };
+
+  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Array)], Header.prototype, "candidatesList", void 0);
+
+  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Boolean)], Header.prototype, "galleryMode", void 0);
+
+  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)], Header.prototype, "focusedCandidate", void 0);
+
+  __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "shuffleCandidates", null);
+
+  __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", [Number]), __metadata("design:returntype", void 0)], Header.prototype, "focusChange", null);
+
+  __decorate([(0, _vuePropertyDecorator.Emit)("update:galleryMode"), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "updateGalleryMode", null);
+
+  Header = __decorate([(0, _vuePropertyDecorator.Component)({})], Header);
+  return Header;
+}(_vuePropertyDecorator.Vue);
+
+var _default = Header;
+exports.default = _default;
+        var $09fc64 = exports.default || module.exports;
+      
+      if (typeof $09fc64 === 'function') {
+        $09fc64 = $09fc64.options;
+      }
+    
+        /* template */
+        Object.assign($09fc64, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("header", { staticClass: "is-primary is-bold container" }, [
+    _c("div", { staticClass: "hero-body" }, [
+      _c("div", { staticClass: "our-header container" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _vm._m(1),
+        _vm._v(" "),
+        _c("div", { staticClass: "buttons box" }, [
+          _c("div", [
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.shuffleCandidates()
+                  }
+                }
+              },
+              [
+                _vm._v("\n            Shuffle\n            "),
+                _c("i", { staticClass: "material-icons right" }, [
+                  _vm._v("shuffle")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "switch" }, [
+              _c("label", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.galleryMode,
+                      expression: "galleryMode"
+                    }
+                  ],
+                  attrs: { type: "checkbox" },
+                  domProps: {
+                    checked: Array.isArray(_vm.galleryMode)
+                      ? _vm._i(_vm.galleryMode, null) > -1
+                      : _vm.galleryMode
+                  },
+                  on: {
+                    click: function($event) {
+                      return _vm.updateGalleryMode()
+                    },
+                    change: function($event) {
+                      var $$a = _vm.galleryMode,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 && (_vm.galleryMode = $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            (_vm.galleryMode = $$a
+                              .slice(0, $$i)
+                              .concat($$a.slice($$i + 1)))
+                        }
+                      } else {
+                        _vm.galleryMode = $$c
+                      }
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "lever" }),
+                _vm._v("\n              Show All\n            ")
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "time-setters-global" }, [
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.setTime(30)
+                  }
+                }
+              },
+              [
+                _vm._v("\n            30\n            "),
+                _c("i", { staticClass: "material-icons left" }, [
+                  _vm._v("timer")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.setTime(60)
+                  }
+                }
+              },
+              [
+                _vm._v("\n            60\n            "),
+                _c("i", { staticClass: "material-icons left" }, [
+                  _vm._v("timer")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.setTime(90)
+                  }
+                }
+              },
+              [
+                _vm._v("\n            90\n            "),
+                _c("i", { staticClass: "material-icons left" }, [
+                  _vm._v("timer")
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.focusChange(-1)
+                  }
+                }
+              },
+              [
+                _vm._v("\n            Prev\n            "),
+                _c("i", { staticClass: "material-icons left" }, [
+                  _vm._v("navigate_before")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c("span", { staticClass: "current-focus-number" }, [
+              _vm._v(_vm._s(_vm.focusedCandidate))
+            ]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.focusChange(1)
+                  }
+                }
+              },
+              [
+                _vm._v("\n            Next\n            "),
+                _c("i", { staticClass: "material-icons right" }, [
+                  _vm._v("navigate_next")
+                ])
+              ]
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "logo-img" }, [
+      _c("img", {
+        attrs: {
+          src: "/just_homes_logo.5f11e9bb.png",
+          alt: "MVMHA logo"
+        }
+      })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "header-text" }, [
+      _c("h1", { staticClass: "title" }, [
+        _vm._v("\n          2020\n          "),
+        _c("span", [_vm._v("Mountain View")]),
+        _vm._v(" "),
+        _c("span", [_vm._v("City Council")]),
+        _vm._v(" "),
+        _c("span", [_vm._v("Candidate Forum")])
+      ]),
+      _vm._v(" "),
+      _c("h2", { staticClass: "subtitle" }, [
+        _vm._v("\n          Hosted by the\n          "),
+        _c("span", [_vm._v("Mountain View Mobile Home Alliance")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: "data-v-09fc64",
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$09fc64', $09fc64);
+          } else {
+            api.reload('$09fc64', $09fc64);
+          }
+        }
+
+        
+        var reloadCSS = require('_css_loader');
+        module.hot.dispose(reloadCSS);
+        module.hot.accept(reloadCSS);
+      
+      }
+    })();
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./..\\assets\\just_homes_logo.png":[["just_homes_logo.5f11e9bb.png","src/assets/just_homes_logo.png"],"src/assets/just_homes_logo.png"],"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/app.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15754,6 +16122,8 @@ var _vuePropertyDecorator = require("vue-property-decorator");
 var _candidates = require("./candidates");
 
 var _candidateCard = _interopRequireDefault(require("./candidate-card.vue"));
+
+var _header = _interopRequireDefault(require("./header.vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15821,15 +16191,9 @@ function (_super) {
     }
   };
 
-  App.prototype.focusNext = function () {
+  App.prototype.changeFocus = function (num) {
     this.checkFocusNaN();
-    this.focusedCandidate++;
-    this.focusedCandidate %= this.visibleCandidates.length;
-  };
-
-  App.prototype.focusPrevious = function () {
-    this.checkFocusNaN();
-    this.focusedCandidate--;
+    this.focusedCandidate += num;
     this.focusedCandidate += this.visibleCandidates.length;
     this.focusedCandidate %= this.visibleCandidates.length;
   };
@@ -15897,14 +16261,6 @@ function (_super) {
     this.checkFocus();
   };
 
-  App.prototype.setTime = function (time) {
-    this.allCandidates.map(function (candidate) {
-      return candidate.timer;
-    }).forEach(function (timer) {
-      timer.setTime(time, "s");
-    });
-  };
-
   App.prototype.showCandidateDialog = function () {
     var _this = this;
 
@@ -15915,7 +16271,7 @@ function (_super) {
       },
       trapFocus: true,
       onConfirm: function onConfirm(value) {
-        _this.setCandidates(value.split(',')); // this.$buefy.toast.open(`Your name is: ${value}`);
+        _this.setCandidates(value.split(",")); // this.$buefy.toast.open(`Your name is: ${value}`);
 
       }
     });
@@ -15929,6 +16285,7 @@ function (_super) {
 
   App = __decorate([(0, _vuePropertyDecorator.Component)({
     components: {
+      AppHeader: _header.default,
       CandidateCard: _candidateCard.default
     }
   })], App);
@@ -15949,312 +16306,123 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "app-container" }, [
-    _c("header", { staticClass: "is-primary is-bold container" }, [
-      _c("div", { staticClass: "hero-body" }, [
-        _c("div", { staticClass: "our-header container" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _vm._m(1),
-          _vm._v(" "),
-          _c("div", { staticClass: "buttons box" }, [
-            _c("div", [
-              _c(
-                "a",
-                {
-                  staticClass: "btn",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.shuffleCandidates()
-                    }
-                  }
-                },
-                [
-                  _vm._v("\n              Shuffle\n              "),
-                  _c("i", { staticClass: "material-icons right" }, [
-                    _vm._v("shuffle")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "switch" }, [
-                _c("label", [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.galleryMode,
-                        expression: "galleryMode"
-                      }
-                    ],
-                    attrs: { type: "checkbox" },
-                    domProps: {
-                      checked: Array.isArray(_vm.galleryMode)
-                        ? _vm._i(_vm.galleryMode, null) > -1
-                        : _vm.galleryMode
-                    },
-                    on: {
-                      change: function($event) {
-                        var $$a = _vm.galleryMode,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 && (_vm.galleryMode = $$a.concat([$$v]))
-                          } else {
-                            $$i > -1 &&
-                              (_vm.galleryMode = $$a
-                                .slice(0, $$i)
-                                .concat($$a.slice($$i + 1)))
-                          }
-                        } else {
-                          _vm.galleryMode = $$c
-                        }
-                      }
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "lever" }),
-                  _vm._v("\n                Show All\n              ")
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "time-setters-global" }, [
-              _c(
-                "a",
-                {
-                  staticClass: "btn",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.setTime(30)
-                    }
-                  }
-                },
-                [
-                  _vm._v("\n              30\n              "),
-                  _c("i", { staticClass: "material-icons left" }, [
-                    _vm._v("timer")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "btn",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.setTime(60)
-                    }
-                  }
-                },
-                [
-                  _vm._v("\n              60\n              "),
-                  _c("i", { staticClass: "material-icons left" }, [
-                    _vm._v("timer")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "btn",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.setTime(90)
-                    }
-                  }
-                },
-                [
-                  _vm._v("\n              90\n              "),
-                  _c("i", { staticClass: "material-icons left" }, [
-                    _vm._v("timer")
-                  ])
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", [
-              _c(
-                "a",
-                {
-                  staticClass: "btn",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.focusPrevious()
-                    }
-                  }
-                },
-                [
-                  _vm._v("\n              Prev\n              "),
-                  _c("i", { staticClass: "material-icons left" }, [
-                    _vm._v("navigate_before")
-                  ])
-                ]
-              ),
-              _vm._v(" "),
-              _c("span", [_vm._v(_vm._s(_vm.focusedCandidate))]),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "btn",
-                  attrs: { href: "#" },
-                  on: {
-                    click: function($event) {
-                      $event.preventDefault()
-                      return _vm.focusNext()
-                    }
-                  }
-                },
-                [
-                  _vm._v("\n              Next\n              "),
-                  _c("i", { staticClass: "material-icons right" }, [
-                    _vm._v("navigate_next")
-                  ])
-                ]
-              )
-            ])
-          ])
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "container time-out-container-container" },
-      [
-        _c(
-          "b-taglist",
-          { staticClass: "time-out-container" },
-          _vm._l(_vm.minimizedCandidates, function(candidate) {
-            return _c(
-              "b-tag",
-              {
-                key: candidate.name,
-                staticClass: "is-primary minimized-candidate",
-                nativeOn: {
-                  click: function($event) {
-                    return _vm.minimizeCandidate(candidate)
-                  }
-                }
-              },
-              [_vm._v(_vm._s(candidate.name))]
-            )
-          }),
-          1
-        )
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "main",
-      { staticClass: "container", class: { "gallery-mode": _vm.galleryMode } },
-      [
-        _c(
-          "div",
-          { staticClass: "candidates-container" },
-          [
-            _c(
-              "transition-group",
-              {
-                staticClass: "transition-container",
-                attrs: { name: "squish", tag: "div" }
-              },
-              _vm._l(_vm.visibleCandidates, function(candidate, index) {
-                return _c(
-                  "div",
-                  { key: candidate.name, staticClass: "squish-item" },
-                  [
-                    _c("candidate-card", {
-                      class: _vm.getCardClasses(index),
-                      attrs: { candidate: candidate },
-                      on: {
-                        "minimize-candidate": function($event) {
-                          return _vm.minimizeCandidate(candidate)
-                        }
-                      }
-                    })
-                  ],
-                  1
-                )
-              }),
-              0
-            )
-          ],
-          1
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c("footer", [
-      _c(
-        "a",
-        {
-          attrs: { href: "#" },
-          on: {
-            click: function($event) {
-              $event.preventDefault()
-              return _vm.showCandidateDialog()
-            }
-          }
-        },
-        [_vm._v("Set New Candidates")]
-      )
-    ])
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "logo-img" }, [
-      _c("img", {
+  return _c(
+    "div",
+    { staticClass: "app-container" },
+    [
+      _c("app-header", {
         attrs: {
-          src: "/just_homes_logo.5f11e9bb.png",
-          alt: "MVMHA logo"
+          "focused-candidate": _vm.focusedCandidate,
+          "gallery-mode": _vm.galleryMode,
+          "candidates-list": _vm.allCandidates
+        },
+        on: {
+          "update:galleryMode": function($event) {
+            _vm.galleryMode = $event
+          },
+          "update:gallery-mode": function($event) {
+            _vm.galleryMode = $event
+          },
+          "shuffle-candidates": function($event) {
+            return _vm.shuffleCandidates()
+          },
+          "focus-change": function($event) {
+            return _vm.changeFocus($event)
+          }
         }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "header-text" }, [
-      _c("h1", { staticClass: "title" }, [
-        _vm._v("\n            2020\n            "),
-        _c("span", [_vm._v("Mountain View")]),
-        _vm._v(" "),
-        _c("span", [_vm._v("City Council")]),
-        _vm._v(" "),
-        _c("span", [_vm._v("Candidate Forum")])
-      ]),
+      }),
       _vm._v(" "),
-      _c("h2", { staticClass: "subtitle" }, [
-        _vm._v("\n            Hosted by the\n            "),
-        _c("span", [_vm._v("Mountain View Mobile Home Alliance")])
+      _c(
+        "div",
+        { staticClass: "container time-out-container-container" },
+        [
+          _c(
+            "b-taglist",
+            { staticClass: "time-out-container" },
+            _vm._l(_vm.minimizedCandidates, function(candidate) {
+              return _c(
+                "b-tag",
+                {
+                  key: candidate.name,
+                  staticClass: "is-primary minimized-candidate",
+                  nativeOn: {
+                    click: function($event) {
+                      return _vm.minimizeCandidate(candidate)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(candidate.name))]
+              )
+            }),
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "main",
+        {
+          staticClass: "container",
+          class: { "gallery-mode": _vm.galleryMode }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "candidates-container" },
+            [
+              _c(
+                "transition-group",
+                {
+                  staticClass: "transition-container",
+                  attrs: { name: "squish", tag: "div" }
+                },
+                _vm._l(_vm.visibleCandidates, function(candidate, index) {
+                  return _c(
+                    "div",
+                    { key: candidate.name, staticClass: "squish-item" },
+                    [
+                      _c("candidate-card", {
+                        class: _vm.getCardClasses(index),
+                        attrs: { candidate: candidate },
+                        on: {
+                          "minimize-candidate": function($event) {
+                            return _vm.minimizeCandidate(candidate)
+                          }
+                        }
+                      })
+                    ],
+                    1
+                  )
+                }),
+                0
+              )
+            ],
+            1
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _c("footer", [
+        _c(
+          "a",
+          {
+            attrs: { href: "#" },
+            on: {
+              click: function($event) {
+                $event.preventDefault()
+                return _vm.showCandidateDialog()
+              }
+            }
+          },
+          [_vm._v("Set New Candidates")]
+        )
       ])
-    ])
-  }
-]
+    ],
+    1
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 
           return {
@@ -16287,7 +16455,7 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","./..\\assets\\just_homes_logo.png":[["just_homes_logo.5f11e9bb.png","src/assets/just_homes_logo.png"],"src/assets/just_homes_logo.png"],"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-1fafdf15.js":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-1fafdf15.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35447,7 +35615,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "9524" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "5360" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
