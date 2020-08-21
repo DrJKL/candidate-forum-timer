@@ -3,18 +3,15 @@
     <div class="hero-body">
       <div class="our-header container">
         <div class="logo-img">
-          <img src="../assets/just_homes_logo.png" alt="MVMHA logo" />
+          <img :src="config.eventInfo.logoUrl" alt="Organization logo" />
         </div>
         <div class="header-text">
-          <h1 class="title">
-            2020
-            <span>Mountain View</span>
-            <span>City Council</span>
-            <span>Candidate Forum</span>
+          <h1 class="title" v-html="config.eventInfo.eventTitle">
+            <!-- Unknown Event -->
           </h1>
           <h2 class="subtitle">
             Hosted by the
-            <span>Mountain View Mobile Home Alliance</span>
+            <span>{{config.eventInfo.orgTitle}}</span>
           </h2>
         </div>
         <div class="buttons box">
@@ -66,6 +63,7 @@
 import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 import moment from "moment";
 import { Candidate } from "./candidates";
+import Config from './global_config';
 
 @Component({})
 export default class Header extends Vue {
@@ -90,6 +88,7 @@ export default class Header extends Vue {
   updateGalleryMode() {
     return !this.galleryMode;
   }
+  config = Config;
 
   setTime(time: number) {
     this.candidatesList
