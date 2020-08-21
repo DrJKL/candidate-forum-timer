@@ -120,6 +120,17 @@
 .app-container > footer[data-v-cd5f52] {
     flex: 0 1 auto;
 }
+footer[data-v-cd5f52] {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
+footer > a[data-v-cd5f52] {
+    flex: 0 1 auto;
+}
+footer > span[data-v-cd5f52] {
+    flex: 0 1 auto;
+}
 .container.gallery-mode .candidates-container .transition-container[data-v-cd5f52] {
   display: flex;
   flex-direction: row;

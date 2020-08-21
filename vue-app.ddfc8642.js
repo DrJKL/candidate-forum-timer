@@ -14992,7 +14992,8 @@ function () {
     // "Mountain View Mobile Home Alliance",
     "League of Women Voters",
     eventTitle: //
-    "2020\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>"
+    "2020\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>",
+    candidatesList: ["Margaret Abe-Koga", "Jose Gutierrez", "John Lashlee", "Sally Lieber", "Lisa Matichak", "Alex Nunez", "Paul Roales", "Pat Showalter", "Lenny Siegel"]
   };
   return Config;
 }();
@@ -15091,6 +15092,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.totalTimeLeft = totalTimeLeft;
 exports.allCandidates = exports.Candidate = void 0;
 
+var _global_config = _interopRequireDefault(require("./global_config"));
+
 var _timer = _interopRequireDefault(require("./timer"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -15113,9 +15116,11 @@ function () {
 }();
 
 exports.Candidate = Candidate;
-var allCandidates = ["Margaret Abe-Koga", "Jose Gutierrez", "John Lashlee", "Sally Lieber", "Lisa Matichak", "Alex Nunez", "Paul Roales", "Pat Showalter", "Lenny Siegel"].map(function (candidateName) {
+
+var allCandidates = _global_config.default.eventInfo.candidatesList.map(function (candidateName) {
   return new Candidate(candidateName);
 });
+
 exports.allCandidates = allCandidates;
 
 function totalTimeLeft() {
@@ -15123,7 +15128,7 @@ function totalTimeLeft() {
     return candidate.timer.timeLeft;
   });
 }
-},{"./timer":"src/js/timer.ts"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"./global_config":"src/js/global_config.ts","./timer":"src/js/timer.ts"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -16436,7 +16441,11 @@ exports.default = _default;
             }
           },
           [_vm._v("Set New Candidates")]
-        )
+        ),
+        _vm._v(" "),
+        _c("span", { staticClass: "attribution-label" }, [
+          _vm._v("Originally Built by Alex Brown for the MVMHA (2020)")
+        ])
       ])
     ],
     1
