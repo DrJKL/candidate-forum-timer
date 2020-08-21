@@ -59,6 +59,7 @@
 
 .our-header[data-v-09fc64] {
   display: flex;
+  align-items: center;
 }
 .our-header > div[data-v-09fc64] {
     flex: 1;
@@ -110,6 +111,15 @@
 .app-container > header[data-v-cd5f52] {
     flex: 0 1 auto;
 }
+.app-container > .time-out-container-container[data-v-cd5f52] {
+    flex: 0 1 auto;
+}
+.app-container > main[data-v-cd5f52] {
+    flex: 1 0 auto;
+}
+.app-container > footer[data-v-cd5f52] {
+    flex: 0 1 auto;
+}
 .container.gallery-mode .candidates-container .transition-container[data-v-cd5f52] {
   display: flex;
   flex-direction: row;
@@ -127,10 +137,11 @@
 .container:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] {
     display: flex;
     width: 80vw;
-    height: 33vw;
+    max-height: 33vw;
 }
 .container:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] .card-content .card-title {
       font-size: 6vw;
+      line-height: initial;
 }
 .container:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52], .container:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] {
     display: inline-block;

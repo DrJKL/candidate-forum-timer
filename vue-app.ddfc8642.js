@@ -14944,7 +14944,25 @@ var global = arguments[3];
 
 })));
 
-},{}],"src/js/global_config.ts":[function(require,module,exports) {
+},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
+module.exports = "/just_homes_logo.5f11e9bb.png";
+},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
+module.exports = "/lwv-logo.87fe3171.png";
+},{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
+module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
+},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
+module.exports = "/lwv-logo_color_open (1).437ccd50.png";
+},{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
+module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
+},{}],"src/assets/*.png":[function(require,module,exports) {
+module.exports = {
+  "just_homes_logo": require("./just_homes_logo.png"),
+  "lwv-logo": require("./lwv-logo.png"),
+  "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
+  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
+  "lwv-logo_color_open": require("./lwv-logo_color_open.png")
+};
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo.png":"src/assets/lwv-logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14953,6 +14971,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _moment = _interopRequireDefault(require("moment"));
+
+var _ = _interopRequireDefault(require("../assets/*.png"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14964,12 +14984,22 @@ function () {
   Config.timeLimitTotal = _moment.default.duration(90, 's');
   Config.timeGranularity = 100;
   Config.timeDelta = _moment.default.duration(1, 's');
+  Config.eventInfo = {
+    logoUrl: //
+    //  images['just_homes_logo'],
+    _.default['lwv-logo'],
+    orgTitle: // 
+    // "Mountain View Mobile Home Alliance",
+    "League of Women Voters",
+    eventTitle: //
+    "2020\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>"
+  };
   return Config;
 }();
 
 var _default = Config;
 exports.default = _default;
-},{"moment":"node_modules/moment/moment.js"}],"src/js/timer.ts":[function(require,module,exports) {
+},{"moment":"node_modules/moment/moment.js","../assets/*.png":"src/assets/*.png"}],"src/js/timer.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15751,6 +15781,10 @@ exports.default = void 0;
 
 var _vuePropertyDecorator = require("vue-property-decorator");
 
+var _global_config = _interopRequireDefault(require("./global_config"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var __extends = void 0 && (void 0).__extends || function () {
@@ -15799,7 +15833,10 @@ function (_super) {
   __extends(Header, _super);
 
   function Header() {
-    return _super !== null && _super.apply(this, arguments) || this;
+    var _this = _super !== null && _super.apply(this, arguments) || this;
+
+    _this.config = _global_config.default;
+    return _this;
   }
 
   Header.prototype.shuffleCandidates = function () {};
@@ -15855,9 +15892,26 @@ exports.default = _default;
   return _c("header", { staticClass: "is-primary is-bold container" }, [
     _c("div", { staticClass: "hero-body" }, [
       _c("div", { staticClass: "our-header container" }, [
-        _vm._m(0),
+        _c("div", { staticClass: "logo-img" }, [
+          _c("img", {
+            attrs: {
+              src: _vm.config.eventInfo.logoUrl,
+              alt: "Organization logo"
+            }
+          })
+        ]),
         _vm._v(" "),
-        _vm._m(1),
+        _c("div", { staticClass: "header-text" }, [
+          _c("h1", {
+            staticClass: "title",
+            domProps: { innerHTML: _vm._s(_vm.config.eventInfo.eventTitle) }
+          }),
+          _vm._v(" "),
+          _c("h2", { staticClass: "subtitle" }, [
+            _vm._v("\n          Hosted by the\n          "),
+            _c("span", [_vm._v(_vm._s(_vm.config.eventInfo.orgTitle))])
+          ])
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "buttons box" }, [
           _c("div", [
@@ -16042,41 +16096,7 @@ exports.default = _default;
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "logo-img" }, [
-      _c("img", {
-        attrs: {
-          src: "/just_homes_logo.5f11e9bb.png",
-          alt: "MVMHA logo"
-        }
-      })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "header-text" }, [
-      _c("h1", { staticClass: "title" }, [
-        _vm._v("\n          2020\n          "),
-        _c("span", [_vm._v("Mountain View")]),
-        _vm._v(" "),
-        _c("span", [_vm._v("City Council")]),
-        _vm._v(" "),
-        _c("span", [_vm._v("Candidate Forum")])
-      ]),
-      _vm._v(" "),
-      _c("h2", { staticClass: "subtitle" }, [
-        _vm._v("\n          Hosted by the\n          "),
-        _c("span", [_vm._v("Mountain View Mobile Home Alliance")])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
           return {
@@ -16109,7 +16129,7 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./..\\assets\\just_homes_logo.png":[["just_homes_logo.5f11e9bb.png","src/assets/just_homes_logo.png"],"src/assets/just_homes_logo.png"],"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/app.vue":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./global_config":"src/js/global_config.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/app.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16403,7 +16423,7 @@ exports.default = _default;
         ]
       ),
       _vm._v(" "),
-      _c("footer", [
+      _c("footer", { staticClass: "container" }, [
         _c(
           "a",
           {
@@ -35615,7 +35635,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "5360" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8859" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
