@@ -4,6 +4,7 @@
       :focused-candidate="focusedCandidate"
       :gallery-mode.sync="galleryMode"
       :candidates-list="allCandidates"
+      @shuffle-candidates="shuffleCandidates()"
       @focus-change="changeFocus($event)"
     ></app-header>
     <div class="container time-out-container-container">
