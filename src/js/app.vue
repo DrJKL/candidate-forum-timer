@@ -4,7 +4,7 @@
       :focused-candidate="focusedCandidate"
       :gallery-mode.sync="galleryMode"
       :candidates-list="allCandidates"
-      v-on:focus-change="changeFocus($event)"
+      @focus-change="changeFocus($event)"
     ></app-header>
     <div class="container time-out-container-container">
       <b-taglist class="time-out-container">
@@ -12,11 +12,11 @@
           class="is-primary minimized-candidate"
           v-for="candidate of minimizedCandidates"
           :key="candidate.name"
-          v-on:click.native="minimizeCandidate(candidate)"
+          @click.native="minimizeCandidate(candidate)"
         >{{candidate.name}}</b-tag>
       </b-taglist>
     </div>
-    <main class="container" v-bind:class="{'gallery-mode': galleryMode}">
+    <main class="container" :class="{'gallery-mode': galleryMode}">
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
           <div
@@ -26,15 +26,15 @@
           >
             <candidate-card
               :candidate="candidate"
-              v-bind:class="getCardClasses(index)"
-              v-on:minimize-candidate="minimizeCandidate(candidate)"
+              :class="getCardClasses(index)"
+              @minimize-candidate="minimizeCandidate(candidate)"
             ></candidate-card>
           </div>
         </transition-group>
       </div>
     </main>
     <footer>
-      <a href="#" v-on:click.prevent="showCandidateDialog()">Set New Candidates</a>
+      <a href="#" @click.prevent="showCandidateDialog()">Set New Candidates</a>
     </footer>
   </div>
 </template>

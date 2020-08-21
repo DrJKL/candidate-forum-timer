@@ -3,7 +3,7 @@
     <div class="card-content">
       <div class="card-title">
         <span>{{candidate.name}}</span>
-        <a href="#" class="btn-floating btn-flat" v-on:click.prevent="minimizeCandidate()">
+        <a href="#" class="btn-floating btn-flat" @click.prevent="minimizeCandidate()">
           <i class="material-icons">minimize</i>
         </a>
       </div>
@@ -12,7 +12,7 @@
         'remaining'}}
       </div>
       <div class="spacer"></div>
-      <div v-bind:class="{'time-up': candidate.timer.isTimeUp}">
+      <div :class="{'time-up': candidate.timer.isTimeUp}">
         <b-progress
           :value="progressValue"
           size="is-large"
@@ -25,22 +25,22 @@
         <a
           href="#"
           class="btn startstop"
-          v-on:click.prevent="candidate.timer.toggleTimer();"
+          @click.prevent="candidate.timer.toggleTimer();"
         >{{candidate.timer.isRunning() ? 'Stop': 'Start'}}</a>
         <div class="inc-dec-buttons">
-          <a href="#" class="btn" v-on:click.prevent="candidate.timer.addTime()">
+          <a href="#" class="btn" @click.prevent="candidate.timer.addTime()">
             <i class="material-icons">add</i>
           </a>
-          <a href="#" class="btn" v-on:click.prevent="candidate.timer.removeTime()">
+          <a href="#" class="btn" @click.prevent="candidate.timer.removeTime()">
             <i class="material-icons">remove</i>
           </a>
         </div>
       </div>
       <div class="action-row time-setters">
-        <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(0,'s')">0</a>
-        <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(30,'s')">30</a>
-        <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(60,'s')">60</a>
-        <a href="#" class="btn" v-on:click.prevent="candidate.timer.setTime(90,'s')">90</a>
+        <a href="#" class="btn" @click.prevent="candidate.timer.setTime(0,'s')">0</a>
+        <a href="#" class="btn" @click.prevent="candidate.timer.setTime(30,'s')">30</a>
+        <a href="#" class="btn" @click.prevent="candidate.timer.setTime(60,'s')">60</a>
+        <a href="#" class="btn" @click.prevent="candidate.timer.setTime(90,'s')">90</a>
       </div>
     </div>
   </div>

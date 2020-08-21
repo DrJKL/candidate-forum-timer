@@ -19,7 +19,7 @@
         </div>
         <div class="buttons box">
           <div>
-            <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
+            <a href="#" class="btn" @click.prevent="shuffleCandidates()">
               Shuffle
               <i class="material-icons right">shuffle</i>
             </a>
@@ -33,26 +33,26 @@
           </div>
 
           <div class="time-setters-global">
-            <a href="#" class="btn" v-on:click.prevent="setTime(30)">
+            <a href="#" class="btn" @click.prevent="setTime(30)">
               30
               <i class="material-icons left">timer</i>
             </a>
-            <a href="#" class="btn" v-on:click.prevent="setTime(60)">
+            <a href="#" class="btn" @click.prevent="setTime(60)">
               60
               <i class="material-icons left">timer</i>
             </a>
-            <a href="#" class="btn" v-on:click.prevent="setTime(90)">
+            <a href="#" class="btn" @click.prevent="setTime(90)">
               90
               <i class="material-icons left">timer</i>
             </a>
           </div>
           <div>
-            <a href="#" class="btn" v-on:click.prevent="focusChange(-1)">
+            <a href="#" class="btn" @click.prevent="focusChange(-1)">
               Prev
               <i class="material-icons left">navigate_before</i>
             </a>
             <span>{{focusedCandidate}}</span>
-            <a href="#" class="btn" v-on:click.prevent="focusChange(1)">
+            <a href="#" class="btn" @click.prevent="focusChange(1)">
               Next
               <i class="material-icons right">navigate_next</i>
             </a>
