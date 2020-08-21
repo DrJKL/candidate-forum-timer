@@ -51,7 +51,7 @@
               Prev
               <i class="material-icons left">navigate_before</i>
             </a>
-            <span>{{focusedCandidate}}</span>
+            <span class="current-focus-number">{{focusedCandidate}}</span>
             <a href="#" class="btn" @click.prevent="focusChange(1)">
               Next
               <i class="material-icons right">navigate_next</i>
@@ -88,7 +88,7 @@ export default class Header extends Vue {
 
   @Emit("update:galleryMode")
   updateGalleryMode() {
-      return !this.galleryMode;
+    return !this.galleryMode;
   }
 
   setTime(time: number) {
@@ -133,6 +133,10 @@ export default class Header extends Vue {
         flex: 0 1 auto;
         margin-right: 4px;
       }
+    }
+    .current-focus-number {
+      font-weight: bold;
+      align-self: center;
     }
   }
   .title span,
