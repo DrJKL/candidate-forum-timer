@@ -34,7 +34,7 @@
         </transition-group>
       </div>
     </main>
-    <footer>
+    <footer class="container">
       <a href="#" @click.prevent="showCandidateDialog()">Set New Candidates</a>
     </footer>
   </div>
@@ -140,14 +140,21 @@ export default class App extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-
-
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100%;
   flex: 1;
   > header {
+    flex: 0 1 auto;
+  }
+  > .time-out-container-container {
+    flex: 0 1 auto;
+  }
+  > main {
+    flex: 1 0 auto;
+  }
+  > footer {
     flex: 0 1 auto;
   }
 }
@@ -174,8 +181,8 @@ export default class App extends Vue {
         line-height: initial;
       }
       display: flex;
-      width:80vw;
-      height:33vw;
+      width: 80vw;
+      max-height: 33vw;
     }
     &.is-previous,
     &.on-deck {
@@ -191,7 +198,7 @@ export default class App extends Vue {
 }
 
 .focused-item {
-    border-left: 3px inset red;
+  border-left: 3px inset red;
 }
 
 .squish-item {

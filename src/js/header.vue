@@ -103,6 +103,7 @@ export default class Header extends Vue {
 <style lang="scss" scoped>
 .our-header {
   display: flex;
+  align-items: center;
   > div {
     flex: 1;
   }
