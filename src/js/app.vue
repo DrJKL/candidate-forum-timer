@@ -171,6 +171,7 @@ export default class App extends Vue {
     &.focused-item {
       /deep/ .card-content .card-title {
         font-size: 6vw;
+        line-height: initial;
       }
       display: flex;
       width:80vw;
