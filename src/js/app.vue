@@ -36,6 +36,7 @@
     </main>
     <footer class="container">
       <a href="#" @click.prevent="showCandidateDialog()">Set New Candidates</a>
+      <span class="attribution-label">Originally Built by Alex Brown for the MVMHA (2020)</span>
     </footer>
   </div>
 </template>
@@ -155,6 +156,18 @@ export default class App extends Vue {
     flex: 1 0 auto;
   }
   > footer {
+    flex: 0 1 auto;
+  }
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  > a {
+    flex: 0 1 auto;
+  }
+  > span {
     flex: 0 1 auto;
   }
 }
