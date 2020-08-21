@@ -1,67 +1,11 @@
 <template>
   <div class="app-container">
-    <header class="is-primary is-bold container">
-      <div class="hero-body">
-        <div class="our-header container">
-          <div class="logo-img">
-            <img src="../assets/just_homes_logo.png" alt="MVMHA logo" />
-          </div>
-          <div class="header-text">
-            <h1 class="title">
-              2020
-              <span>Mountain View</span>
-              <span>City Council</span>
-              <span>Candidate Forum</span>
-            </h1>
-            <h2 class="subtitle">
-              Hosted by the
-              <span>Mountain View Mobile Home Alliance</span>
-            </h2>
-          </div>
-          <div class="buttons box">
-            <div>
-              <a href="#" class="btn" v-on:click.prevent="shuffleCandidates()">
-                Shuffle
-                <i class="material-icons right">shuffle</i>
-              </a>
-              <div class="switch">
-                <label>
-                  <input type="checkbox" v-model="galleryMode" />
-                  <span class="lever"></span>
-                  Show All
-                </label>
-              </div>
-            </div>
-
-            <div class="time-setters-global">
-              <a href="#" class="btn" v-on:click.prevent="setTime(30)">
-                30
-                <i class="material-icons left">timer</i>
-              </a>
-              <a href="#" class="btn" v-on:click.prevent="setTime(60)">
-                60
-                <i class="material-icons left">timer</i>
-              </a>
-              <a href="#" class="btn" v-on:click.prevent="setTime(90)">
-                90
-                <i class="material-icons left">timer</i>
-              </a>
-            </div>
-            <div>
-              <a href="#" class="btn" v-on:click.prevent="focusPrevious()">
-                Prev
-                <i class="material-icons left">navigate_before</i>
-              </a>
-              <span>{{focusedCandidate}}</span>
-              <a href="#" class="btn" v-on:click.prevent="focusNext()">
-                Next
-                <i class="material-icons right">navigate_next</i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
+    <app-header
+      :focused-candidate="focusedCandidate"
+      :gallery-mode.sync="galleryMode"
+      :candidates-list="allCandidates"
+      v-on:focus-change="changeFocus($event)"
+    ></app-header>
     <div class="container time-out-container-container">
       <b-taglist class="time-out-container">
         <b-tag
@@ -99,9 +43,10 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import moment from "moment";
 import { allCandidates as listOfCandidates, Candidate } from "./candidates";
 import CandidateCard from "./candidate-card.vue";
+import AppHeader from "./header.vue";
 
 @Component({
-  components: { CandidateCard },
+  components: { AppHeader, CandidateCard },
 })
 export default class App extends Vue {
   allCandidates = listOfCandidates;
@@ -118,14 +63,9 @@ export default class App extends Vue {
       this.focusedCandidate = 0;
     }
   }
-  focusNext() {
+  changeFocus(num: -1 | 1) {
     this.checkFocusNaN();
-    this.focusedCandidate++;
-    this.focusedCandidate %= this.visibleCandidates.length;
-  }
-  focusPrevious() {
-    this.checkFocusNaN();
-    this.focusedCandidate--;
+    this.focusedCandidate += num;
     this.focusedCandidate += this.visibleCandidates.length;
     this.focusedCandidate %= this.visibleCandidates.length;
   }
@@ -179,14 +119,6 @@ export default class App extends Vue {
     this.checkFocus();
   }
 
-  setTime(time: number) {
-    this.allCandidates
-      .map((candidate) => candidate.timer)
-      .forEach((timer) => {
-        timer.setTime(time, "s");
-      });
-  }
-
   showCandidateDialog() {
     this.$buefy.dialog.prompt({
       message: `List the candidates, comma separated`,
@@ -195,7 +127,7 @@ export default class App extends Vue {
       },
       trapFocus: true,
       onConfirm: (value) => {
-        this.setCandidates(value.split(','));
+        this.setCandidates(value.split(","));
         // this.$buefy.toast.open(`Your name is: ${value}`);
       },
     });
@@ -207,45 +139,7 @@ export default class App extends Vue {
 }
 </script>
 <style lang="scss" scoped>
-.our-header {
-  display: flex;
-  > div {
-    flex: 1;
-  }
-  > div.logo-img {
-    flex: 0 1 auto;
-    margin-right: 2em;
-    img {
-      height: 5em;
-      width: auto;
-    }
-  }
-  .header-text {
-    padding-right: 1em;
-  }
-  .buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    flex: 0 1 auto;
-    width: fit-content;
-    > div {
-      flex: 0 1 auto;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      > * {
-        flex: 0 1 auto;
-        margin-right: 4px;
-      }
-    }
-  }
-  .title span,
-  .subtitle span {
-    display: inline-block;
-  }
-}
+
 
 .app-container {
   display: flex;
