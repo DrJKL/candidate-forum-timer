@@ -169,7 +169,12 @@ export default class App extends Vue {
   .candidate-card {
     display: none;
     &.focused-item {
-      display: inline-block;
+      /deep/ .card-content .card-title {
+        font-size: 6vw;
+      }
+      display: flex;
+      width:80vw;
+      height:33vw;
     }
     &.is-previous,
     &.on-deck {
@@ -185,12 +190,7 @@ export default class App extends Vue {
 }
 
 .focused-item {
-  /deep/ .card-title::before {
-    content: ">";
-    color: red;
-    position: absolute;
-    left: 5px;
-  }
+    border-left: 3px inset red;
 }
 
 .squish-item {
