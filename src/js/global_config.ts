@@ -12,11 +12,22 @@ export default class Config {
         orgTitle: // 
             // "Mountain View Mobile Home Alliance",
             "League of Women Voters",
-            eventTitle: //
+        eventTitle: //
             `2020
             <span>Mountain View</span>
             <span>City Council</span>
-            <span>Candidate Forum</span>`
+            <span>Candidate Forum</span>`,
+        candidatesList: [
+            "Margaret Abe-Koga",
+            "Jose Gutierrez",
+            "John Lashlee",
+            "Sally Lieber",
+            "Lisa Matichak",
+            "Alex Nunez",
+            "Paul Roales",
+            "Pat Showalter",
+            "Lenny Siegel",
+        ],
     }
 
 }

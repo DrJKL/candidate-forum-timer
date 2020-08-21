@@ -15,17 +15,7 @@ export class Candidate {
     }
 }
 
-export const allCandidates = [
-    "Margaret Abe-Koga",
-    "Jose Gutierrez",
-    "John Lashlee",
-    "Sally Lieber",
-    "Lisa Matichak",
-    "Alex Nunez",
-    "Paul Roales",
-    "Pat Showalter",
-    "Lenny Siegel",
-].map((candidateName) => new Candidate(candidateName));
+export const allCandidates = Config.eventInfo.candidatesList.map((candidateName) => new Candidate(candidateName));
 
 export function totalTimeLeft() {
     return allCandidates.map((candidate) => candidate.timer.timeLeft);
