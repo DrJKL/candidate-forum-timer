@@ -36,8 +36,8 @@
       </div>
     </main>
     <footer class="container">
-      <a href="#" @click.prevent="showCandidateDialog()">Set New Candidates</a>
-      <span class="attribution-label">Originally Built by Alex Brown for the MVMHA (2020)</span>
+      <a href="#" class="btn-flat" @click.prevent="showCandidateDialog()">Set New Candidates</a>
+      <span class="attribution-label">Originally Built by Alex Brown for the <a href="https://mvmha.com">MVMHA</a> (2020)</span>
     </footer>
   </div>
 </template>
