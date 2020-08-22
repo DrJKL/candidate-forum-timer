@@ -36,18 +36,31 @@
       </div>
     </main>
     <footer class="container">
-      <a href="#" class="btn-flat" @click.prevent="showCandidateDialog()">Set New Candidates</a>
-      <span class="attribution-label">Originally Built by Alex Brown for the <a href="https://mvmha.com">MVMHA</a> (2020)</span>
+      <div>
+        <span>Set New</span>
+        <a href="#" class="btn-flat" @click.prevent="showCandidateDialog()">Candidates</a>
+        <a href="#" class="btn-flat" @click.prevent="showLogoDialog()">Logo</a>
+        <a href="#" class="btn-flat" @click.prevent="showTitleDialog()">Title</a>
+      </div>
+      <span class="attribution-label">
+        Originally Built by Alex Brown for the
+        <a href="https://mvmha.com">MVMHA</a> (2020)
+      </span>
     </footer>
   </div>
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import moment from "moment";
-import { allCandidates as listOfCandidates, Candidate } from "./candidates";
+import {
+  allCandidates as listOfCandidates,
+  Candidate,
+  shuffle,
+} from "./candidates";
 import CandidateCard from "./candidate-card.vue";
 import AppHeader from "./header.vue";
-import FocusManager from './focus_manager';
+import FocusManager from "./focus_manager";
+import {globalConfig} from "./global_config";
 
 @Component({
   components: { AppHeader, CandidateCard },
@@ -55,9 +68,9 @@ import FocusManager from './focus_manager';
 export default class App extends Vue {
   allCandidates = listOfCandidates;
   galleryMode = false;
- 
-  focusManager = new FocusManager()
- 
+
+  focusManager = new FocusManager();
+
   getCardClasses(index: number) {
     return {
       "focused-item": this.focusManager.isFocused(index),
@@ -67,22 +80,7 @@ export default class App extends Vue {
   }
 
   shuffleCandidates() {
-    const tempCandidates = this.allCandidates.slice();
-    let currentIndex = tempCandidates.length;
-    let temporaryValue, randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-
-      // And swap it with the current element.
-      temporaryValue = tempCandidates[currentIndex];
-      tempCandidates[currentIndex] = tempCandidates[randomIndex];
-      tempCandidates[randomIndex] = temporaryValue;
-    }
-    this.allCandidates = tempCandidates;
+    this.allCandidates = shuffle(this.allCandidates);
   }
 
   get visibleCandidates() {
@@ -109,6 +107,33 @@ export default class App extends Vue {
       trapFocus: true,
       onConfirm: (value) => {
         this.setCandidates(value.split(","));
+      },
+    });
+  }
+  showLogoDialog() {
+    this.$buefy.dialog.prompt({
+      message: `Enter image URL for logo`,
+      inputAttrs: {
+        // placeholder: "e.g. Joe, Jan, Jill, Jazz",
+      },
+      trapFocus: true,
+      onConfirm: (value) => {
+        console.log("Logo change: ", value);
+        console.log(globalConfig.eventInfo);
+        globalConfig.eventInfo.logoUrl = value;
+        console.log(globalConfig.eventInfo);
+      },
+    });
+  }
+    showTitleDialog() {
+    this.$buefy.dialog.prompt({
+      message: `Enter new Event Title`,
+      inputAttrs: {
+        // placeholder: "e.g. Joe, Jan, Jill, Jazz",
+      },
+      trapFocus: true,
+      onConfirm: (value) => {
+        globalConfig.eventInfo.eventTitle = value;
       },
     });
   }

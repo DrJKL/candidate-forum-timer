@@ -3,15 +3,15 @@
     <div class="hero-body">
       <div class="our-header container">
         <div class="logo-img">
-          <img :src="config.eventInfo.logoUrl" alt="Organization logo" />
+          <img :src="logoUrl" alt="Organization logo" />
         </div>
         <div class="header-text">
-          <h1 class="title" v-html="config.eventInfo.eventTitle">
+          <h1 class="title" v-html="eventTitle">
             <!-- Unknown Event -->
           </h1>
           <h2 class="subtitle">
             Hosted by the
-            <span>{{config.eventInfo.orgTitle}}</span>
+            <span>{{orgTitle}}</span>
           </h2>
         </div>
         <div class="buttons box">
@@ -60,10 +60,10 @@
   </header>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from "vue-property-decorator";
+import { Component, Vue, Prop, Emit, Watch } from "vue-property-decorator";
 import moment from "moment";
 import { Candidate } from "./candidates";
-import Config from "./global_config";
+import {globalConfig, Config} from "./global_config";
 
 @Component({})
 export default class Header extends Vue {
@@ -79,6 +79,8 @@ export default class Header extends Vue {
   @Prop()
   numberCandidates?: number;
 
+  config = globalConfig;
+
   @Emit()
   shuffleCandidates() {}
 
@@ -91,7 +93,22 @@ export default class Header extends Vue {
   updateGalleryMode() {
     return !this.galleryMode;
   }
-  config = Config;
+
+  @Watch("config", { deep: true, immediate: true })
+  configChanged(newConfig: Config) {
+    console.log(newConfig);
+    this.$forceUpdate();
+  }
+
+  get logoUrl() {
+    return globalConfig.eventInfo.logoUrl;
+  }
+  get eventTitle() {
+    return globalConfig.eventInfo.eventTitle;
+  }
+  get orgTitle() {
+    return globalConfig.eventInfo.orgTitle;
+  }
 
   setTime(time: number) {
     this.candidatesList

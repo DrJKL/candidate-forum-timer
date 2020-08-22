@@ -1,6 +1,4 @@
-import Config from "./global_config";
-import moment from "moment";
-import { DurationInputArg1, DurationInputArg2 } from "moment";
+import {globalConfig} from "./global_config";
 import Timer from "./timer";
 
 export class Candidate {
@@ -15,8 +13,27 @@ export class Candidate {
     }
 }
 
-export const allCandidates = Config.eventInfo.candidatesList.map((candidateName) => new Candidate(candidateName));
+export const allCandidates = globalConfig.eventInfo.candidatesList.map((candidateName) => new Candidate(candidateName));
 
 export function totalTimeLeft() {
     return allCandidates.map((candidate) => candidate.timer.timeLeft);
+}
+
+export function shuffle<T>(initialArray: T[]) {
+    const tempCandidates = initialArray.slice();
+    let currentIndex = tempCandidates.length;
+    let temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = tempCandidates[currentIndex];
+      tempCandidates[currentIndex] = tempCandidates[randomIndex];
+      tempCandidates[randomIndex] = temporaryValue;
+    }
+    return tempCandidates
 }

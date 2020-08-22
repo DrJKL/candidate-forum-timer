@@ -1,4 +1,4 @@
-import Config from "./global_config";
+import {globalConfig} from "./global_config";
 import moment from "moment";
 import { DurationInputArg1, DurationInputArg2 } from "moment";
 
@@ -7,7 +7,7 @@ export default class Timer {
     public countingDown: number|null;
 
     constructor() {
-        this.timeLeft = Config.timeLimitTotal.clone();
+        this.timeLeft = globalConfig.timeLimitTotal.clone();
         this.countingDown = null;
     }
 
@@ -18,16 +18,16 @@ export default class Timer {
             return;
         }
         this.countingDown = setInterval(() => {
-            this.timeLeft.subtract(Config.timeGranularity, 'ms');
-        }, Config.timeGranularity);
+            this.timeLeft.subtract(globalConfig.timeGranularity, 'ms');
+        }, globalConfig.timeGranularity);
     }
 
     addTime() {
-        this.timeLeft.add(Config.timeDelta);
+        this.timeLeft.add(globalConfig.timeDelta);
     }
 
     removeTime() {
-        this.timeLeft.subtract(Config.timeDelta);
+        this.timeLeft.subtract(globalConfig.timeDelta);
     }
 
     setTime(num: DurationInputArg1, unit: DurationInputArg2) {
@@ -48,7 +48,7 @@ export default class Timer {
     }
 
     get progressPercent() {
-        return 100*(this.millisLeft / Config.timeLimitTotal.asMilliseconds());
+        return 100*(this.millisLeft / globalConfig.timeLimitTotal.asMilliseconds());
     }
 
     get isTimeUp() {

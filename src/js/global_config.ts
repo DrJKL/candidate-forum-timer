@@ -1,11 +1,11 @@
 import moment from "moment";
 import images from "../assets/*.png";
 
-export default class Config {
-    static timeLimitTotal = moment.duration(90, 's');
-    static timeGranularity = 100;
-    static timeDelta = moment.duration(1, 's');
-    static eventInfo = {
+export class Config {
+    timeLimitTotal = moment.duration(90, 's');
+    timeGranularity = 100;
+    timeDelta = moment.duration(1, 's');
+    eventInfo = {
         logoUrl: //
             //  images['just_homes_logo'],
             images['lwv-logo'],
@@ -29,5 +29,5 @@ export default class Config {
             "Lenny Siegel",
         ],
     }
-
 }
+export const globalConfig = new Config();
