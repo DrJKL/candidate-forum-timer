@@ -115,6 +115,7 @@ export default class Header extends Vue {
     this.candidatesList
       ?.map((candidate) => candidate.timer)
       .forEach((timer) => {
+        timer.toggleTimer(false);
         timer.setTime(time, "s");
       });
   }
