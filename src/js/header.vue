@@ -49,7 +49,7 @@
               Prev
               <i class="material-icons left">navigate_before</i>
             </a>
-            <span class="current-focus-number">{{focusedCandidate}}</span>
+            <span class="current-focus-number">{{focusedCandidate + 1}}</span>
             <a href="#" class="btn" @click.prevent="focusChange(1)" :disabled="!nextEnabled">
               Next
               <i class="material-icons right">navigate_next</i>
