@@ -1,11 +1,12 @@
 <template>
   <div class="app-container">
     <app-header
-      :focused-candidate="focusedCandidate"
+      :focused-candidate="focusManager.focusedCandidate"
+      :number-candidates="numberOfCandidates"
       :gallery-mode.sync="galleryMode"
       :candidates-list="allCandidates"
       @shuffle-candidates="shuffleCandidates()"
-      @focus-change="changeFocus($event)"
+      @focus-change="focusManager.changeFocus($event, numberOfCandidates - 1)"
     ></app-header>
     <div class="container time-out-container-container">
       <b-taglist class="time-out-container">
@@ -46,46 +47,22 @@ import moment from "moment";
 import { allCandidates as listOfCandidates, Candidate } from "./candidates";
 import CandidateCard from "./candidate-card.vue";
 import AppHeader from "./header.vue";
+import FocusManager from './focus_manager';
 
 @Component({
   components: { AppHeader, CandidateCard },
 })
 export default class App extends Vue {
   allCandidates = listOfCandidates;
-  focusedCandidate = 0;
   galleryMode = false;
-
-  checkFocus() {
-    const limit = this.visibleCandidates.length - 1;
-    this.checkFocusNaN();
-    this.focusedCandidate = Math.max(Math.min(this.focusedCandidate, limit), 0);
-  }
-  checkFocusNaN() {
-    if (isNaN(this.focusedCandidate)) {
-      this.focusedCandidate = 0;
-    }
-  }
-  changeFocus(num: -1 | 1) {
-    this.checkFocusNaN();
-    this.focusedCandidate += num;
-    this.focusedCandidate += this.visibleCandidates.length;
-    this.focusedCandidate %= this.visibleCandidates.length;
-  }
-  isFocused(index: number) {
-    return this.focusedCandidate === index;
-  }
-  isNext(index: number) {
-    return this.focusedCandidate === index - 1;
-  }
-  isPrev(index: number) {
-    return this.focusedCandidate === index + 1;
-  }
-
+ 
+  focusManager = new FocusManager()
+ 
   getCardClasses(index: number) {
     return {
-      "focused-item": this.isFocused(index),
-      "previous-item": this.isPrev(index),
-      "on-deck": this.isNext(index),
+      "focused-item": this.focusManager.isFocused(index),
+      "previous-item": this.focusManager.isPrev(index),
+      "on-deck": this.focusManager.isNext(index),
     };
   }
 
@@ -114,11 +91,13 @@ export default class App extends Vue {
   get minimizedCandidates() {
     return this.allCandidates.filter((candidate) => candidate.isMinimized);
   }
+  get numberOfCandidates() {
+    return this.visibleCandidates.length;
+  }
 
   minimizeCandidate(candidate: Candidate) {
-    console.log("FFFF", candidate);
     candidate.toggleMinimized();
-    this.checkFocus();
+    this.focusManager.checkFocus(this.numberOfCandidates - 1);
   }
 
   showCandidateDialog() {
@@ -130,7 +109,6 @@ export default class App extends Vue {
       trapFocus: true,
       onConfirm: (value) => {
         this.setCandidates(value.split(","));
-        // this.$buefy.toast.open(`Your name is: ${value}`);
       },
     });
   }

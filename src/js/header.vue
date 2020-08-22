@@ -44,12 +44,12 @@
             </a>
           </div>
           <div>
-            <a href="#" class="btn" @click.prevent="focusChange(-1)">
+            <a href="#" class="btn" @click.prevent="focusChange(-1)" :disabled="!prevEnabled">
               Prev
               <i class="material-icons left">navigate_before</i>
             </a>
             <span class="current-focus-number">{{focusedCandidate}}</span>
-            <a href="#" class="btn" @click.prevent="focusChange(1)">
+            <a href="#" class="btn" @click.prevent="focusChange(1)" :disabled="!nextEnabled">
               Next
               <i class="material-icons right">navigate_next</i>
             </a>
@@ -63,7 +63,7 @@
 import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 import moment from "moment";
 import { Candidate } from "./candidates";
-import Config from './global_config';
+import Config from "./global_config";
 
 @Component({})
 export default class Header extends Vue {
@@ -75,6 +75,9 @@ export default class Header extends Vue {
 
   @Prop()
   focusedCandidate?: number;
+
+  @Prop()
+  numberCandidates?: number;
 
   @Emit()
   shuffleCandidates() {}
@@ -96,6 +99,17 @@ export default class Header extends Vue {
       .forEach((timer) => {
         timer.setTime(time, "s");
       });
+  }
+
+  get prevEnabled() {
+    return this.focusedCandidate !== undefined && this.focusedCandidate > 0;
+  }
+  get nextEnabled() {
+    return (
+      this.focusedCandidate !== undefined &&
+      this.numberCandidates !== undefined &&
+      this.focusedCandidate < this.numberCandidates - 1
+    );
   }
 }
 </script>
