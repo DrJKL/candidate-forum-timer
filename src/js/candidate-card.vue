@@ -71,10 +71,10 @@ export default class CandidateCard extends Vue {
 
   get timeClass() {
     return {
-      'plenty-time': this.progressPercent >= 50,
-      'running-out': this.progressPercent < 50 && this.progressPercent >= 25,
-      'almost-done': this.progressPercent < 25,
-    }
+      "plenty-time": this.progressPercent >= 50,
+      "running-out": this.progressPercent < 50 && this.progressPercent >= 25,
+      "almost-done": this.progressPercent < 25,
+    };
   }
 }
 </script>
@@ -111,7 +111,7 @@ export default class CandidateCard extends Vue {
     outline-color: yellow;
   }
   &.almost-done {
-    outline-color: red; 
+    outline-color: red;
   }
 
   .card-action {
@@ -126,7 +126,7 @@ export default class CandidateCard extends Vue {
       justify-content: space-between;
 
       div {
-        flex: 0 1 auto;
+        flex: 1 1 auto;
       }
       a {
         margin: 4px;
@@ -136,6 +136,7 @@ export default class CandidateCard extends Vue {
         justify-content: space-between;
         a {
           flex: 0 1 1em;
+          width: calc(50% - 8px);
         }
       }
     }
@@ -143,6 +144,7 @@ export default class CandidateCard extends Vue {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      // display: none; // These should be unnecessary for normal use.
       a {
         flex: 1 1 calc(50% - 8px);
         width: calc(50% - 8px);
