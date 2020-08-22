@@ -87,13 +87,13 @@ export default class App extends Vue {
     this.isShuffling = true;
     this.galleryMode = true;
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 100));
     this.allCandidates = shuffle(this.allCandidates);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
     this.focusManager.focusedCandidate = 0;
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     this.isShuffling = false;
     this.galleryMode = wasGallery;
   }
@@ -229,7 +229,7 @@ footer {
 }
 
 .focused-item {
-  outline: 4px solid red;
+  outline: 4px solid;
 }
 
 .squish-item {
