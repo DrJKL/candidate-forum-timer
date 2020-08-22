@@ -3,42 +3,51 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
+      <meta charset="utf-8" />
 
-  <title>Candidate Timer</title>
-  <meta name="description"
-        content="A timer for the MVMHA candidate forum" />
-  <meta name="author"
-        content="Alex" />
+      <title>Candidate Timer</title>
+      <meta name="description"
+            content="A timer for the MVMHA candidate forum" />
+      <meta name="author"
+            content="Alex" />
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async
+              src="https://www.googletagmanager.com/gtag/js?id=UA-49645063-1"></script>
+      <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
 
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-  <link rel="stylesheet"
-        href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
-  <link rel="stylesheet"
-        href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+            gtag('config', 'UA-49645063-1');
+      </script>
 
-  <link rel="stylesheet"
-        href="src/materialize/css/materialize.css" />
+      <link rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+      <link rel="stylesheet"
+            href="https://cdn.materialdesignicons.com/5.3.45/css/materialdesignicons.min.css">
+      <link rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
 
-  <script src="src/materialize/js/materialize.js"></script>
-  <style>
-    
-    body {
-      display: flex;
-      height:100%;
-    }
-  </style>
+      <link rel="stylesheet"
+            href="src/materialize/css/materialize.css" />
+
+      <script src="src/materialize/js/materialize.js"></script>
+      <style>
+            body {
+                  display: flex;
+                  height: 100%;
+            }
+      </style>
 
 </head>
 
 <body>
 
-  <div id="app"></div>
+      <div id="app"></div>
 
-  <script type="text/javascript"
-          src="src/materialize/js/materialize.min.js"></script>
-  <script src="src/js/vue-app.ts"></script>
+      <script type="text/javascript"
+              src="src/materialize/js/materialize.min.js"></script>
+      <script src="src/js/vue-app.ts"></script>
 </body>
 
 </html>
