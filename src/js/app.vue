@@ -83,22 +83,19 @@ export default class App extends Vue {
 
   async shuffleCandidates() {
     const wasGallery = this.galleryMode;
+
     this.isShuffling = true;
     this.galleryMode = true;
+
     await new Promise((resolve) => setTimeout(resolve, 500));
     this.allCandidates = shuffle(this.allCandidates);
+
     await new Promise((resolve) => setTimeout(resolve, 100));
     this.focusManager.focusedCandidate = 0;
+
     await new Promise((resolve) => setTimeout(resolve, 100));
     this.isShuffling = false;
     this.galleryMode = wasGallery;
-
-    // setTimeout(() => {
-    //   setTimeout(() => {
-    //     setTimeout(() => {
-    //     }, 1000);
-    //   }, 100);
-    // }, 500);
   }
 
   get visibleCandidates() {
