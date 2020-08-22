@@ -1,7 +1,7 @@
 <template>
   <header class="is-primary is-bold container">
     <div class="hero-body">
-      <div class="our-header ">
+      <div class="our-header">
         <div class="logo-img">
           <img :src="logoUrl" alt="Organization logo" />
         </div>
@@ -17,13 +17,22 @@
         <div class="spacer"></div>
         <div class="buttons box">
           <div>
-            <a href="#" class="btn" @click.prevent="shuffleCandidates()">
+            <a
+              href="#"
+              :class="{btn: true, disabled: isShuffling}"
+              @click.prevent="shuffleCandidates()"
+            >
               Shuffle
               <i class="material-icons right">shuffle</i>
             </a>
             <div class="switch">
               <label>
-                <input type="checkbox" v-model="galleryMode" @click="updateGalleryMode()" />
+                <input
+                  type="checkbox"
+                  :disabled="isShuffling"
+                  v-model="galleryMode"
+                  @click="updateGalleryMode()"
+                />
                 <span class="lever"></span>
                 Show All
               </label>
@@ -64,7 +73,7 @@
 import { Component, Vue, Prop, Emit, Watch } from "vue-property-decorator";
 import moment from "moment";
 import { Candidate } from "./candidates";
-import {globalConfig, Config} from "./global_config";
+import { globalConfig, Config } from "./global_config";
 
 @Component({})
 export default class Header extends Vue {
@@ -73,6 +82,9 @@ export default class Header extends Vue {
 
   @Prop()
   galleryMode?: boolean;
+
+  @Prop()
+  isShuffling?: boolean;
 
   @Prop()
   focusedCandidate?: number;

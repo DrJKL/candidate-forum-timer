@@ -4,6 +4,7 @@
       :focused-candidate="focusManager.focusedCandidate"
       :number-candidates="numberOfCandidates"
       :gallery-mode.sync="galleryMode"
+      :is-shuffling="isShuffling"
       :candidates-list="allCandidates"
       @shuffle-candidates="shuffleCandidates()"
       @focus-change="focusManager.changeFocus($event, numberOfCandidates - 1)"
@@ -68,6 +69,7 @@ import { globalConfig } from "./global_config";
 export default class App extends Vue {
   allCandidates = listOfCandidates;
   galleryMode = true;
+  isShuffling = false;
 
   focusManager = new FocusManager();
 
@@ -81,16 +83,18 @@ export default class App extends Vue {
 
   shuffleCandidates() {
     const wasGallery = this.galleryMode;
+    this.isShuffling = true;
     this.galleryMode = true;
     setTimeout(() => {
-      this.focusManager.focusedCandidate = 0;
+      this.allCandidates = shuffle(this.allCandidates);
       setTimeout(() => {
-        this.allCandidates = shuffle(this.allCandidates);
+        this.focusManager.focusedCandidate = 0;
         setTimeout(() => {
+          this.isShuffling = false;
           this.galleryMode = wasGallery;
         }, 1000);
-      }, 500);
-    }, 100);
+      }, 100);
+    }, 500);
   }
 
   get visibleCandidates() {
@@ -224,7 +228,7 @@ footer {
 }
 
 .focused-item {
-  border-left: 3px inset red;
+  outline: 4px solid red;
 }
 
 .squish-item {
