@@ -1,7 +1,7 @@
 <template>
   <header class="is-primary is-bold container">
     <div class="hero-body">
-      <div class="our-header container">
+      <div class="our-header ">
         <div class="logo-img">
           <img :src="logoUrl" alt="Organization logo" />
         </div>
@@ -14,6 +14,7 @@
             <span>{{orgTitle}}</span>
           </h2>
         </div>
+        <div class="spacer"></div>
         <div class="buttons box">
           <div>
             <a href="#" class="btn" @click.prevent="shuffleCandidates()">
@@ -131,14 +132,17 @@ export default class Header extends Vue {
 }
 </script>
 <style lang="scss" scoped>
+header {
+  width: 100%;
+}
+
 .our-header {
   display: flex;
   align-items: center;
   > div {
-    flex: 1;
+    flex: 0 0 auto;
   }
   > div.logo-img {
-    flex: 0 1 auto;
     margin-right: 2em;
     img {
       height: 5em;
@@ -146,13 +150,16 @@ export default class Header extends Vue {
     }
   }
   .header-text {
+    flex-shrink: 1;
     padding-right: 1em;
+  }
+  .spacer {
+    flex: 1;
   }
   .buttons {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    flex: 0 1 auto;
     user-select: none;
     width: fit-content;
     > div {
