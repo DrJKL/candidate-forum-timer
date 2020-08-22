@@ -60,7 +60,7 @@ import {
 import CandidateCard from "./candidate-card.vue";
 import AppHeader from "./header.vue";
 import FocusManager from "./focus_manager";
-import {globalConfig} from "./global_config";
+import { globalConfig } from "./global_config";
 
 @Component({
   components: { AppHeader, CandidateCard },
@@ -80,7 +80,17 @@ export default class App extends Vue {
   }
 
   shuffleCandidates() {
-    this.allCandidates = shuffle(this.allCandidates);
+    const wasGallery = this.galleryMode;
+    this.galleryMode = true;
+    setTimeout(() => {
+      this.focusManager.focusedCandidate = 0;
+      setTimeout(() => {
+        this.allCandidates = shuffle(this.allCandidates);
+        setTimeout(() => {
+          this.galleryMode = wasGallery;
+        }, 1000);
+      }, 500);
+    }, 100);
   }
 
   get visibleCandidates() {
@@ -125,7 +135,7 @@ export default class App extends Vue {
       },
     });
   }
-    showTitleDialog() {
+  showTitleDialog() {
     this.$buefy.dialog.prompt({
       message: `Enter new Event Title`,
       inputAttrs: {
