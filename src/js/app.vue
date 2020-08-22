@@ -67,7 +67,7 @@ import {globalConfig} from "./global_config";
 })
 export default class App extends Vue {
   allCandidates = listOfCandidates;
-  galleryMode = false;
+  galleryMode = true;
 
   focusManager = new FocusManager();
 
