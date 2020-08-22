@@ -71,8 +71,8 @@ export default class CandidateCard extends Vue {
 
   get timeClass() {
     return {
-      'plenty-time': this.progressPercent >= 25,
-      'running-out': this.progressPercent < 25 && this.progressPercent >= 10,
+      'plenty-time': this.progressPercent >= 50,
+      'running-out': this.progressPercent < 50 && this.progressPercent >= 10,
       'almost-done': this.progressPercent < 10,
     }
   }

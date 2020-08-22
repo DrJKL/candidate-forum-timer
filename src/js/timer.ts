@@ -5,9 +5,11 @@ import { DurationInputArg1, DurationInputArg2 } from "moment";
 export default class Timer {
     public timeLeft: moment.Duration;
     public countingDown: number | null;
+    public timeLimit: moment.Duration;
 
     constructor() {
         this.timeLeft = globalConfig.timeLimitTotal.clone();
+        this.timeLimit = globalConfig.timeLimitTotal.clone();
         this.countingDown = null;
     }
 
@@ -33,7 +35,8 @@ export default class Timer {
     }
 
     setTime(num: DurationInputArg1, unit: DurationInputArg2) {
-        this.timeLeft = moment.duration(num, unit);
+        this.timeLimit = moment.duration(num, unit);
+        this.timeLeft = this.timeLimit.clone();
     }
 
     isRunning() { return !!this.countingDown; }
@@ -50,7 +53,7 @@ export default class Timer {
     }
 
     get progressPercent() {
-        return 100 * (this.millisLeft / globalConfig.timeLimitTotal.asMilliseconds());
+        return 100 * (this.millisLeft / this.timeLimit.asMilliseconds());
     }
 
     get isTimeUp() {
