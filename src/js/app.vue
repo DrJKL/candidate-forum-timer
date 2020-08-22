@@ -85,9 +85,10 @@ export default class App extends Vue {
     const wasGallery = this.galleryMode;
 
     this.isShuffling = true;
-    this.galleryMode = true;
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    if (!wasGallery) {
+      this.galleryMode = true;
+      await new Promise((resolve) => setTimeout(resolve, 700));
+    }
     this.allCandidates = shuffle(this.allCandidates);
 
     await new Promise((resolve) => setTimeout(resolve, 100));
