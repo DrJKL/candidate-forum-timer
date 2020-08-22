@@ -14946,29 +14946,29 @@ var global = arguments[3];
 
 },{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
 module.exports = "/just_homes_logo.5f11e9bb.png";
+},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
+module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
 },{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open (1).437ccd50.png";
-},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
-module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
   "just_homes_logo": require("./just_homes_logo.png"),
+  "lwv-logo": require("./lwv-logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
   "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
-  "lwv-logo": require("./lwv-logo.png"),
   "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo.png":"src/assets/lwv-logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.globalConfig = exports.Config = void 0;
 
 var _moment = _interopRequireDefault(require("moment"));
 
@@ -14979,27 +14979,29 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Config =
 /** @class */
 function () {
-  function Config() {}
+  function Config() {
+    this.timeLimitTotal = _moment.default.duration(90, 's');
+    this.timeGranularity = 100;
+    this.timeDelta = _moment.default.duration(1, 's');
+    this.eventInfo = {
+      logoUrl: //
+      //  images['just_homes_logo'],
+      _.default['lwv-logo'],
+      orgTitle: // 
+      // "Mountain View Mobile Home Alliance",
+      "League of Women Voters",
+      eventTitle: //
+      "2020\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>",
+      candidatesList: ["Margaret Abe-Koga", "Jose Gutierrez", "John Lashlee", "Sally Lieber", "Lisa Matichak", "Alex Nunez", "Paul Roales", "Pat Showalter", "Lenny Siegel"]
+    };
+  }
 
-  Config.timeLimitTotal = _moment.default.duration(90, 's');
-  Config.timeGranularity = 100;
-  Config.timeDelta = _moment.default.duration(1, 's');
-  Config.eventInfo = {
-    logoUrl: //
-    //  images['just_homes_logo'],
-    _.default['lwv-logo'],
-    orgTitle: // 
-    // "Mountain View Mobile Home Alliance",
-    "League of Women Voters",
-    eventTitle: //
-    "2020\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>",
-    candidatesList: ["Margaret Abe-Koga", "Jose Gutierrez", "John Lashlee", "Sally Lieber", "Lisa Matichak", "Alex Nunez", "Paul Roales", "Pat Showalter", "Lenny Siegel"]
-  };
   return Config;
 }();
 
-var _default = Config;
-exports.default = _default;
+exports.Config = Config;
+var globalConfig = new Config();
+exports.globalConfig = globalConfig;
 },{"moment":"node_modules/moment/moment.js","../assets/*.png":"src/assets/*.png"}],"src/js/timer.ts":[function(require,module,exports) {
 "use strict";
 
@@ -15008,7 +15010,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _global_config = _interopRequireDefault(require("./global_config"));
+var _global_config = require("./global_config");
 
 var _moment = _interopRequireDefault(require("moment"));
 
@@ -15018,7 +15020,7 @@ var Timer =
 /** @class */
 function () {
   function Timer() {
-    this.timeLeft = _global_config.default.timeLimitTotal.clone();
+    this.timeLeft = _global_config.globalConfig.timeLimitTotal.clone();
     this.countingDown = null;
   }
 
@@ -15032,16 +15034,16 @@ function () {
     }
 
     this.countingDown = setInterval(function () {
-      _this.timeLeft.subtract(_global_config.default.timeGranularity, 'ms');
-    }, _global_config.default.timeGranularity);
+      _this.timeLeft.subtract(_global_config.globalConfig.timeGranularity, 'ms');
+    }, _global_config.globalConfig.timeGranularity);
   };
 
   Timer.prototype.addTime = function () {
-    this.timeLeft.add(_global_config.default.timeDelta);
+    this.timeLeft.add(_global_config.globalConfig.timeDelta);
   };
 
   Timer.prototype.removeTime = function () {
-    this.timeLeft.subtract(_global_config.default.timeDelta);
+    this.timeLeft.subtract(_global_config.globalConfig.timeDelta);
   };
 
   Timer.prototype.setTime = function (num, unit) {
@@ -15066,7 +15068,7 @@ function () {
   });
   Object.defineProperty(Timer.prototype, "progressPercent", {
     get: function get() {
-      return 100 * (this.millisLeft / _global_config.default.timeLimitTotal.asMilliseconds());
+      return 100 * (this.millisLeft / _global_config.globalConfig.timeLimitTotal.asMilliseconds());
     },
     enumerable: false,
     configurable: true
@@ -15090,9 +15092,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.totalTimeLeft = totalTimeLeft;
+exports.shuffle = shuffle;
 exports.allCandidates = exports.Candidate = void 0;
 
-var _global_config = _interopRequireDefault(require("./global_config"));
+var _global_config = require("./global_config");
 
 var _timer = _interopRequireDefault(require("./timer"));
 
@@ -15117,7 +15120,7 @@ function () {
 
 exports.Candidate = Candidate;
 
-var allCandidates = _global_config.default.eventInfo.candidatesList.map(function (candidateName) {
+var allCandidates = _global_config.globalConfig.eventInfo.candidatesList.map(function (candidateName) {
   return new Candidate(candidateName);
 });
 
@@ -15127,6 +15130,24 @@ function totalTimeLeft() {
   return allCandidates.map(function (candidate) {
     return candidate.timer.timeLeft;
   });
+}
+
+function shuffle(initialArray) {
+  var tempCandidates = initialArray.slice();
+  var currentIndex = tempCandidates.length;
+  var temporaryValue, randomIndex; // While there remain elements to shuffle...
+
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1; // And swap it with the current element.
+
+    temporaryValue = tempCandidates[currentIndex];
+    tempCandidates[currentIndex] = tempCandidates[randomIndex];
+    tempCandidates[randomIndex] = temporaryValue;
+  }
+
+  return tempCandidates;
 }
 },{"./global_config":"src/js/global_config.ts","./timer":"src/js/timer.ts"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
@@ -15786,9 +15807,7 @@ exports.default = void 0;
 
 var _vuePropertyDecorator = require("vue-property-decorator");
 
-var _global_config = _interopRequireDefault(require("./global_config"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _global_config = require("./global_config");
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -15840,7 +15859,7 @@ function (_super) {
   function Header() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
-    _this.config = _global_config.default;
+    _this.config = _global_config.globalConfig;
     return _this;
   }
 
@@ -15853,6 +15872,33 @@ function (_super) {
   Header.prototype.updateGalleryMode = function () {
     return !this.galleryMode;
   };
+
+  Header.prototype.configChanged = function (newConfig) {
+    console.log(newConfig);
+    this.$forceUpdate();
+  };
+
+  Object.defineProperty(Header.prototype, "logoUrl", {
+    get: function get() {
+      return _global_config.globalConfig.eventInfo.logoUrl;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Header.prototype, "eventTitle", {
+    get: function get() {
+      return _global_config.globalConfig.eventInfo.eventTitle;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Header.prototype, "orgTitle", {
+    get: function get() {
+      return _global_config.globalConfig.eventInfo.orgTitle;
+    },
+    enumerable: false,
+    configurable: true
+  });
 
   Header.prototype.setTime = function (time) {
     var _a;
@@ -15879,6 +15925,8 @@ function (_super) {
     configurable: true
   });
 
+  var _a;
+
   __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Array)], Header.prototype, "candidatesList", void 0);
 
   __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Boolean)], Header.prototype, "galleryMode", void 0);
@@ -15892,6 +15940,11 @@ function (_super) {
   __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", [Number]), __metadata("design:returntype", void 0)], Header.prototype, "focusChange", null);
 
   __decorate([(0, _vuePropertyDecorator.Emit)("update:galleryMode"), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "updateGalleryMode", null);
+
+  __decorate([(0, _vuePropertyDecorator.Watch)("config", {
+    deep: true,
+    immediate: true
+  }), __metadata("design:type", Function), __metadata("design:paramtypes", [typeof (_a = typeof _global_config.Config !== "undefined" && _global_config.Config) === "function" ? _a : Object]), __metadata("design:returntype", void 0)], Header.prototype, "configChanged", null);
 
   Header = __decorate([(0, _vuePropertyDecorator.Component)({})], Header);
   return Header;
@@ -15915,23 +15968,18 @@ exports.default = _default;
     _c("div", { staticClass: "hero-body" }, [
       _c("div", { staticClass: "our-header container" }, [
         _c("div", { staticClass: "logo-img" }, [
-          _c("img", {
-            attrs: {
-              src: _vm.config.eventInfo.logoUrl,
-              alt: "Organization logo"
-            }
-          })
+          _c("img", { attrs: { src: _vm.logoUrl, alt: "Organization logo" } })
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "header-text" }, [
           _c("h1", {
             staticClass: "title",
-            domProps: { innerHTML: _vm._s(_vm.config.eventInfo.eventTitle) }
+            domProps: { innerHTML: _vm._s(_vm.eventTitle) }
           }),
           _vm._v(" "),
           _c("h2", { staticClass: "subtitle" }, [
             _vm._v("\n          Hosted by the\n          "),
-            _c("span", [_vm._v(_vm._s(_vm.config.eventInfo.orgTitle))])
+            _c("span", [_vm._v(_vm._s(_vm.orgTitle))])
           ])
         ]),
         _vm._v(" "),
@@ -16217,6 +16265,8 @@ var _header = _interopRequireDefault(require("./header.vue"));
 
 var _focus_manager = _interopRequireDefault(require("./focus_manager"));
 
+var _global_config = require("./global_config");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -16280,21 +16330,7 @@ function (_super) {
   };
 
   App.prototype.shuffleCandidates = function () {
-    var tempCandidates = this.allCandidates.slice();
-    var currentIndex = tempCandidates.length;
-    var temporaryValue, randomIndex; // While there remain elements to shuffle...
-
-    while (0 !== currentIndex) {
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1; // And swap it with the current element.
-
-      temporaryValue = tempCandidates[currentIndex];
-      tempCandidates[currentIndex] = tempCandidates[randomIndex];
-      tempCandidates[randomIndex] = temporaryValue;
-    }
-
-    this.allCandidates = tempCandidates;
+    this.allCandidates = (0, _candidates.shuffle)(this.allCandidates);
   };
 
   Object.defineProperty(App.prototype, "visibleCandidates", {
@@ -16339,6 +16375,33 @@ function (_super) {
       trapFocus: true,
       onConfirm: function onConfirm(value) {
         _this.setCandidates(value.split(","));
+      }
+    });
+  };
+
+  App.prototype.showLogoDialog = function () {
+    this.$buefy.dialog.prompt({
+      message: "Enter image URL for logo",
+      inputAttrs: {// placeholder: "e.g. Joe, Jan, Jill, Jazz",
+      },
+      trapFocus: true,
+      onConfirm: function onConfirm(value) {
+        console.log("Logo change: ", value);
+        console.log(_global_config.globalConfig.eventInfo);
+        _global_config.globalConfig.eventInfo.logoUrl = value;
+        console.log(_global_config.globalConfig.eventInfo);
+      }
+    });
+  };
+
+  App.prototype.showTitleDialog = function () {
+    this.$buefy.dialog.prompt({
+      message: "Enter new Event Title",
+      inputAttrs: {// placeholder: "e.g. Joe, Jan, Jill, Jazz",
+      },
+      trapFocus: true,
+      onConfirm: function onConfirm(value) {
+        _global_config.globalConfig.eventInfo.eventTitle = value;
       }
     });
   };
@@ -16474,29 +16537,73 @@ exports.default = _default;
       ),
       _vm._v(" "),
       _c("footer", { staticClass: "container" }, [
-        _c(
-          "a",
-          {
-            attrs: { href: "#" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.showCandidateDialog()
+        _c("div", [
+          _c("span", [_vm._v("Set New")]),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn-flat",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.showCandidateDialog()
+                }
               }
-            }
-          },
-          [_vm._v("Set New Candidates")]
-        ),
+            },
+            [_vm._v("Candidates")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn-flat",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.showLogoDialog()
+                }
+              }
+            },
+            [_vm._v("Logo")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn-flat",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.showTitleDialog()
+                }
+              }
+            },
+            [_vm._v("Title")]
+          )
+        ]),
         _vm._v(" "),
-        _c("span", { staticClass: "attribution-label" }, [
-          _vm._v("Originally Built by Alex Brown for the MVMHA (2020)")
-        ])
+        _vm._m(0)
       ])
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "attribution-label" }, [
+      _vm._v("\n      Originally Built by Alex Brown for the\n      "),
+      _c("a", { attrs: { href: "https://mvmha.com" } }, [_vm._v("MVMHA")]),
+      _vm._v(" (2020)\n    ")
+    ])
+  }
+]
 render._withStripped = true
 
           return {
@@ -16529,7 +16636,7 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","./focus_manager":"src/js/focus_manager.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-1fafdf15.js":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","./focus_manager":"src/js/focus_manager.ts","./global_config":"src/js/global_config.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-1fafdf15.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35689,7 +35796,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2701" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "7972" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
