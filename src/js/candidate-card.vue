@@ -55,6 +55,9 @@ export default class CandidateCard extends Vue {
   @Prop({ required: true })
   candidate!: Candidate;
 
+  @Emit()
+  minimizeCandidate() {}
+
   get progressPercent() {
     return this.candidate.timer.progressPercent;
   }
@@ -65,9 +68,6 @@ export default class CandidateCard extends Vue {
     }
     return this.progressPercent;
   }
-
-  @Emit()
-  minimizeCandidate() {}
 
   get timeClass() {
     return {
