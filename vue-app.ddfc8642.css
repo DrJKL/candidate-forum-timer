@@ -80,6 +80,7 @@
     flex-direction: column;
     align-items: flex-end;
     flex: 0 1 auto;
+    user-select: none;
     width: fit-content;
 }
 .our-header .buttons > div[data-v-09fc64] {
@@ -97,8 +98,8 @@
       font-weight: bold;
       align-self: center;
 }
-.our-header .title span[data-v-09fc64],
-  .our-header .subtitle span[data-v-09fc64] {
+.our-header .title[data-v-09fc64] span,
+  .our-header .subtitle[data-v-09fc64] span {
     display: inline-block;
 }
 

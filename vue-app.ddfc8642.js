@@ -14946,23 +14946,23 @@ var global = arguments[3];
 
 },{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
 module.exports = "/just_homes_logo.5f11e9bb.png";
-},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
-module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
 },{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open (1).437ccd50.png";
+},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
+module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
   "just_homes_logo": require("./just_homes_logo.png"),
-  "lwv-logo": require("./lwv-logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
   "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
+  "lwv-logo": require("./lwv-logo.png"),
   "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo.png":"src/assets/lwv-logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15864,11 +15864,28 @@ function (_super) {
     });
   };
 
+  Object.defineProperty(Header.prototype, "prevEnabled", {
+    get: function get() {
+      return this.focusedCandidate !== undefined && this.focusedCandidate > 0;
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(Header.prototype, "nextEnabled", {
+    get: function get() {
+      return this.focusedCandidate !== undefined && this.numberCandidates !== undefined && this.focusedCandidate < this.numberCandidates - 1;
+    },
+    enumerable: false,
+    configurable: true
+  });
+
   __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Array)], Header.prototype, "candidatesList", void 0);
 
   __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Boolean)], Header.prototype, "galleryMode", void 0);
 
   __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)], Header.prototype, "focusedCandidate", void 0);
+
+  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)], Header.prototype, "numberCandidates", void 0);
 
   __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "shuffleCandidates", null);
 
@@ -16056,7 +16073,7 @@ exports.default = _default;
               "a",
               {
                 staticClass: "btn",
-                attrs: { href: "#" },
+                attrs: { href: "#", disabled: !_vm.prevEnabled },
                 on: {
                   click: function($event) {
                     $event.preventDefault()
@@ -16080,7 +16097,7 @@ exports.default = _default;
               "a",
               {
                 staticClass: "btn",
-                attrs: { href: "#" },
+                attrs: { href: "#", disabled: !_vm.nextEnabled },
                 on: {
                   click: function($event) {
                     $event.preventDefault()
@@ -16134,7 +16151,55 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./global_config":"src/js/global_config.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/app.vue":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./global_config":"src/js/global_config.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/focus_manager.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var FocusManager =
+/** @class */
+function () {
+  function FocusManager() {
+    this.focusedCandidate = 0;
+  }
+
+  FocusManager.prototype.checkFocus = function (limit) {
+    this.checkFocusNaN();
+    this.focusedCandidate = Math.max(Math.min(this.focusedCandidate, limit), 0);
+  };
+
+  FocusManager.prototype.checkFocusNaN = function () {
+    if (isNaN(this.focusedCandidate)) {
+      this.focusedCandidate = 0;
+    }
+  };
+
+  FocusManager.prototype.changeFocus = function (num, limit) {
+    this.focusedCandidate += num;
+    this.checkFocus(limit);
+  };
+
+  FocusManager.prototype.isFocused = function (index) {
+    return this.focusedCandidate === index;
+  };
+
+  FocusManager.prototype.isNext = function (index) {
+    return this.focusedCandidate === index - 1;
+  };
+
+  FocusManager.prototype.isPrev = function (index) {
+    return this.focusedCandidate === index + 1;
+  };
+
+  return FocusManager;
+}();
+
+var _default = FocusManager;
+exports.default = _default;
+},{}],"src/js/app.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16149,6 +16214,8 @@ var _candidates = require("./candidates");
 var _candidateCard = _interopRequireDefault(require("./candidate-card.vue"));
 
 var _header = _interopRequireDefault(require("./header.vue"));
+
+var _focus_manager = _interopRequireDefault(require("./focus_manager"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -16199,47 +16266,16 @@ function (_super) {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
     _this.allCandidates = _candidates.allCandidates;
-    _this.focusedCandidate = 0;
     _this.galleryMode = false;
+    _this.focusManager = new _focus_manager.default();
     return _this;
   }
 
-  App.prototype.checkFocus = function () {
-    var limit = this.visibleCandidates.length - 1;
-    this.checkFocusNaN();
-    this.focusedCandidate = Math.max(Math.min(this.focusedCandidate, limit), 0);
-  };
-
-  App.prototype.checkFocusNaN = function () {
-    if (isNaN(this.focusedCandidate)) {
-      this.focusedCandidate = 0;
-    }
-  };
-
-  App.prototype.changeFocus = function (num) {
-    this.checkFocusNaN();
-    this.focusedCandidate += num;
-    this.focusedCandidate += this.visibleCandidates.length;
-    this.focusedCandidate %= this.visibleCandidates.length;
-  };
-
-  App.prototype.isFocused = function (index) {
-    return this.focusedCandidate === index;
-  };
-
-  App.prototype.isNext = function (index) {
-    return this.focusedCandidate === index - 1;
-  };
-
-  App.prototype.isPrev = function (index) {
-    return this.focusedCandidate === index + 1;
-  };
-
   App.prototype.getCardClasses = function (index) {
     return {
-      "focused-item": this.isFocused(index),
-      "previous-item": this.isPrev(index),
-      "on-deck": this.isNext(index)
+      "focused-item": this.focusManager.isFocused(index),
+      "previous-item": this.focusManager.isPrev(index),
+      "on-deck": this.focusManager.isNext(index)
     };
   };
 
@@ -16279,11 +16315,17 @@ function (_super) {
     enumerable: false,
     configurable: true
   });
+  Object.defineProperty(App.prototype, "numberOfCandidates", {
+    get: function get() {
+      return this.visibleCandidates.length;
+    },
+    enumerable: false,
+    configurable: true
+  });
 
   App.prototype.minimizeCandidate = function (candidate) {
-    console.log("FFFF", candidate);
     candidate.toggleMinimized();
-    this.checkFocus();
+    this.focusManager.checkFocus(this.numberOfCandidates - 1);
   };
 
   App.prototype.showCandidateDialog = function () {
@@ -16296,8 +16338,7 @@ function (_super) {
       },
       trapFocus: true,
       onConfirm: function onConfirm(value) {
-        _this.setCandidates(value.split(",")); // this.$buefy.toast.open(`Your name is: ${value}`);
-
+        _this.setCandidates(value.split(","));
       }
     });
   };
@@ -16337,7 +16378,8 @@ exports.default = _default;
     [
       _c("app-header", {
         attrs: {
-          "focused-candidate": _vm.focusedCandidate,
+          "focused-candidate": _vm.focusManager.focusedCandidate,
+          "number-candidates": _vm.numberOfCandidates,
           "gallery-mode": _vm.galleryMode,
           "candidates-list": _vm.allCandidates
         },
@@ -16352,7 +16394,10 @@ exports.default = _default;
             return _vm.shuffleCandidates()
           },
           "focus-change": function($event) {
-            return _vm.changeFocus($event)
+            return _vm.focusManager.changeFocus(
+              $event,
+              _vm.numberOfCandidates - 1
+            )
           }
         }
       }),
@@ -16484,7 +16529,7 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-1fafdf15.js":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/vue-property-decorator.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","./focus_manager":"src/js/focus_manager.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-1fafdf15.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -35644,7 +35689,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8859" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2701" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
