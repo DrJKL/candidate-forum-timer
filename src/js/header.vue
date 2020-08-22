@@ -136,6 +136,7 @@ export default class Header extends Vue {
     flex-direction: column;
     align-items: flex-end;
     flex: 0 1 auto;
+    user-select: none;
     width: fit-content;
     > div {
       flex: 0 1 auto;
@@ -153,8 +154,8 @@ export default class Header extends Vue {
       align-self: center;
     }
   }
-  .title span,
-  .subtitle span {
+  .title /deep/ span,
+  .subtitle /deep/ span {
     display: inline-block;
   }
 }
