@@ -1,5 +1,5 @@
 <template>
-  <div class="candidate-card card z-depth-2">
+  <div class="candidate-card card z-depth-2" :class="timeClass">
     <div class="card-content">
       <div class="card-title">
         <span>{{candidate.name}}</span>
@@ -68,6 +68,14 @@ export default class CandidateCard extends Vue {
 
   @Emit()
   minimizeCandidate() {}
+
+  get timeClass() {
+    return {
+      'plenty-time': this.progressPercent >= 25,
+      'running-out': this.progressPercent < 25 && this.progressPercent >= 10,
+      'almost-done': this.progressPercent < 10,
+    }
+  }
 }
 </script>
 
@@ -96,6 +104,16 @@ export default class CandidateCard extends Vue {
   .time-left {
     font-size: 20pt;
   }
+  &.plenty-time {
+    outline-color: green !important;
+  }
+  &.running-out {
+    outline-color: yellow !important;
+  }
+  &.almost-done {
+    outline-color: red !important; 
+  }
+
   .card-action {
     display: flex;
     flex-direction: row;
