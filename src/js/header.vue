@@ -109,7 +109,6 @@ export default class Header extends Vue {
 
   @Watch("config", { deep: true, immediate: true })
   configChanged(newConfig: Config) {
-    console.log(newConfig);
     this.$forceUpdate();
   }
 

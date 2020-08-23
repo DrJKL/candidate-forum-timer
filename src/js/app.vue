@@ -51,23 +51,22 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop } from "vue-property-decorator";
+import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import moment from "moment";
 import {
-  allCandidates as listOfCandidates,
   Candidate,
   shuffle,
 } from "./candidates";
 import CandidateCard from "./candidate-card.vue";
 import AppHeader from "./header.vue";
 import FocusManager from "./focus_manager";
-import { globalConfig } from "./global_config";
+import { globalConfig, saveConfig, restoreConfig } from "./global_config";
 
 @Component({
   components: { AppHeader, CandidateCard },
 })
 export default class App extends Vue {
-  allCandidates = listOfCandidates;
+  allCandidates: Candidate[] = [];
   galleryMode = true;
   isShuffling = false;
 
@@ -123,40 +122,43 @@ export default class App extends Vue {
       trapFocus: true,
       onConfirm: (value) => {
         this.setCandidates(value.split(","));
+        saveConfig();
       },
     });
   }
   showLogoDialog() {
     this.$buefy.dialog.prompt({
       message: `Enter image URL for logo`,
-      inputAttrs: {
-        // placeholder: "e.g. Joe, Jan, Jill, Jazz",
-      },
       trapFocus: true,
       onConfirm: (value) => {
-        console.log("Logo change: ", value);
-        console.log(globalConfig.eventInfo);
         globalConfig.eventInfo.logoUrl = value;
-        console.log(globalConfig.eventInfo);
+        saveConfig();
       },
     });
   }
   showTitleDialog() {
     this.$buefy.dialog.prompt({
       message: `Enter new Event Title`,
-      inputAttrs: {
-        // placeholder: "e.g. Joe, Jan, Jill, Jazz",
-      },
       trapFocus: true,
       onConfirm: (value) => {
         globalConfig.eventInfo.eventTitle = value;
+        saveConfig();
       },
     });
   }
 
   setCandidates(candidateNames: string[]) {
+    globalConfig.eventInfo.candidatesList = candidateNames;
     this.allCandidates = candidateNames.map((name) => new Candidate(name));
   }
+
+  mounted() {
+    restoreConfig();
+    this.allCandidates = globalConfig.eventInfo.candidatesList.map(
+      (name) => new Candidate(name)
+    );
+  }
+
 }
 </script>
 <style lang="scss" scoped>

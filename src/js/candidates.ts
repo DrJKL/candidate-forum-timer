@@ -13,12 +13,6 @@ export class Candidate {
     }
 }
 
-export const allCandidates = globalConfig.eventInfo.candidatesList.map((candidateName) => new Candidate(candidateName));
-
-export function totalTimeLeft() {
-    return allCandidates.map((candidate) => candidate.timer.timeLeft);
-}
-
 export function shuffle<T>(initialArray: T[]) {
     const tempCandidates = initialArray.slice();
     let currentIndex = tempCandidates.length;

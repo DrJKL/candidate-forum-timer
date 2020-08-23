@@ -1,3 +1,4 @@
+import { Candidate } from './candidates';
 import moment from "moment";
 import images from "../assets/*.png";
 
@@ -29,5 +30,30 @@ export class Config {
             "Lenny Siegel",
         ],
     }
+    get candidates() {
+        return this.eventInfo.candidatesList.map(name => new Candidate(name));
+    }
+    set candidates(newCandidates: Candidate[]) {
+        this.eventInfo.candidatesList = newCandidates.map(candidate => candidate.name);
+    }
 }
 export const globalConfig = new Config();
+
+const CONFIG_KEY = 'saved_candidate_config';
+
+export function restoreConfig() {
+    console.log("restoring");
+    const savedConfig = localStorage.getItem(CONFIG_KEY);
+    if (!savedConfig) {
+        return;
+    }
+    const parsedConfig = JSON.parse(savedConfig);
+    console.log(parsedConfig);
+    Object.assign(globalConfig.eventInfo, parsedConfig);
+    console.log(globalConfig.eventInfo);
+}
+export function saveConfig() {
+    console.log("saving");
+    localStorage.setItem(CONFIG_KEY, JSON.stringify(globalConfig.eventInfo));
+    console.log(globalConfig.eventInfo)
+}
