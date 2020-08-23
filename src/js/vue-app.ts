@@ -1,5 +1,3 @@
-import { allCandidates } from "./candidates";
-
 import Vue from "vue";
 import App from "./app.vue";
 import Buefy from 'buefy';
