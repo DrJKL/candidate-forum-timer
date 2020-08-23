@@ -213,7 +213,7 @@ footer {
   }
 }
 
-.container.gallery-mode {
+main.gallery-mode {
   .candidates-container .transition-container {
     display: flex;
     flex-direction: row;
@@ -226,7 +226,7 @@ footer {
     }
   }
 }
-.container:not(.gallery-mode) {
+main:not(.gallery-mode) {
   .candidate-card {
     display: none;
     &.focused-item {
