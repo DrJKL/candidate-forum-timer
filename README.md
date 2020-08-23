@@ -14,6 +14,6 @@
 
 ### Features TBI
 
-* Paddle Style Color (Border)
-* Better Shuffle --> New Round
-* Store Customization in LocalStorage
+* ~~Paddle Style Color (Border)~~
+* ~~Better Shuffle --> New Round~~
+* ~~Store Customization in LocalStorage~~
