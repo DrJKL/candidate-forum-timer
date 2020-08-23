@@ -38,13 +38,14 @@
     </main>
     <footer class="container">
       <div>
-        <span>Set New</span>
+        <span>Set New...</span>
         <a href="#" class="btn-flat" @click.prevent="showCandidateDialog()">Candidates</a>
         <a href="#" class="btn-flat" @click.prevent="showLogoDialog()">Logo</a>
         <a href="#" class="btn-flat" @click.prevent="showTitleDialog()">Title</a>
+        <a href="#" class="btn-flat red-text" @click.prevent="resetConfig()">Reset All</a>
       </div>
       <span class="attribution-label">
-        Originally Built by Alex Brown for the
+        Built by Alex Brown for the
         <a href="https://mvmha.com">MVMHA</a> (2020)
       </span>
     </footer>
@@ -53,14 +54,16 @@
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import moment from "moment";
-import {
-  Candidate,
-  shuffle,
-} from "./candidates";
+import { Candidate, shuffle } from "./candidates";
 import CandidateCard from "./candidate-card.vue";
 import AppHeader from "./header.vue";
 import FocusManager from "./focus_manager";
-import { globalConfig, saveConfig, restoreConfig } from "./global_config";
+import {
+  globalConfig,
+  saveConfig,
+  restoreConfig,
+  actuallyResetConfig,
+} from "./global_config";
 
 @Component({
   components: { AppHeader, CandidateCard },
@@ -146,6 +149,21 @@ export default class App extends Vue {
       },
     });
   }
+  resetConfig() {
+    this.$buefy.dialog.confirm({
+      title: "Resetting Config",
+      message:
+        "Are you sure you want to <b>Reset</b> all fields? This action cannot be undone.",
+      confirmText: "Reset Page",
+      type: "is-danger",
+      hasIcon: true,
+      onConfirm: () => {
+        actuallyResetConfig();
+        this.resetCandidates();
+        this.$buefy.toast.open("Options Reset!");
+      },
+    });
+  }
 
   setCandidates(candidateNames: string[]) {
     globalConfig.eventInfo.candidatesList = candidateNames;
@@ -154,11 +172,13 @@ export default class App extends Vue {
 
   mounted() {
     restoreConfig();
+    this.resetCandidates();
+  }
+  private resetCandidates() {
     this.allCandidates = globalConfig.eventInfo.candidatesList.map(
       (name) => new Candidate(name)
     );
   }
-
 }
 </script>
 <style lang="scss" scoped>

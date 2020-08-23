@@ -45,6 +45,7 @@ export function restoreConfig() {
     console.log("restoring");
     const savedConfig = localStorage.getItem(CONFIG_KEY);
     if (!savedConfig) {
+        globalConfig.eventInfo = new Config().eventInfo;
         return;
     }
     const parsedConfig = JSON.parse(savedConfig);
@@ -56,4 +57,8 @@ export function saveConfig() {
     console.log("saving");
     localStorage.setItem(CONFIG_KEY, JSON.stringify(globalConfig.eventInfo));
     console.log(globalConfig.eventInfo)
+}
+export function actuallyResetConfig() {
+    localStorage.removeItem(CONFIG_KEY);
+    restoreConfig();
 }
