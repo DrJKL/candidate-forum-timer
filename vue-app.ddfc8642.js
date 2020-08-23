@@ -14944,31 +14944,36 @@ var global = arguments[3];
 
 })));
 
-},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
-module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
-},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
-module.exports = "/lwv-logo.87fe3171.png";
+},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
+module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open (1).437ccd50.png";
+},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
+module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
-  "just_homes_logo": require("./just_homes_logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
-  "lwv-logo": require("./lwv-logo.png"),
+  "just_homes_logo": require("./just_homes_logo.png"),
   "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
+  "lwv-logo": require("./lwv-logo.png"),
   "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.restoreConfig = restoreConfig;
+exports.saveConfig = saveConfig;
+exports.actuallyResetConfig = actuallyResetConfig;
 exports.globalConfig = exports.Config = void 0;
+
+var _candidates = require("./candidates");
 
 var _moment = _interopRequireDefault(require("moment"));
 
@@ -14996,13 +15001,54 @@ function () {
     };
   }
 
+  Object.defineProperty(Config.prototype, "candidates", {
+    get: function get() {
+      return this.eventInfo.candidatesList.map(function (name) {
+        return new _candidates.Candidate(name);
+      });
+    },
+    set: function set(newCandidates) {
+      this.eventInfo.candidatesList = newCandidates.map(function (candidate) {
+        return candidate.name;
+      });
+    },
+    enumerable: false,
+    configurable: true
+  });
   return Config;
 }();
 
 exports.Config = Config;
 var globalConfig = new Config();
 exports.globalConfig = globalConfig;
-},{"moment":"node_modules/moment/moment.js","../assets/*.png":"src/assets/*.png"}],"src/js/timer.ts":[function(require,module,exports) {
+var CONFIG_KEY = 'saved_candidate_config';
+
+function restoreConfig() {
+  console.log("restoring");
+  var savedConfig = localStorage.getItem(CONFIG_KEY);
+
+  if (!savedConfig) {
+    globalConfig.eventInfo = new Config().eventInfo;
+    return;
+  }
+
+  var parsedConfig = JSON.parse(savedConfig);
+  console.log(parsedConfig);
+  Object.assign(globalConfig.eventInfo, parsedConfig);
+  console.log(globalConfig.eventInfo);
+}
+
+function saveConfig() {
+  console.log("saving");
+  localStorage.setItem(CONFIG_KEY, JSON.stringify(globalConfig.eventInfo));
+  console.log(globalConfig.eventInfo);
+}
+
+function actuallyResetConfig() {
+  localStorage.removeItem(CONFIG_KEY);
+  restoreConfig();
+}
+},{"./candidates":"src/js/candidates.ts","moment":"node_modules/moment/moment.js","../assets/*.png":"src/assets/*.png"}],"src/js/timer.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15021,11 +15067,16 @@ var Timer =
 function () {
   function Timer() {
     this.timeLeft = _global_config.globalConfig.timeLimitTotal.clone();
+    this.timeLimit = _global_config.globalConfig.timeLimitTotal.clone();
     this.countingDown = null;
   }
 
-  Timer.prototype.toggleTimer = function () {
+  Timer.prototype.toggleTimer = function (force) {
     var _this = this;
+
+    if (force === void 0) {
+      force = true;
+    }
 
     if (this.countingDown) {
       clearInterval(this.countingDown);
@@ -15033,9 +15084,11 @@ function () {
       return;
     }
 
-    this.countingDown = setInterval(function () {
-      _this.timeLeft.subtract(_global_config.globalConfig.timeGranularity, 'ms');
-    }, _global_config.globalConfig.timeGranularity);
+    if (force === true) {
+      this.countingDown = setInterval(function () {
+        _this.timeLeft.subtract(_global_config.globalConfig.timeGranularity, 'ms');
+      }, _global_config.globalConfig.timeGranularity);
+    }
   };
 
   Timer.prototype.addTime = function () {
@@ -15047,7 +15100,8 @@ function () {
   };
 
   Timer.prototype.setTime = function (num, unit) {
-    this.timeLeft = _moment.default.duration(num, unit);
+    this.timeLimit = _moment.default.duration(num, unit);
+    this.timeLeft = this.timeLimit.clone();
   };
 
   Timer.prototype.isRunning = function () {
@@ -15068,7 +15122,7 @@ function () {
   });
   Object.defineProperty(Timer.prototype, "progressPercent", {
     get: function get() {
-      return 100 * (this.millisLeft / _global_config.globalConfig.timeLimitTotal.asMilliseconds());
+      return 100 * (this.millisLeft / this.timeLimit.asMilliseconds());
     },
     enumerable: false,
     configurable: true
@@ -15091,11 +15145,8 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.totalTimeLeft = totalTimeLeft;
 exports.shuffle = shuffle;
-exports.allCandidates = exports.Candidate = void 0;
-
-var _global_config = require("./global_config");
+exports.Candidate = void 0;
 
 var _timer = _interopRequireDefault(require("./timer"));
 
@@ -15120,18 +15171,6 @@ function () {
 
 exports.Candidate = Candidate;
 
-var allCandidates = _global_config.globalConfig.eventInfo.candidatesList.map(function (candidateName) {
-  return new Candidate(candidateName);
-});
-
-exports.allCandidates = allCandidates;
-
-function totalTimeLeft() {
-  return allCandidates.map(function (candidate) {
-    return candidate.timer.timeLeft;
-  });
-}
-
 function shuffle(initialArray) {
   var tempCandidates = initialArray.slice();
   var currentIndex = tempCandidates.length;
@@ -15149,7 +15188,7 @@ function shuffle(initialArray) {
 
   return tempCandidates;
 }
-},{"./global_config":"src/js/global_config.ts","./timer":"src/js/timer.ts"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"./timer":"src/js/timer.ts"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -15554,6 +15593,8 @@ function (_super) {
     return _super !== null && _super.apply(this, arguments) || this;
   }
 
+  CandidateCard.prototype.minimizeCandidate = function () {};
+
   Object.defineProperty(CandidateCard.prototype, "progressPercent", {
     get: function get() {
       return this.candidate.timer.progressPercent;
@@ -15572,8 +15613,17 @@ function (_super) {
     enumerable: false,
     configurable: true
   });
-
-  CandidateCard.prototype.minimizeCandidate = function () {};
+  Object.defineProperty(CandidateCard.prototype, "timeClass", {
+    get: function get() {
+      return {
+        "plenty-time": this.progressPercent >= 50,
+        "running-out": this.progressPercent < 50 && this.progressPercent >= 25,
+        "almost-done": this.progressPercent < 25
+      };
+    },
+    enumerable: false,
+    configurable: true
+  });
 
   var _a;
 
@@ -15601,73 +15651,109 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "candidate-card card z-depth-2" }, [
-    _c("div", { staticClass: "card-content" }, [
-      _c("div", { staticClass: "card-title" }, [
-        _c("span", [_vm._v(_vm._s(_vm.candidate.name))]),
+  return _c(
+    "div",
+    { staticClass: "candidate-card card z-depth-2", class: _vm.timeClass },
+    [
+      _c("div", { staticClass: "card-content" }, [
+        _c("div", { staticClass: "card-title" }, [
+          _c("span", [_vm._v(_vm._s(_vm.candidate.name))]),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn-floating btn-flat",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.minimizeCandidate()
+                }
+              }
+            },
+            [_c("i", { staticClass: "material-icons" }, [_vm._v("minimize")])]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "time-left" }, [
+          _vm._v(
+            "\n      " +
+              _vm._s(_vm.candidate.timer.getTimeLeft()) +
+              " " +
+              _vm._s(_vm.candidate.timer.isTimeUp ? "over" : "remaining") +
+              "\n    "
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "spacer" }),
         _vm._v(" "),
         _c(
-          "a",
-          {
-            staticClass: "btn-floating btn-flat",
-            attrs: { href: "#" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.minimizeCandidate()
+          "div",
+          { class: { "time-up": _vm.candidate.timer.isTimeUp } },
+          [
+            _c("b-progress", {
+              attrs: {
+                value: _vm.progressValue,
+                size: "is-large",
+                type: _vm.candidate.timer.isTimeUp ? "is-danger" : "is-info"
               }
-            }
-          },
-          [_c("i", { staticClass: "material-icons" }, [_vm._v("minimize")])]
+            })
+          ],
+          1
         )
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "time-left" }, [
-        _vm._v(
-          "\n      " +
-            _vm._s(_vm.candidate.timer.getTimeLeft()) +
-            " " +
-            _vm._s(_vm.candidate.timer.isTimeUp ? "over" : "remaining") +
-            "\n    "
-        )
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "spacer" }),
-      _vm._v(" "),
-      _c(
-        "div",
-        { class: { "time-up": _vm.candidate.timer.isTimeUp } },
-        [
-          _c("b-progress", {
-            attrs: {
-              value: _vm.progressValue,
-              size: "is-large",
-              type: _vm.candidate.timer.isTimeUp ? "is-danger" : "is-info"
-            }
-          })
-        ],
-        1
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "card-action" }, [
-      _c("div", { staticClass: "action-row" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn startstop",
-            attrs: { href: "#" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.candidate.timer.toggleTimer()
+      _c("div", { staticClass: "card-action" }, [
+        _c("div", { staticClass: "action-row" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn startstop",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.candidate.timer.toggleTimer()
+                }
               }
-            }
-          },
-          [_vm._v(_vm._s(_vm.candidate.timer.isRunning() ? "Stop" : "Start"))]
-        ),
+            },
+            [_vm._v(_vm._s(_vm.candidate.timer.isRunning() ? "Stop" : "Start"))]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "inc-dec-buttons" }, [
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.candidate.timer.addTime()
+                  }
+                }
+              },
+              [_c("i", { staticClass: "material-icons" }, [_vm._v("add")])]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn",
+                attrs: { href: "#" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.candidate.timer.removeTime()
+                  }
+                }
+              },
+              [_c("i", { staticClass: "material-icons" }, [_vm._v("remove")])]
+            )
+          ])
+        ]),
         _vm._v(" "),
-        _c("div", { staticClass: "inc-dec-buttons" }, [
+        _c("div", { staticClass: "action-row time-setters" }, [
           _c(
             "a",
             {
@@ -15676,11 +15762,11 @@ exports.default = _default;
               on: {
                 click: function($event) {
                   $event.preventDefault()
-                  return _vm.candidate.timer.addTime()
+                  return _vm.candidate.timer.setTime(0, "s")
                 }
               }
             },
-            [_c("i", { staticClass: "material-icons" }, [_vm._v("add")])]
+            [_vm._v("0")]
           ),
           _vm._v(" "),
           _c(
@@ -15691,78 +15777,46 @@ exports.default = _default;
               on: {
                 click: function($event) {
                   $event.preventDefault()
-                  return _vm.candidate.timer.removeTime()
+                  return _vm.candidate.timer.setTime(30, "s")
                 }
               }
             },
-            [_c("i", { staticClass: "material-icons" }, [_vm._v("remove")])]
+            [_vm._v("30")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.candidate.timer.setTime(60, "s")
+                }
+              }
+            },
+            [_vm._v("60")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.candidate.timer.setTime(90, "s")
+                }
+              }
+            },
+            [_vm._v("90")]
           )
         ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "action-row time-setters" }, [
-        _c(
-          "a",
-          {
-            staticClass: "btn",
-            attrs: { href: "#" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.candidate.timer.setTime(0, "s")
-              }
-            }
-          },
-          [_vm._v("0")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn",
-            attrs: { href: "#" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.candidate.timer.setTime(30, "s")
-              }
-            }
-          },
-          [_vm._v("30")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn",
-            attrs: { href: "#" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.candidate.timer.setTime(60, "s")
-              }
-            }
-          },
-          [_vm._v("60")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn",
-            attrs: { href: "#" },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                return _vm.candidate.timer.setTime(90, "s")
-              }
-            }
-          },
-          [_vm._v("90")]
-        )
       ])
-    ])
-  ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -15874,7 +15928,6 @@ function (_super) {
   };
 
   Header.prototype.configChanged = function (newConfig) {
-    console.log(newConfig);
     this.$forceUpdate();
   };
 
@@ -15906,6 +15959,7 @@ function (_super) {
     (_a = this.candidatesList) === null || _a === void 0 ? void 0 : _a.map(function (candidate) {
       return candidate.timer;
     }).forEach(function (timer) {
+      timer.toggleTimer(false);
       timer.setTime(time, "s");
     });
   };
@@ -15930,6 +15984,8 @@ function (_super) {
   __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Array)], Header.prototype, "candidatesList", void 0);
 
   __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Boolean)], Header.prototype, "galleryMode", void 0);
+
+  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Boolean)], Header.prototype, "isShuffling", void 0);
 
   __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)], Header.prototype, "focusedCandidate", void 0);
 
@@ -15966,7 +16022,7 @@ exports.default = _default;
   var _c = _vm._self._c || _h
   return _c("header", { staticClass: "is-primary is-bold container" }, [
     _c("div", { staticClass: "hero-body" }, [
-      _c("div", { staticClass: "our-header " }, [
+      _c("div", { staticClass: "our-header" }, [
         _c("div", { staticClass: "logo-img" }, [
           _c("img", { attrs: { src: _vm.logoUrl, alt: "Organization logo" } })
         ]),
@@ -15990,7 +16046,7 @@ exports.default = _default;
             _c(
               "a",
               {
-                staticClass: "btn",
+                class: { btn: true, disabled: _vm.isShuffling },
                 attrs: { href: "#" },
                 on: {
                   click: function($event) {
@@ -16018,7 +16074,7 @@ exports.default = _default;
                       expression: "galleryMode"
                     }
                   ],
-                  attrs: { type: "checkbox" },
+                  attrs: { type: "checkbox", disabled: _vm.isShuffling },
                   domProps: {
                     checked: Array.isArray(_vm.galleryMode)
                       ? _vm._i(_vm.galleryMode, null) > -1
@@ -16140,7 +16196,7 @@ exports.default = _default;
             ),
             _vm._v(" "),
             _c("span", { staticClass: "current-focus-number" }, [
-              _vm._v(_vm._s(_vm.focusedCandidate))
+              _vm._v(_vm._s(_vm.focusedCandidate + 1))
             ]),
             _vm._v(" "),
             _c(
@@ -16309,6 +16365,149 @@ var __decorate = void 0 && (void 0).__decorate || function (decorators, target, 
   return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 
+var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P, generator) {
+  function adopt(value) {
+    return value instanceof P ? value : new P(function (resolve) {
+      resolve(value);
+    });
+  }
+
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) {
+      try {
+        step(generator.next(value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function rejected(value) {
+      try {
+        step(generator["throw"](value));
+      } catch (e) {
+        reject(e);
+      }
+    }
+
+    function step(result) {
+      result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+    }
+
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+
+var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
+  var _ = {
+    label: 0,
+    sent: function sent() {
+      if (t[0] & 1) throw t[1];
+      return t[1];
+    },
+    trys: [],
+    ops: []
+  },
+      f,
+      y,
+      t,
+      g;
+  return g = {
+    next: verb(0),
+    "throw": verb(1),
+    "return": verb(2)
+  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
+    return this;
+  }), g;
+
+  function verb(n) {
+    return function (v) {
+      return step([n, v]);
+    };
+  }
+
+  function step(op) {
+    if (f) throw new TypeError("Generator is already executing.");
+
+    while (_) {
+      try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+
+          case 4:
+            _.label++;
+            return {
+              value: op[1],
+              done: false
+            };
+
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+
+          case 7:
+            op = _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
+              t = op;
+              break;
+            }
+
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+
+              _.ops.push(op);
+
+              break;
+            }
+
+            if (t[2]) _.ops.pop();
+
+            _.trys.pop();
+
+            continue;
+        }
+
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+    }
+
+    if (op[0] & 5) throw op[1];
+    return {
+      value: op[0] ? op[1] : void 0,
+      done: true
+    };
+  }
+};
+
 var App =
 /** @class */
 function (_super) {
@@ -16317,8 +16516,9 @@ function (_super) {
   function App() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
-    _this.allCandidates = _candidates.allCandidates;
-    _this.galleryMode = false;
+    _this.allCandidates = [];
+    _this.galleryMode = true;
+    _this.isShuffling = false;
     _this.focusManager = new _focus_manager.default();
     return _this;
   }
@@ -16332,7 +16532,57 @@ function (_super) {
   };
 
   App.prototype.shuffleCandidates = function () {
-    this.allCandidates = (0, _candidates.shuffle)(this.allCandidates);
+    return __awaiter(this, void 0, void 0, function () {
+      var wasGallery;
+      return __generator(this, function (_a) {
+        switch (_a.label) {
+          case 0:
+            wasGallery = this.galleryMode;
+            this.isShuffling = true;
+            if (!!wasGallery) return [3
+            /*break*/
+            , 2];
+            this.galleryMode = true;
+            return [4
+            /*yield*/
+            , new Promise(function (resolve) {
+              return setTimeout(resolve, 700);
+            })];
+
+          case 1:
+            _a.sent();
+
+            _a.label = 2;
+
+          case 2:
+            this.allCandidates = (0, _candidates.shuffle)(this.allCandidates);
+            return [4
+            /*yield*/
+            , new Promise(function (resolve) {
+              return setTimeout(resolve, 100);
+            })];
+
+          case 3:
+            _a.sent();
+
+            this.focusManager.focusedCandidate = 0;
+            return [4
+            /*yield*/
+            , new Promise(function (resolve) {
+              return setTimeout(resolve, 1000);
+            })];
+
+          case 4:
+            _a.sent();
+
+            this.isShuffling = false;
+            this.galleryMode = wasGallery;
+            return [2
+            /*return*/
+            ];
+        }
+      });
+    });
   };
 
   Object.defineProperty(App.prototype, "visibleCandidates", {
@@ -16377,6 +16627,8 @@ function (_super) {
       trapFocus: true,
       onConfirm: function onConfirm(value) {
         _this.setCandidates(value.split(","));
+
+        (0, _global_config.saveConfig)();
       }
     });
   };
@@ -16384,14 +16636,10 @@ function (_super) {
   App.prototype.showLogoDialog = function () {
     this.$buefy.dialog.prompt({
       message: "Enter image URL for logo",
-      inputAttrs: {// placeholder: "e.g. Joe, Jan, Jill, Jazz",
-      },
       trapFocus: true,
       onConfirm: function onConfirm(value) {
-        console.log("Logo change: ", value);
-        console.log(_global_config.globalConfig.eventInfo);
         _global_config.globalConfig.eventInfo.logoUrl = value;
-        console.log(_global_config.globalConfig.eventInfo);
+        (0, _global_config.saveConfig)();
       }
     });
   };
@@ -16399,17 +16647,47 @@ function (_super) {
   App.prototype.showTitleDialog = function () {
     this.$buefy.dialog.prompt({
       message: "Enter new Event Title",
-      inputAttrs: {// placeholder: "e.g. Joe, Jan, Jill, Jazz",
-      },
       trapFocus: true,
       onConfirm: function onConfirm(value) {
         _global_config.globalConfig.eventInfo.eventTitle = value;
+        (0, _global_config.saveConfig)();
+      }
+    });
+  };
+
+  App.prototype.resetConfig = function () {
+    var _this = this;
+
+    this.$buefy.dialog.confirm({
+      title: "Resetting Config",
+      message: "Are you sure you want to <b>Reset</b> all fields? This action cannot be undone.",
+      confirmText: "Reset Page",
+      type: "is-danger",
+      hasIcon: true,
+      onConfirm: function onConfirm() {
+        (0, _global_config.actuallyResetConfig)();
+
+        _this.resetCandidates();
+
+        _this.$buefy.toast.open("Options Reset!");
       }
     });
   };
 
   App.prototype.setCandidates = function (candidateNames) {
+    _global_config.globalConfig.eventInfo.candidatesList = candidateNames;
     this.allCandidates = candidateNames.map(function (name) {
+      return new _candidates.Candidate(name);
+    });
+  };
+
+  App.prototype.mounted = function () {
+    (0, _global_config.restoreConfig)();
+    this.resetCandidates();
+  };
+
+  App.prototype.resetCandidates = function () {
+    this.allCandidates = _global_config.globalConfig.eventInfo.candidatesList.map(function (name) {
       return new _candidates.Candidate(name);
     });
   };
@@ -16446,6 +16724,7 @@ exports.default = _default;
           "focused-candidate": _vm.focusManager.focusedCandidate,
           "number-candidates": _vm.numberOfCandidates,
           "gallery-mode": _vm.galleryMode,
+          "is-shuffling": _vm.isShuffling,
           "candidates-list": _vm.allCandidates
         },
         on: {
@@ -16540,7 +16819,7 @@ exports.default = _default;
       _vm._v(" "),
       _c("footer", { staticClass: "container" }, [
         _c("div", [
-          _c("span", [_vm._v("Set New")]),
+          _c("span", [_vm._v("Set New...")]),
           _vm._v(" "),
           _c(
             "a",
@@ -16585,6 +16864,21 @@ exports.default = _default;
               }
             },
             [_vm._v("Title")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn-flat red-text",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.resetConfig()
+                }
+              }
+            },
+            [_vm._v("Reset All")]
           )
         ]),
         _vm._v(" "),
@@ -16600,7 +16894,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "attribution-label" }, [
-      _vm._v("\n      Originally Built by Alex Brown for the\n      "),
+      _vm._v("\n      Built by Alex Brown for the\n      "),
       _c("a", { attrs: { href: "https://mvmha.com" } }, [_vm._v("MVMHA")]),
       _vm._v(" (2020)\n    ")
     ])
@@ -35798,7 +36092,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2821" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11997" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -23,6 +23,15 @@
 .candidate-card .time-left[data-v-03db96] {
     font-size: 20pt;
 }
+.candidate-card.plenty-time[data-v-03db96] {
+    outline-color: green;
+}
+.candidate-card.running-out[data-v-03db96] {
+    outline-color: yellow;
+}
+.candidate-card.almost-done[data-v-03db96] {
+    outline-color: red;
+}
 .candidate-card .card-action[data-v-03db96] {
     display: flex;
     flex-direction: row;
@@ -35,7 +44,7 @@
       justify-content: space-between;
 }
 .candidate-card .card-action .action-row div[data-v-03db96] {
-        flex: 0 1 auto;
+        flex: 1 1 auto;
 }
 .candidate-card .card-action .action-row a[data-v-03db96] {
         margin: 4px;
@@ -46,6 +55,7 @@
 }
 .candidate-card .card-action .action-row .inc-dec-buttons a[data-v-03db96] {
           flex: 0 1 1em;
+          width: calc(50% - 8px);
 }
 .candidate-card .card-action .time-setters[data-v-03db96] {
       display: flex;
@@ -170,7 +180,7 @@ footer > span[data-v-cd5f52] {
       display: none;
 }
 .focused-item[data-v-cd5f52] {
-  border-left: 3px inset red;
+  outline: 4px solid;
 }
 .squish-item[data-v-cd5f52] {
   transition: all 0.5s;
