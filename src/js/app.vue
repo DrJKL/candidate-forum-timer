@@ -39,10 +39,10 @@
     <footer class="container">
       <div>
         <span>Set New...</span>
-        <a href="#" class="btn-flat" @click.prevent="showCandidateDialog()">Candidates</a>
-        <a href="#" class="btn-flat" @click.prevent="showLogoDialog()">Logo</a>
-        <a href="#" class="btn-flat" @click.prevent="showTitleDialog()">Title</a>
-        <a href="#" class="btn-flat red-text" @click.prevent="resetConfig()">Reset All</a>
+        <b-button href="#" class="is-flat" @click.prevent="showCandidateDialog()">Candidates</b-button>
+        <b-button href="#" class @click.prevent="showLogoDialog()">Logo</b-button>
+        <b-button href="#" class @click.prevent="showTitleDialog()">Title</b-button>
+        <b-button href="#" class="red-text" @click.prevent="resetConfig()">Reset All</b-button>
       </div>
       <span class="attribution-label">
         Built by Alex Brown for the
@@ -205,11 +205,20 @@ footer {
   display: flex;
   justify-content: space-between;
   width: 80%;
+  align-items: center;
   > a {
     flex: 0 1 auto;
   }
-  > span {
-    flex: 0 1 auto;
+  > div {
+    display: flex;
+    align-items: center;
+    > span {
+      flex: 0 1 auto;
+      padding-right:1em;
+    }
+    > button {
+      border-color: transparent;
+    }
   }
 }
 
