@@ -39,10 +39,10 @@
     <footer class="container">
       <div>
         <span>Set New...</span>
-        <b-button href="#" class="is-flat" @click.prevent="showCandidateDialog()">Candidates</b-button>
-        <b-button href="#" class @click.prevent="showLogoDialog()">Logo</b-button>
-        <b-button href="#" class @click.prevent="showTitleDialog()">Title</b-button>
-        <b-button href="#" class="red-text" @click.prevent="resetConfig()">Reset All</b-button>
+        <b-button @click.prevent="showCandidateDialog()">Candidates</b-button>
+        <b-button @click.prevent="showLogoDialog()">Logo</b-button>
+        <b-button @click.prevent="showTitleDialog()">Title</b-button>
+        <b-button class="red-text" @click.prevent="resetConfig()">Reset All</b-button>
       </div>
       <span class="attribution-label">
         Built by Alex Brown for the
@@ -214,9 +214,12 @@ footer {
     align-items: center;
     > span {
       flex: 0 1 auto;
-      padding-right:1em;
+      padding-right: 1em;
     }
     > button {
+      &.red-text {
+        color: #f44336;
+      }
       border-color: transparent;
     }
   }

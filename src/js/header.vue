@@ -17,14 +17,12 @@
         <div class="spacer"></div>
         <div class="buttons box">
           <div>
-            <a
-              href="#"
-              :class="{btn: true, disabled: isShuffling}"
+            <b-button
+              :disabled="isShuffling"
+              icon-right="shuffle"
+              type="is-info"
               @click.prevent="shuffleCandidates()"
-            >
-              Shuffle
-              <i class="material-icons right">shuffle</i>
-            </a>
+            >Shuffle</b-button>
             <div class="switch">
               <label>
                 <input
