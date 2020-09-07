@@ -14944,25 +14944,25 @@ var global = arguments[3];
 
 })));
 
-},{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
-module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
 },{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
 module.exports = "/just_homes_logo.5f11e9bb.png";
-},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
-module.exports = "/lwv-logo_color_open (1).437ccd50.png";
+},{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
+module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
 },{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
 module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
+},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
+module.exports = "/lwv-logo_color_open (1).437ccd50.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
-  "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
   "just_homes_logo": require("./just_homes_logo.png"),
-  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
+  "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
   "lwv-logo": require("./lwv-logo.png"),
-  "lwv-logo_color_open": require("./lwv-logo_color_open.png")
+  "lwv-logo_color_open": require("./lwv-logo_color_open.png"),
+  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png")
 };
-},{"./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14994,10 +14994,10 @@ function () {
       _.default['lwv-logo'],
       orgTitle: // 
       // "Mountain View Mobile Home Alliance",
-      "League of Women Voters",
+      "the League of Women Voters",
       eventTitle: //
       "2020\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>",
-      candidatesList: ["Margaret Abe-Koga", "Jose Gutierrez", "John Lashlee", "Sally Lieber", "Lisa Matichak", "Alex Nunez", "Paul Roales", "Pat Showalter", "Lenny Siegel"]
+      candidatesList: ["Margaret Abe-Koga", "Jose Gutierrez", "John Lashlee", "Sally Lieber", "Lisa Matichak", "Alex Núñez", "Paul Roales", "Pat Showalter", "Lenny Siegel"]
     };
   }
 
@@ -16034,7 +16034,7 @@ exports.default = _default;
           }),
           _vm._v(" "),
           _c("h2", { staticClass: "subtitle" }, [
-            _vm._v("\n          Hosted by the\n          "),
+            _vm._v("\n          Hosted by\n          "),
             _c("span", [_vm._v(_vm._s(_vm.orgTitle))])
           ])
         ]),
@@ -16042,75 +16042,77 @@ exports.default = _default;
         _c("div", { staticClass: "spacer" }),
         _vm._v(" "),
         _c("div", { staticClass: "buttons box" }, [
-          _c("div", [
-            _c(
-              "a",
-              {
-                class: { btn: true, disabled: _vm.isShuffling },
-                attrs: { href: "#" },
-                on: {
-                  click: function($event) {
-                    $event.preventDefault()
-                    return _vm.shuffleCandidates()
-                  }
-                }
-              },
-              [
-                _vm._v("\n            Shuffle\n            "),
-                _c("i", { staticClass: "material-icons right" }, [
-                  _vm._v("shuffle")
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "switch" }, [
-              _c("label", [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.galleryMode,
-                      expression: "galleryMode"
-                    }
-                  ],
-                  attrs: { type: "checkbox", disabled: _vm.isShuffling },
-                  domProps: {
-                    checked: Array.isArray(_vm.galleryMode)
-                      ? _vm._i(_vm.galleryMode, null) > -1
-                      : _vm.galleryMode
+          _c(
+            "div",
+            [
+              _c(
+                "b-button",
+                {
+                  attrs: {
+                    disabled: _vm.isShuffling,
+                    "icon-right": "shuffle",
+                    type: "is-info"
                   },
                   on: {
                     click: function($event) {
-                      return _vm.updateGalleryMode()
-                    },
-                    change: function($event) {
-                      var $$a = _vm.galleryMode,
-                        $$el = $event.target,
-                        $$c = $$el.checked ? true : false
-                      if (Array.isArray($$a)) {
-                        var $$v = null,
-                          $$i = _vm._i($$a, $$v)
-                        if ($$el.checked) {
-                          $$i < 0 && (_vm.galleryMode = $$a.concat([$$v]))
-                        } else {
-                          $$i > -1 &&
-                            (_vm.galleryMode = $$a
-                              .slice(0, $$i)
-                              .concat($$a.slice($$i + 1)))
-                        }
-                      } else {
-                        _vm.galleryMode = $$c
-                      }
+                      $event.preventDefault()
+                      return _vm.shuffleCandidates()
                     }
                   }
-                }),
-                _vm._v(" "),
-                _c("span", { staticClass: "lever" }),
-                _vm._v("\n              Show All\n            ")
+                },
+                [_vm._v("Shuffle")]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "switch" }, [
+                _c("label", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.galleryMode,
+                        expression: "galleryMode"
+                      }
+                    ],
+                    attrs: { type: "checkbox", disabled: _vm.isShuffling },
+                    domProps: {
+                      checked: Array.isArray(_vm.galleryMode)
+                        ? _vm._i(_vm.galleryMode, null) > -1
+                        : _vm.galleryMode
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.updateGalleryMode()
+                      },
+                      change: function($event) {
+                        var $$a = _vm.galleryMode,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.galleryMode = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.galleryMode = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.galleryMode = $$c
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "lever" }),
+                  _vm._v("\n              Show All\n            ")
+                ])
               ])
-            ])
-          ]),
+            ],
+            1
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "time-setters-global" }, [
             _c(
@@ -16655,6 +16657,17 @@ function (_super) {
     });
   };
 
+  App.prototype.showOrgDialog = function () {
+    this.$buefy.dialog.prompt({
+      message: "Enter new Host Organization Title",
+      trapFocus: true,
+      onConfirm: function onConfirm(value) {
+        _global_config.globalConfig.eventInfo.orgTitle = value;
+        (0, _global_config.saveConfig)();
+      }
+    });
+  };
+
   App.prototype.resetConfig = function () {
     var _this = this;
 
@@ -16818,69 +16831,79 @@ exports.default = _default;
       ),
       _vm._v(" "),
       _c("footer", { staticClass: "container" }, [
-        _c("div", [
-          _c("span", [_vm._v("Set New...")]),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn-flat",
-              attrs: { href: "#" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.showCandidateDialog()
+        _c(
+          "div",
+          [
+            _c("span", [_vm._v("Set New...")]),
+            _vm._v(" "),
+            _c(
+              "b-button",
+              {
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.showCandidateDialog()
+                  }
                 }
-              }
-            },
-            [_vm._v("Candidates")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn-flat",
-              attrs: { href: "#" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.showLogoDialog()
+              },
+              [_vm._v("Candidates")]
+            ),
+            _vm._v(" "),
+            _c(
+              "b-button",
+              {
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.showLogoDialog()
+                  }
                 }
-              }
-            },
-            [_vm._v("Logo")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn-flat",
-              attrs: { href: "#" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.showTitleDialog()
+              },
+              [_vm._v("Logo")]
+            ),
+            _vm._v(" "),
+            _c(
+              "b-button",
+              {
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.showTitleDialog()
+                  }
                 }
-              }
-            },
-            [_vm._v("Title")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn-flat red-text",
-              attrs: { href: "#" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  return _vm.resetConfig()
+              },
+              [_vm._v("Title")]
+            ),
+            _vm._v(" "),
+            _c(
+              "b-button",
+              {
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.showOrgDialog()
+                  }
                 }
-              }
-            },
-            [_vm._v("Reset All")]
-          )
-        ]),
+              },
+              [_vm._v("Org")]
+            ),
+            _vm._v(" "),
+            _c(
+              "b-button",
+              {
+                staticClass: "red-text",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.resetConfig()
+                  }
+                }
+              },
+              [_vm._v("Reset All")]
+            )
+          ],
+          1
+        ),
         _vm._v(" "),
         _vm._m(0)
       ])
@@ -36092,7 +36115,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "11997" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "12538" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

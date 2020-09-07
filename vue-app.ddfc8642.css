@@ -140,43 +140,55 @@ footer[data-v-cd5f52] {
   display: flex;
   justify-content: space-between;
   width: 80%;
+  align-items: center;
 }
 footer > a[data-v-cd5f52] {
     flex: 0 1 auto;
 }
-footer > span[data-v-cd5f52] {
-    flex: 0 1 auto;
+footer > div[data-v-cd5f52] {
+    display: flex;
+    align-items: center;
 }
-.container.gallery-mode .candidates-container .transition-container[data-v-cd5f52] {
+footer > div > span[data-v-cd5f52] {
+      flex: 0 1 auto;
+      padding-right: 1em;
+}
+footer > div > button[data-v-cd5f52] {
+      border-color: transparent;
+}
+footer > div > button.red-text[data-v-cd5f52] {
+        color: #f44336;
+}
+main.gallery-mode .candidates-container .transition-container[data-v-cd5f52] {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
-.container.gallery-mode .candidates-container .transition-container > div[data-v-cd5f52],
-  .container.gallery-mode .candidates-container .transition-container > candidate-card[data-v-cd5f52] {
+main.gallery-mode .candidates-container .transition-container > div[data-v-cd5f52],
+  main.gallery-mode .candidates-container .transition-container > candidate-card[data-v-cd5f52] {
     margin: 0 0.5em;
     visibility: visible;
 }
-.container:not(.gallery-mode) .candidate-card[data-v-cd5f52] {
+main:not(.gallery-mode) .candidate-card[data-v-cd5f52] {
   display: none;
 }
-.container:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] {
+main:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] {
     display: flex;
     width: 80vw;
     max-height: 33vw;
 }
-.container:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] .card-content .card-title {
+main:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] .card-content .card-title {
       font-size: 6vw;
       line-height: initial;
 }
-.container:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52], .container:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] {
+main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52], main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] {
     display: inline-block;
 }
-.container:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-action, .container:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] .card-action {
+main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-action, main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] .card-action {
       display: none !important;
 }
-.container:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-content > :not(.card-title), .container:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] .card-content > :not(.card-title) {
+main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-content > :not(.card-title), main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] .card-content > :not(.card-title) {
       display: none;
 }
 .focused-item[data-v-cd5f52] {
