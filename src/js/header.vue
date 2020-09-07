@@ -10,7 +10,7 @@
             <!-- Unknown Event -->
           </h1>
           <h2 class="subtitle">
-            Hosted by the
+            Hosted by
             <span>{{orgTitle}}</span>
           </h2>
         </div>

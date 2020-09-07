@@ -42,6 +42,7 @@
         <b-button @click.prevent="showCandidateDialog()">Candidates</b-button>
         <b-button @click.prevent="showLogoDialog()">Logo</b-button>
         <b-button @click.prevent="showTitleDialog()">Title</b-button>
+        <b-button @click.prevent="showOrgDialog()">Org</b-button>
         <b-button class="red-text" @click.prevent="resetConfig()">Reset All</b-button>
       </div>
       <span class="attribution-label">
@@ -145,6 +146,16 @@ export default class App extends Vue {
       trapFocus: true,
       onConfirm: (value) => {
         globalConfig.eventInfo.eventTitle = value;
+        saveConfig();
+      },
+    });
+  }
+  showOrgDialog() {
+    this.$buefy.dialog.prompt({
+      message: `Enter new Host Organization Title`,
+      trapFocus: true,
+      onConfirm: (value) => {
+        globalConfig.eventInfo.orgTitle = value;
         saveConfig();
       },
     });

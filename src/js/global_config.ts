@@ -12,7 +12,7 @@ export class Config {
             images['lwv-logo'],
         orgTitle: // 
             // "Mountain View Mobile Home Alliance",
-            "League of Women Voters",
+            "the League of Women Voters",
         eventTitle: //
             `2020
             <span>Mountain View</span>
