@@ -24,7 +24,7 @@ export class Config {
             "John Lashlee",
             "Sally Lieber",
             "Lisa Matichak",
-            "Alex Nunez",
+            "Alex Núñez",
             "Paul Roales",
             "Pat Showalter",
             "Lenny Siegel",
