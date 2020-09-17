@@ -38,16 +38,12 @@
           </div>
 
           <div class="time-setters-global">
-            <a href="#" class="btn" @click.prevent="setTime(30)">
-              30
-              <i class="material-icons left">timer</i>
-            </a>
-            <a href="#" class="btn" @click.prevent="setTime(60)">
-              60
-              <i class="material-icons left">timer</i>
-            </a>
-            <a href="#" class="btn" @click.prevent="setTime(90)">
-              90
+
+            <a  href="#" class="btn" 
+                v-for="time in [30, 60, 90,120]"
+                :key="time"
+                @click.prevent="setTime(time)">
+              {{time}}
               <i class="material-icons left">timer</i>
             </a>
           </div>
