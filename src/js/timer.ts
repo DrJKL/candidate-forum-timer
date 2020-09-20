@@ -36,6 +36,9 @@ export default class Timer {
 
     setTime(num: DurationInputArg1, unit: DurationInputArg2) {
         this.timeLimit = moment.duration(num, unit);
+        this.resetTime();
+    }
+    resetTime() {
         this.timeLeft = this.timeLimit.clone();
     }
 

@@ -27,6 +27,11 @@
           class="btn startstop"
           @click.prevent="candidate.timer.toggleTimer();"
         >{{candidate.timer.isRunning() ? 'Stop': 'Start'}}</a>
+        
+        <a href="#" class="btn resetTime" @click.prevent="candidate.timer.resetTime()">
+          <i class="material-icons">restore</i>
+        </a>
+        
         <div class="inc-dec-buttons">
           <a href="#" class="btn" @click.prevent="candidate.timer.addTime()">
             <i class="material-icons">add</i>
@@ -122,7 +127,6 @@ export default class CandidateCard extends Vue {
     .action-row {
       flex: 1;
       display: flex;
-      flex-direction: column;
       justify-content: space-between;
 
       div {
@@ -131,9 +135,13 @@ export default class CandidateCard extends Vue {
       a {
         margin: 4px;
       }
+      .startstop {
+        flex: 1 1 100%;
+      }
       .inc-dec-buttons {
         display: flex;
         justify-content: space-between;
+        display: none;
         a {
           flex: 0 1 1em;
           width: calc(50% - 8px);
@@ -144,7 +152,7 @@ export default class CandidateCard extends Vue {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
-      // display: none; // These should be unnecessary for normal use.
+      display: none; // These should be unnecessary for normal use.
       a {
         flex: 1 1 calc(50% - 8px);
         width: calc(50% - 8px);

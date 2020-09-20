@@ -247,6 +247,7 @@ main.gallery-mode {
     > candidate-card {
       margin: 0 0.5em;
       visibility: visible;
+      flex-basis: 30vw;
     }
   }
 }
