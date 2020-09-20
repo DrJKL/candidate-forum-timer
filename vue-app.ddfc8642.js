@@ -15101,6 +15101,10 @@ function () {
 
   Timer.prototype.setTime = function (num, unit) {
     this.timeLimit = _moment.default.duration(num, unit);
+    this.resetTime();
+  };
+
+  Timer.prototype.resetTime = function () {
     this.timeLeft = this.timeLimit.clone();
   };
 
@@ -15718,6 +15722,21 @@ exports.default = _default;
               }
             },
             [_vm._v(_vm._s(_vm.candidate.timer.isRunning() ? "Stop" : "Start"))]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn resetTime",
+              attrs: { href: "#" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  return _vm.candidate.timer.resetTime()
+                }
+              }
+            },
+            [_c("i", { staticClass: "material-icons" }, [_vm._v("restore")])]
           ),
           _vm._v(" "),
           _c("div", { staticClass: "inc-dec-buttons" }, [
@@ -36074,7 +36093,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "6247" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "7435" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

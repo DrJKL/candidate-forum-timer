@@ -40,7 +40,6 @@
 .candidate-card .card-action .action-row[data-v-03db96] {
       flex: 1;
       display: flex;
-      flex-direction: column;
       justify-content: space-between;
 }
 .candidate-card .card-action .action-row div[data-v-03db96] {
@@ -49,9 +48,13 @@
 .candidate-card .card-action .action-row a[data-v-03db96] {
         margin: 4px;
 }
+.candidate-card .card-action .action-row .startstop[data-v-03db96] {
+        flex: 1 1 100%;
+}
 .candidate-card .card-action .action-row .inc-dec-buttons[data-v-03db96] {
         display: flex;
         justify-content: space-between;
+        display: none;
 }
 .candidate-card .card-action .action-row .inc-dec-buttons a[data-v-03db96] {
           flex: 0 1 1em;
@@ -61,6 +64,7 @@
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      display: none;
 }
 .candidate-card .card-action .time-setters a[data-v-03db96] {
         flex: 1 1 calc(50% - 8px);
@@ -170,6 +174,7 @@ main.gallery-mode .candidates-container .transition-container > div[data-v-cd5f5
   main.gallery-mode .candidates-container .transition-container > candidate-card[data-v-cd5f52] {
     margin: 0 0.5em;
     visibility: visible;
+    flex-basis: 30vw;
 }
 main:not(.gallery-mode) .candidate-card[data-v-cd5f52] {
   display: none;
