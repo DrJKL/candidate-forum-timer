@@ -239,9 +239,8 @@ footer {
 
 main.gallery-mode {
   .candidates-container .transition-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     justify-content: space-evenly;
     > div,
     > candidate-card {
