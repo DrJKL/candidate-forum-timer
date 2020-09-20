@@ -9,7 +9,7 @@
       @shuffle-candidates="shuffleCandidates()"
       @focus-change="focusManager.changeFocus($event, numberOfCandidates - 1)"
     ></app-header>
-    <div class="container time-out-container-container">
+    <div class="time-out-container-container">
       <b-taglist class="time-out-container">
         <b-tag
           class="is-primary minimized-candidate"
@@ -19,7 +19,7 @@
         >{{candidate.name}}</b-tag>
       </b-taglist>
     </div>
-    <main class="container" :class="{'gallery-mode': galleryMode}">
+    <main class="" :class="{'gallery-mode': galleryMode}">
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
           <div
@@ -36,7 +36,7 @@
         </transition-group>
       </div>
     </main>
-    <footer class="container">
+    <footer class="">
       <div>
         <span>Set New...</span>
         <b-button @click.prevent="showCandidateDialog()">Candidates</b-button>
@@ -198,6 +198,7 @@ export default class App extends Vue {
   flex-direction: column;
   height: 100%;
   flex: 1;
+  padding: 0 1em;
   > header {
     flex: 0 1 auto;
   }
@@ -215,7 +216,7 @@ export default class App extends Vue {
 footer {
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 100%;
   align-items: center;
   > a {
     flex: 0 1 auto;
@@ -258,7 +259,6 @@ main:not(.gallery-mode) {
         line-height: initial;
       }
       display: flex;
-      width: 80vw;
       max-height: 33vw;
     }
     &.is-previous,

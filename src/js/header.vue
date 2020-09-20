@@ -1,5 +1,5 @@
 <template>
-  <header class="is-primary is-bold container">
+  <header class="is-primary is-bold">
     <div class="hero-body">
       <div class="our-header">
         <div class="logo-img">
