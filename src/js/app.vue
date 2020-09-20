@@ -240,7 +240,7 @@ footer {
 main.gallery-mode {
   .candidates-container .transition-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0,1fr));
     justify-content: space-evenly;
     > div,
     > candidate-card {
