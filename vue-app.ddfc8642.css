@@ -123,6 +123,7 @@ header[data-v-09fc64] {
   flex-direction: column;
   height: 100%;
   flex: 1;
+  padding: 0 1em;
 }
 .app-container > header[data-v-cd5f52] {
     flex: 0 1 auto;
@@ -139,7 +140,7 @@ header[data-v-09fc64] {
 footer[data-v-cd5f52] {
   display: flex;
   justify-content: space-between;
-  width: 80%;
+  width: 100%;
   align-items: center;
 }
 footer > a[data-v-cd5f52] {
@@ -175,7 +176,6 @@ main:not(.gallery-mode) .candidate-card[data-v-cd5f52] {
 }
 main:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] {
     display: flex;
-    width: 80vw;
     max-height: 33vw;
 }
 main:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] .card-content .card-title {

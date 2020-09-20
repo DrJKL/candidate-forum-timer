@@ -14948,21 +14948,21 @@ var global = arguments[3];
 module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
+},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
+module.exports = "/lwv-logo_color_open (1).437ccd50.png";
 },{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
 module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
-},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
-module.exports = "/lwv-logo_color_open (1).437ccd50.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
   "just_homes_logo": require("./just_homes_logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
+  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
   "lwv-logo": require("./lwv-logo.png"),
-  "lwv-logo_color_open": require("./lwv-logo_color_open.png"),
-  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png")
+  "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16020,7 +16020,7 @@ exports.default = _default;
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("header", { staticClass: "is-primary is-bold container" }, [
+  return _c("header", { staticClass: "is-primary is-bold" }, [
     _c("div", { staticClass: "hero-body" }, [
       _c("div", { staticClass: "our-header" }, [
         _c("div", { staticClass: "logo-img" }, [
@@ -16727,7 +16727,7 @@ exports.default = _default;
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "container time-out-container-container" },
+        { staticClass: "time-out-container-container" },
         [
           _c(
             "b-taglist",
@@ -16753,50 +16753,43 @@ exports.default = _default;
         1
       ),
       _vm._v(" "),
-      _c(
-        "main",
-        {
-          staticClass: "container",
-          class: { "gallery-mode": _vm.galleryMode }
-        },
-        [
-          _c(
-            "div",
-            { staticClass: "candidates-container" },
-            [
-              _c(
-                "transition-group",
-                {
-                  staticClass: "transition-container",
-                  attrs: { name: "squish", tag: "div" }
-                },
-                _vm._l(_vm.visibleCandidates, function(candidate, index) {
-                  return _c(
-                    "div",
-                    { key: candidate.name, staticClass: "squish-item" },
-                    [
-                      _c("candidate-card", {
-                        class: _vm.getCardClasses(index),
-                        attrs: { candidate: candidate },
-                        on: {
-                          "minimize-candidate": function($event) {
-                            return _vm.minimizeCandidate(candidate)
-                          }
+      _c("main", { class: { "gallery-mode": _vm.galleryMode } }, [
+        _c(
+          "div",
+          { staticClass: "candidates-container" },
+          [
+            _c(
+              "transition-group",
+              {
+                staticClass: "transition-container",
+                attrs: { name: "squish", tag: "div" }
+              },
+              _vm._l(_vm.visibleCandidates, function(candidate, index) {
+                return _c(
+                  "div",
+                  { key: candidate.name, staticClass: "squish-item" },
+                  [
+                    _c("candidate-card", {
+                      class: _vm.getCardClasses(index),
+                      attrs: { candidate: candidate },
+                      on: {
+                        "minimize-candidate": function($event) {
+                          return _vm.minimizeCandidate(candidate)
                         }
-                      })
-                    ],
-                    1
-                  )
-                }),
-                0
-              )
-            ],
-            1
-          )
-        ]
-      ),
+                      }
+                    })
+                  ],
+                  1
+                )
+              }),
+              0
+            )
+          ],
+          1
+        )
+      ]),
       _vm._v(" "),
-      _c("footer", { staticClass: "container" }, [
+      _c("footer", {}, [
         _c(
           "div",
           [
@@ -36081,7 +36074,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "5301" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "6247" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
