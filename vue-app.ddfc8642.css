@@ -165,9 +165,8 @@ footer > div > button.red-text[data-v-cd5f52] {
         color: #f44336;
 }
 main.gallery-mode .candidates-container .transition-container[data-v-cd5f52] {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   justify-content: space-evenly;
 }
 main.gallery-mode .candidates-container .transition-container > div[data-v-cd5f52],
