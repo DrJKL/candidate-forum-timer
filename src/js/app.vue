@@ -275,7 +275,7 @@ main:not(.gallery-mode) {
 }
 
 .focused-item {
-  outline: 4px solid;
+  outline: 10px solid;
 }
 
 .squish-item {

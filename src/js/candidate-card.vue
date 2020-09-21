@@ -110,12 +110,15 @@ export default class CandidateCard extends Vue {
     font-size: 20pt;
   }
   &.plenty-time {
+    border-color: green;
     outline-color: green;
   }
   &.running-out {
+    border-color: yellow;
     outline-color: yellow;
   }
   &.almost-done {
+    border-color: red;
     outline-color: red;
   }
 
