@@ -24,12 +24,15 @@
     font-size: 20pt;
 }
 .candidate-card.plenty-time[data-v-03db96] {
+    border-color: green;
     outline-color: green;
 }
 .candidate-card.running-out[data-v-03db96] {
+    border-color: yellow;
     outline-color: yellow;
 }
 .candidate-card.almost-done[data-v-03db96] {
+    border-color: red;
     outline-color: red;
 }
 .candidate-card .card-action[data-v-03db96] {
@@ -196,7 +199,7 @@ main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-content
       display: none;
 }
 .focused-item[data-v-cd5f52] {
-  outline: 4px solid;
+  outline: 10px solid;
 }
 .squish-item[data-v-cd5f52] {
   transition: all 0.5s;
