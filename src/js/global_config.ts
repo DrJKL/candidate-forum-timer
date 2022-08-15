@@ -8,26 +8,22 @@ export class Config {
     timeDelta = moment.duration(1, 's');
     eventInfo = {
         logoUrl: //
-            //  images['just_homes_logo'],
-            images['lwv-logo'],
+             images['just_homes_logo'],
+            // images['lwv-logo'],
         orgTitle: // 
-            // "Mountain View Mobile Home Alliance",
-            "the League of Women Voters",
+            "Mountain View Mobile Home Alliance",
+            // "the League of Women Voters",
         eventTitle: //
-            `2020
+            `2022
             <span>Mountain View</span>
             <span>City Council</span>
             <span>Candidate Forum</span>`,
         candidatesList: [
-            "Margaret Abe-Koga",
-            "Jose Gutierrez",
-            "John Lashlee",
-            "Sally Lieber",
-            "Lisa Matichak",
-            "Alex Núñez",
-            "Paul Roales",
-            "Pat Showalter",
-            "Lenny Siegel",
+            "Lucas Ramirez",
+            "Alison Hicks",
+            "Ellen Kamei",
+            "Li Zhang",
+            "Justin Cohen",
         ],
     }
     get candidates() {
