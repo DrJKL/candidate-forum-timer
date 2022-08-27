@@ -24,28 +24,28 @@
     "index.html"
   ],
   "dependencies": {
-    "@mdi/font": "^5.5.55",
+    "@mdi/font": "^7.0.96",
     "@types/materialize-css": "^1.0.8",
     "@types/vue": "^2.0.0",
     "app.vue": "^0.1.10",
     "babel-types": "^6.26.0",
-    "buefy": "^0.8.20",
+    "buefy": "^0.9.21",
     "cross-env": "^7.0.2",
-    "css-loader": "^4.3.0",
+    "css-loader": "^6.7.1",
     "materialize-css": "^1.0.0",
     "moment": "^2.29.4",
-    "typescript": "^3.9.10",
+    "typescript": "^4.8.2",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.6",
     "vue-loader": "^15.10.0",
     "vue-property-decorator": "^9.1.2",
     "vuetype": "^0.3.2",
-    "webpack": "^4.46.0"
+    "webpack": "^5.74.0"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "^3.3.0",
-    "gh-pages": "^3.2.3",
-    "node-sass": "^4.14.1",
+    "gh-pages": "^4.0.0",
+    "node-sass": "^7.0.1",
     "parcel-bundler": "^1.12.5",
     "sass": "^1.54.5",
     "vue-template-compiler": "^2.7.10"
