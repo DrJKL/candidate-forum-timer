@@ -7,7 +7,7 @@
     "module": "es2020", /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
     /* Specify library files to be included in the compilation. */
     "lib": [
-      "es2017",
+      "es2021",
       "dom"
     ],
     "declaration": true, /* Generates corresponding '.d.ts' file. */

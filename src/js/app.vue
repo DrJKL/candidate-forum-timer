@@ -76,6 +76,13 @@ import {
   actuallyResetConfig,
 } from "./global_config";
 
+function preProcessQuestion(question: string): string {
+  if (question === '.') {
+    return '';
+  }
+  return question.replaceAll(/\\n/g, '\n');
+}
+
 @Component({
   components: { AppHeader, CandidateCard },
 })
@@ -182,7 +189,7 @@ export default class App extends Vue {
       message: `Enter Question to display ("." for No Question)`,
       trapFocus: true,
       onConfirm: (value) => {
-        globalConfig.currentQuestion = value === "." ? "" : value;
+        globalConfig.currentQuestion = preProcessQuestion(value);
         saveConfig();
       },
     });
@@ -267,11 +274,12 @@ footer {
 }
 
 .current-question {
+  flex: 0 1 min-content;
   font-size: 36px;
   font-weight: bold;
   padding: 1em 0;
-  flex: 0 1 min-content;
   text-align: center;
+  white-space: pre-line;
 }
 
 main.gallery-mode {

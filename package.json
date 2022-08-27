@@ -1,6 +1,6 @@
 {
   "name": "candidate-forum-timer",
-  "version": "1.0.0",
+  "version": "1.1.2022",
   "description": "A Simple Timer for our Candidate Forum.",
   "main": "index.html",
   "scripts": {
