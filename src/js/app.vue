@@ -73,7 +73,7 @@ import {
 })
 export default class App extends Vue {
   allCandidates: Candidate[] = [];
-  galleryMode = false;
+  galleryMode = true;
   isShuffling = false;
 
   focusManager = new FocusManager();
