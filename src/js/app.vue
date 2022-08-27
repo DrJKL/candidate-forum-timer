@@ -9,10 +9,13 @@
       @shuffle-candidates="shuffleCandidates()"
       @focus-change="focusManager.changeFocus($event, numberOfCandidates - 1)"
     ></app-header>
-    <div v-if="!galleryMode && currentQuestion" class="current-question">
-      {{ currentQuestion }}
-    </div>
-    <div class="time-out-container-container">
+    <Transition name="slide">
+      <div v-if="!galleryMode && currentQuestion" class="current-question">
+        {{ currentQuestion }}
+      </div>
+    </Transition>
+    <Transition name="slide">
+    <div class="time-out-container-container" v-if="hasMinimizedCandidates">
       <b-taglist class="time-out-container">
         <b-tag
           class="is-primary minimized-candidate"
@@ -23,6 +26,7 @@
         >
       </b-taglist>
     </div>
+    </Transition>
     <main class="" :class="{ 'gallery-mode': galleryMode }">
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
@@ -61,7 +65,6 @@
 </template>
 <script lang="ts">
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
-import moment from "moment";
 import { Candidate, shuffle } from "./candidates";
 import CandidateCard from "./candidate-card.vue";
 import AppHeader from "./header.vue";
@@ -121,6 +124,9 @@ export default class App extends Vue {
   }
   get numberOfCandidates() {
     return this.visibleCandidates.length;
+  }
+  get hasMinimizedCandidates() {
+    return this.minimizedCandidates.length > 0;
   }
 
   minimizeCandidate(candidate: Candidate) {
@@ -218,7 +224,7 @@ export default class App extends Vue {
   display: flex;
   flex-direction: column;
   flex: 1;
-  justify-content: space-between;
+  gap: 8px;
   height: 100%;
   padding: 0 1em;
   > header {
@@ -232,6 +238,7 @@ export default class App extends Vue {
   }
   > footer {
     flex: 0 1 auto;
+    margin-top: auto;
   }
 }
 
@@ -262,7 +269,8 @@ footer {
 .current-question {
   font-size: 36px;
   font-weight: bold;
-  margin: 1em 0;
+  padding: 1em 0;
+  flex: 0 1 min-content;
   text-align: center;
 }
 
@@ -326,4 +334,22 @@ main:not(.gallery-mode) {
 .squish-move {
   transition: transform 0.5s;
 }
+
+.slide-item {
+  transition: all 15s ease-in-out;
+  transform: scaleY(1);
+  opacity: 1;
+  flex:1;
+  padding: 1em 0;
+}
+.slide-enter,
+.slide-leave-to {
+  opacity: 0;
+  transform: scaleY(0);
+  max-width: 0;
+  flex-grow: 0.0000001;
+  padding: 0em 0;
+}
+
+
 </style>
