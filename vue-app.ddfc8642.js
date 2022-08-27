@@ -16505,7 +16505,7 @@ function (_super) {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
     _this.allCandidates = [];
-    _this.galleryMode = false;
+    _this.galleryMode = true;
     _this.isShuffling = false;
     _this.focusManager = new _focus_manager.default();
     return _this;
