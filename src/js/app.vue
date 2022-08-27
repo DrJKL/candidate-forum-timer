@@ -9,7 +9,9 @@
       @shuffle-candidates="shuffleCandidates()"
       @focus-change="focusManager.changeFocus($event, numberOfCandidates - 1)"
     ></app-header>
-    <div v-if="!galleryMode && currentQuestion" class="current-question">{{currentQuestion}}</div>
+    <div v-if="!galleryMode && currentQuestion" class="current-question">
+      {{ currentQuestion }}
+    </div>
     <div class="time-out-container-container">
       <b-taglist class="time-out-container">
         <b-tag
@@ -17,10 +19,11 @@
           v-for="candidate of minimizedCandidates"
           :key="candidate.name"
           @click.native="minimizeCandidate(candidate)"
-        >{{candidate.name}}</b-tag>
+          >{{ candidate.name }}</b-tag
+        >
       </b-taglist>
     </div>
-    <main class="" :class="{'gallery-mode': galleryMode}">
+    <main class="" :class="{ 'gallery-mode': galleryMode }">
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
           <div
@@ -45,7 +48,9 @@
         <b-button @click.prevent="showTitleDialog()">Title</b-button>
         <b-button @click.prevent="showOrgDialog()">Org</b-button>
         <b-button @click.prevent="showQuestionDialog()">Set Question</b-button>
-        <b-button class="red-text" @click.prevent="resetConfig()">Reset All</b-button>
+        <b-button class="red-text" @click.prevent="resetConfig()"
+          >Reset All</b-button
+        >
       </div>
       <span class="attribution-label">
         Built by Alex Brown for the
@@ -171,7 +176,7 @@ export default class App extends Vue {
       message: `Enter Question to display ("." for No Question)`,
       trapFocus: true,
       onConfirm: (value) => {
-        globalConfig.currentQuestion = value === '.' ? '' : value;
+        globalConfig.currentQuestion = value === "." ? "" : value;
         saveConfig();
       },
     });
@@ -264,7 +269,7 @@ footer {
 main.gallery-mode {
   .candidates-container .transition-container {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0,1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     justify-content: space-evenly;
     > div,
     > candidate-card {
@@ -275,8 +280,7 @@ main.gallery-mode {
   }
 }
 main:not(.gallery-mode) {
-
-display: contents;
+  display: contents;
 
   .candidate-card {
     display: none;
