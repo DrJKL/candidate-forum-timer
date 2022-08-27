@@ -77,6 +77,9 @@
 header[data-v-09fc64] {
   width: 100%;
 }
+.hero-body[data-v-09fc64] {
+  padding: 1rem 0.5rem;
+}
 .our-header[data-v-09fc64] {
   display: flex;
   align-items: center;
@@ -128,8 +131,9 @@ header[data-v-09fc64] {
 .app-container[data-v-cd5f52] {
   display: flex;
   flex-direction: column;
-  height: 100%;
   flex: 1;
+  justify-content: space-between;
+  height: 100%;
   padding: 0 1em;
 }
 .app-container > header[data-v-cd5f52] {
@@ -167,6 +171,12 @@ footer > div > button[data-v-cd5f52] {
 footer > div > button.red-text[data-v-cd5f52] {
         color: #f44336;
 }
+.current-question[data-v-cd5f52] {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 1em 0;
+  text-align: center;
+}
 main.gallery-mode .candidates-container .transition-container[data-v-cd5f52] {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -178,25 +188,28 @@ main.gallery-mode .candidates-container .transition-container > div[data-v-cd5f5
     visibility: visible;
     flex-basis: 30vw;
 }
+main[data-v-cd5f52]:not(.gallery-mode) {
+  display: contents;
+}
 main:not(.gallery-mode) .candidate-card[data-v-cd5f52] {
-  display: none;
+    display: none;
 }
 main:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] {
-    display: flex;
-    max-height: 33vw;
+      display: flex;
+      max-height: 33vw;
 }
 main:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] .card-content .card-title {
-      font-size: 6vw;
-      line-height: initial;
+        font-size: 6vw;
+        line-height: initial;
 }
 main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52], main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] {
-    display: inline-block;
+      display: inline-block;
 }
 main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-action, main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] .card-action {
-      display: none !important;
+        display: none !important;
 }
 main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-content > :not(.card-title), main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] .card-content > :not(.card-title) {
-      display: none;
+        display: none;
 }
 .focused-item[data-v-cd5f52] {
   outline: 10px solid;

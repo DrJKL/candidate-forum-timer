@@ -14944,25 +14944,25 @@ var global = arguments[3];
 
 })));
 
-},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
-module.exports = "/just_homes_logo.5f11e9bb.png";
-},{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
-module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
 },{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
 module.exports = "/lwv-logo.87fe3171.png";
+},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
+module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open (1).437ccd50.png";
+},{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
+module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
-  "just_homes_logo": require("./just_homes_logo.png"),
-  "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
   "lwv-logo": require("./lwv-logo.png"),
+  "just_homes_logo": require("./just_homes_logo.png"),
   "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
+  "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
   "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./lwv-logo.png":"src/assets/lwv-logo.png","./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14985,19 +14985,20 @@ var Config =
 /** @class */
 function () {
   function Config() {
+    this.currentQuestion = 'What is your favorite color?';
     this.timeLimitTotal = _moment.default.duration(90, 's');
     this.timeGranularity = 100;
     this.timeDelta = _moment.default.duration(1, 's');
     this.eventInfo = {
       logoUrl: //
-      //  images['just_homes_logo'],
-      _.default['lwv-logo'],
+      _.default['just_homes_logo'],
+      // images['lwv-logo'],
       orgTitle: // 
-      // "Mountain View Mobile Home Alliance",
-      "the League of Women Voters",
+      "Mountain View Mobile Home Alliance",
+      // "the League of Women Voters",
       eventTitle: //
-      "2020\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>",
-      candidatesList: ["Margaret Abe-Koga", "Jose Gutierrez", "John Lashlee", "Sally Lieber", "Lisa Matichak", "Alex Núñez", "Paul Roales", "Pat Showalter", "Lenny Siegel"]
+      "2022\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>",
+      candidatesList: ["Lucas Ramirez", "Alison Hicks", "Ellen Kamei", "Li Zhang", "Justin Cohen"]
     };
   }
 
@@ -16504,7 +16505,7 @@ function (_super) {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
     _this.allCandidates = [];
-    _this.galleryMode = true;
+    _this.galleryMode = false;
     _this.isShuffling = false;
     _this.focusManager = new _focus_manager.default();
     return _this;
@@ -16572,6 +16573,13 @@ function (_super) {
     });
   };
 
+  Object.defineProperty(App.prototype, "currentQuestion", {
+    get: function get() {
+      return _global_config.globalConfig.currentQuestion;
+    },
+    enumerable: false,
+    configurable: true
+  });
   Object.defineProperty(App.prototype, "visibleCandidates", {
     get: function get() {
       return this.allCandidates.filter(function (candidate) {
@@ -16648,6 +16656,17 @@ function (_super) {
       trapFocus: true,
       onConfirm: function onConfirm(value) {
         _global_config.globalConfig.eventInfo.orgTitle = value;
+        (0, _global_config.saveConfig)();
+      }
+    });
+  };
+
+  App.prototype.showQuestionDialog = function () {
+    this.$buefy.dialog.prompt({
+      message: "Enter Question to display (\".\" for No Question)",
+      trapFocus: true,
+      onConfirm: function onConfirm(value) {
+        _global_config.globalConfig.currentQuestion = value === '.' ? '' : value;
         (0, _global_config.saveConfig)();
       }
     });
@@ -16743,6 +16762,12 @@ exports.default = _default;
           }
         }
       }),
+      _vm._v(" "),
+      !_vm.galleryMode && _vm.currentQuestion
+        ? _c("div", { staticClass: "current-question" }, [
+            _vm._v(_vm._s(_vm.currentQuestion))
+          ])
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "div",
@@ -16864,6 +16889,19 @@ exports.default = _default;
                 }
               },
               [_vm._v("Org")]
+            ),
+            _vm._v(" "),
+            _c(
+              "b-button",
+              {
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.showQuestionDialog()
+                  }
+                }
+              },
+              [_vm._v("Set Question")]
             ),
             _vm._v(" "),
             _c(
@@ -36093,7 +36131,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "6040" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14854" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
