@@ -142,6 +142,10 @@ header {
   width: 100%;
 }
 
+.hero-body {
+  padding: 1rem 0.5rem;
+}
+
 .our-header {
   display: flex;
   align-items: center;

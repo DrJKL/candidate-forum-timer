@@ -3,6 +3,7 @@ import moment from "moment";
 import images from "../assets/*.png";
 
 export class Config {
+    currentQuestion = 'What is your favorite color?';
     timeLimitTotal = moment.duration(90, 's');
     timeGranularity = 100;
     timeDelta = moment.duration(1, 's');

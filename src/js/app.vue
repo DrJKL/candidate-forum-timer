@@ -9,6 +9,7 @@
       @shuffle-candidates="shuffleCandidates()"
       @focus-change="focusManager.changeFocus($event, numberOfCandidates - 1)"
     ></app-header>
+    <div v-if="!galleryMode && currentQuestion" class="current-question">{{currentQuestion}}</div>
     <div class="time-out-container-container">
       <b-taglist class="time-out-container">
         <b-tag
@@ -43,6 +44,7 @@
         <b-button @click.prevent="showLogoDialog()">Logo</b-button>
         <b-button @click.prevent="showTitleDialog()">Title</b-button>
         <b-button @click.prevent="showOrgDialog()">Org</b-button>
+        <b-button @click.prevent="showQuestionDialog()">Set Question</b-button>
         <b-button class="red-text" @click.prevent="resetConfig()">Reset All</b-button>
       </div>
       <span class="attribution-label">
@@ -71,7 +73,7 @@ import {
 })
 export default class App extends Vue {
   allCandidates: Candidate[] = [];
-  galleryMode = true;
+  galleryMode = false;
   isShuffling = false;
 
   focusManager = new FocusManager();
@@ -100,6 +102,10 @@ export default class App extends Vue {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     this.isShuffling = false;
     this.galleryMode = wasGallery;
+  }
+
+  get currentQuestion() {
+    return globalConfig.currentQuestion;
   }
 
   get visibleCandidates() {
@@ -160,6 +166,16 @@ export default class App extends Vue {
       },
     });
   }
+  showQuestionDialog() {
+    this.$buefy.dialog.prompt({
+      message: `Enter Question to display ("." for No Question)`,
+      trapFocus: true,
+      onConfirm: (value) => {
+        globalConfig.currentQuestion = value === '.' ? '' : value;
+        saveConfig();
+      },
+    });
+  }
   resetConfig() {
     this.$buefy.dialog.confirm({
       title: "Resetting Config",
@@ -196,8 +212,9 @@ export default class App extends Vue {
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
   flex: 1;
+  justify-content: space-between;
+  height: 100%;
   padding: 0 1em;
   > header {
     flex: 0 1 auto;
@@ -237,6 +254,13 @@ footer {
   }
 }
 
+.current-question {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 1em 0;
+  text-align: center;
+}
+
 main.gallery-mode {
   .candidates-container .transition-container {
     display: grid;
@@ -251,6 +275,9 @@ main.gallery-mode {
   }
 }
 main:not(.gallery-mode) {
+
+display: contents;
+
   .candidate-card {
     display: none;
     &.focused-item {
