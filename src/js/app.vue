@@ -127,7 +127,7 @@ export default class App extends Vue {
   }
 
   get currentQuestion() {
-    return globalConfig.currentQuestion;
+    return `${globalConfig.currentQuestion}`;
   }
 
   get visibleCandidates() {
@@ -196,6 +196,7 @@ export default class App extends Vue {
       message: `Enter Question to display ("." for No Question)`,
       trapFocus: true,
       onConfirm: (value) => {
+        console.log(`new Question: ${value}`);
         globalConfig.currentQuestion = preProcessQuestion(value);
         saveConfig();
       },
@@ -318,7 +319,7 @@ footer {
   padding: 1rem 0;
   text-align: center;
   align-self: center;
-  line-height: 1.15;
+  line-height: 1;
   -webkit-text-stroke: 1px black;
 }
 
