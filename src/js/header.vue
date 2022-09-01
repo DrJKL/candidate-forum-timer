@@ -24,7 +24,8 @@
             >
               Shuffle
               <i class="material-icons left">shuffle</i>
-              </a>
+            </a>
+            <div class="controls-spacer"></div>
             <div class="switch gallery-mode-switch">
               <label>
                 <input
@@ -184,6 +185,7 @@ header {
   .buttons {
     display: grid;
     grid-template: repeat(3, 1fr) / 1fr;
+    gap: 4px;
     user-select: none;
     padding-bottom: 0.5rem;
     > div {
@@ -201,10 +203,14 @@ header {
       font-weight: bold;
       align-self: center;
     }
-    .gallery-mode-switch {
-      label {
-        width: 100%;
-        text-align: right;
+    .global-controls {
+      display: grid;
+      grid-template: 1fr / 2fr 1fr 2fr;
+      .gallery-mode-switch {
+        label {
+          width: 100%;
+          text-align: right;
+        }
       }
     }
   }

@@ -361,8 +361,8 @@ main:not(.gallery-mode) {
           font-weight: 500;
         }
         > :not(.card-title) {
-        display: none;
-      }
+          display: none;
+        }
       }
     }
   }
@@ -407,33 +407,21 @@ main:not(.gallery-mode) {
 }
 
 .app-container.presentation-mode /deep/ .our-header {
-  transition: all 10s ease-in;
+  transition: all 0.5s ease-in;
   .logo-img {
-    // transform: scale(0.75);
     margin-right: 1.15rem;
-
   }
   .header-text {
-    // transform: scale(0.75);
     padding-right: 0.5rem;
+    padding-top: 0.5rem;
   }
   .buttons {
-    transition: all 10s linear;
-    // display: grid;
-    // grid-template: 1fr / repeat(2, 1fr);
+    transition: all 1s linear;
     align-items: center;
-
-    .global-controls {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: baseline;
-      justify-content: normal;
-    }
 
     .time-setters-global {
       display: grid;
       grid-template: 1fr 1fr / 1fr 1fr;
-
       gap: 4px;
     }
 
@@ -444,30 +432,30 @@ main:not(.gallery-mode) {
       text-align: center;
       align-items: center;
       align-self: baseline;
-      .next-button {
-        text-align: right;
-      }
-      .prev-button {
-        text-align: left;
-      }
+      margin-top: 3px;
     }
   }
-  .buttons {  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  gap: 0px 0px;
-  grid-auto-flow: row;
-  grid-template-areas:
-    "time-setters-global global-controls"
-    "time-setters-global candidate-navigation";
-}
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "time-setters-global global-controls"
+      "time-setters-global candidate-navigation";
+  }
 
-.time-setters-global { grid-area: time-setters-global; }
+  .time-setters-global {
+    grid-area: time-setters-global;
+  }
 
-.global-controls { grid-area: global-controls; }
+  .global-controls {
+    grid-area: global-controls;
+  }
 
-.candidate-navigation { grid-area: candidate-navigation; }
-
-
+  .candidate-navigation {
+    grid-area: candidate-navigation;
+  }
 }
 </style>
