@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: all .25s linear;
 }
 .candidate-card .card-content[data-v-03db96] {
     display: flex;
@@ -21,7 +22,7 @@
       flex: 0 1 auto;
 }
 .candidate-card .time-left[data-v-03db96] {
-    font-size: 20pt;
+    font-size: 30pt;
 }
 .candidate-card.plenty-time[data-v-03db96] {
     border-color: green;
@@ -207,7 +208,7 @@ footer > div > button.red-text[data-v-cd5f52] {
   padding: 1rem 0;
   text-align: center;
   align-self: center;
-  line-height: 1.15;
+  line-height: 1;
   -webkit-text-stroke: 1px black;
 }
 main.gallery-mode .candidates-container .transition-container[data-v-cd5f52] {
