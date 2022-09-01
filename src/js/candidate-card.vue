@@ -92,6 +92,7 @@ export default class CandidateCard extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: all .25s linear;
   .card-content {
     display: flex;
     flex-direction: column;
