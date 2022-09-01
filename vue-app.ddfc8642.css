@@ -77,9 +77,6 @@
 header[data-v-09fc64] {
   width: 100%;
 }
-.hero-body[data-v-09fc64] {
-  padding: 1rem 0.5rem;
-}
 .our-header[data-v-09fc64] {
   display: flex;
   align-items: center;
@@ -88,6 +85,7 @@ header[data-v-09fc64] {
     flex: 0 0 auto;
 }
 .our-header > div.logo-img[data-v-09fc64] {
+    transition: transform 0.5s ease-in-out;
     margin-right: 2em;
 }
 .our-header > div.logo-img img[data-v-09fc64] {
@@ -95,6 +93,7 @@ header[data-v-09fc64] {
       width: auto;
 }
 .our-header .header-text[data-v-09fc64] {
+    transition: transform 0.5s ease-in-out;
     flex-shrink: 1;
     padding-right: 1em;
 }
@@ -102,15 +101,14 @@ header[data-v-09fc64] {
     flex: 1;
 }
 .our-header .buttons[data-v-09fc64] {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    display: grid;
+    grid-template: repeat(3, 1fr)/1fr;
+    gap: 4px;
     user-select: none;
-    width: fit-content;
+    padding-bottom: 0.5rem;
 }
 .our-header .buttons > div[data-v-09fc64] {
       flex: 0 1 auto;
-      margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       width: 100%;
@@ -122,6 +120,14 @@ header[data-v-09fc64] {
 .our-header .buttons .current-focus-number[data-v-09fc64] {
       font-weight: bold;
       align-self: center;
+}
+.our-header .buttons .global-controls[data-v-09fc64] {
+      display: grid;
+      grid-template: 1fr / 2fr 1fr 2fr;
+}
+.our-header .buttons .global-controls .gallery-mode-switch label[data-v-09fc64] {
+        width: 100%;
+        text-align: right;
 }
 .our-header .title[data-v-09fc64] span,
   .our-header .subtitle[data-v-09fc64] span {
@@ -149,6 +155,28 @@ header[data-v-09fc64] {
     flex: 0 1 auto;
     margin-top: auto;
 }
+.app-container.presentation-mode[data-v-cd5f52] {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.5fr 2fr 5fr 0.5fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas: "forum-app-header" "forum-app-question" "forum-app-candidate" "forum-app-footer";
+  width: 100%;
+  height: 100%;
+}
+.app-container.presentation-mode .forum-app-header[data-v-cd5f52] {
+    grid-area: forum-app-header;
+}
+.app-container.presentation-mode .forum-app-question[data-v-cd5f52] {
+    grid-area: forum-app-question;
+}
+.app-container.presentation-mode .forum-app-candidate[data-v-cd5f52] {
+    grid-area: forum-app-candidate;
+}
+.app-container.presentation-mode .forum-app-footer[data-v-cd5f52] {
+    grid-area: forum-app-footer;
+}
 footer[data-v-cd5f52] {
   display: flex;
   justify-content: space-between;
@@ -173,11 +201,14 @@ footer > div > button.red-text[data-v-cd5f52] {
         color: #f44336;
 }
 .current-question[data-v-cd5f52] {
-  font-size: 36px;
-  font-weight: bold;
-  padding: 1em 0;
   flex: 0 1 min-content;
+  font-size: 6vw;
+  font-weight: bold;
+  padding: 1rem 0;
   text-align: center;
+  align-self: center;
+  line-height: 1.15;
+  -webkit-text-stroke: 1px black;
 }
 main.gallery-mode .candidates-container .transition-container[data-v-cd5f52] {
   display: grid;
@@ -202,13 +233,18 @@ main:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] {
 }
 main:not(.gallery-mode) .candidate-card.focused-item[data-v-cd5f52] .card-content .card-title {
         font-size: 6vw;
+        font-weight: 500;
         line-height: initial;
+        -webkit-text-stroke: 1px black;
 }
 main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52], main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] {
       display: inline-block;
 }
 main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-action, main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] .card-action {
         display: none !important;
+}
+main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-content .card-title, main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] .card-content .card-title {
+        font-weight: 500;
 }
 main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-content > :not(.card-title), main:not(.gallery-mode) .candidate-card.on-deck[data-v-cd5f52] .card-content > :not(.card-title) {
         display: none;
@@ -233,7 +269,7 @@ main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-content
   transition: transform 0.5s;
 }
 .slide-item[data-v-cd5f52] {
-  transition: all 15s ease-in-out;
+  transition: all 1s ease-in-out;
   transform: scaleY(1);
   opacity: 1;
   flex: 1;
@@ -246,6 +282,50 @@ main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-content
   max-width: 0;
   flex-grow: 0.0000001;
   padding: 0em 0;
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header {
+  transition: all 0.5s ease-in;
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header .logo-img {
+    margin-right: 1.15rem;
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header .header-text {
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header .buttons {
+    transition: all 1s linear;
+    align-items: center;
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header .buttons .time-setters-global {
+      display: grid;
+      grid-template: 1fr 1fr / 1fr 1fr;
+      gap: 4px;
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header .buttons .candidate-navigation {
+      display: grid;
+      grid-template: 1fr / 2fr 1fr 2fr;
+      text-align: center;
+      align-items: center;
+      align-self: baseline;
+      margin-top: 3px;
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header .buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas: "time-setters-global global-controls" "time-setters-global candidate-navigation";
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header .time-setters-global {
+    grid-area: time-setters-global;
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header .global-controls {
+    grid-area: global-controls;
+}
+.app-container.presentation-mode[data-v-cd5f52] .our-header .candidate-navigation {
+    grid-area: candidate-navigation;
 }
 
 /*! Buefy v0.9.21 | MIT License | github.com/buefy/buefy */

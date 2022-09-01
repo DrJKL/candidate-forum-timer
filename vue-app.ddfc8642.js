@@ -16718,10 +16718,10 @@ var global = arguments[3];
 
 })));
 
-},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
-module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
+},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
+module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open (1).437ccd50.png";
 },{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
@@ -16730,13 +16730,13 @@ module.exports = "/lwv-logo.87fe3171.png";
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
-  "just_homes_logo": require("./just_homes_logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
+  "just_homes_logo": require("./just_homes_logo.png"),
   "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
   "lwv-logo": require("./lwv-logo.png"),
   "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17751,6 +17751,13 @@ function (_super) {
     enumerable: false,
     configurable: true
   });
+  Object.defineProperty(Header.prototype, "currentModeName", {
+    get: function get() {
+      return this.galleryMode ? "All Candidates" : "Question Time!";
+    },
+    enumerable: false,
+    configurable: true
+  });
 
   Header.prototype.setTime = function (time) {
     var _a;
@@ -17820,7 +17827,7 @@ exports.default = _default;
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("header", { staticClass: "is-primary is-bold" }, [
-    _c("div", { staticClass: "hero-body" }, [
+    _c("div", {}, [
       _c("div", { staticClass: "our-header" }, [
         _c("div", { staticClass: "logo-img" }, [
           _c("img", { attrs: { src: _vm.logoUrl, alt: "Organization logo" } }),
@@ -17841,77 +17848,81 @@ exports.default = _default;
         _c("div", { staticClass: "spacer" }),
         _vm._v(" "),
         _c("div", { staticClass: "buttons box" }, [
-          _c(
-            "div",
-            [
-              _c(
-                "b-button",
-                {
-                  attrs: {
-                    disabled: _vm.isShuffling,
-                    "icon-right": "shuffle",
-                    type: "is-info",
+          _c("div", { staticClass: "global-controls" }, [
+            _c(
+              "a",
+              {
+                staticClass: "btn shuffle-button",
+                attrs: { disabled: _vm.isShuffling },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.shuffleCandidates()
+                  },
+                },
+              },
+              [
+                _vm._v("\n            Shuffle\n            "),
+                _c("i", { staticClass: "material-icons left" }, [
+                  _vm._v("shuffle"),
+                ]),
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "controls-spacer" }),
+            _vm._v(" "),
+            _c("div", { staticClass: "switch gallery-mode-switch" }, [
+              _c("label", [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.galleryMode,
+                      expression: "galleryMode",
+                    },
+                  ],
+                  attrs: { type: "checkbox", disabled: _vm.isShuffling },
+                  domProps: {
+                    checked: Array.isArray(_vm.galleryMode)
+                      ? _vm._i(_vm.galleryMode, null) > -1
+                      : _vm.galleryMode,
                   },
                   on: {
                     click: function ($event) {
-                      $event.preventDefault()
-                      return _vm.shuffleCandidates()
+                      return _vm.updateGalleryMode()
+                    },
+                    change: function ($event) {
+                      var $$a = _vm.galleryMode,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 && (_vm.galleryMode = $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            (_vm.galleryMode = $$a
+                              .slice(0, $$i)
+                              .concat($$a.slice($$i + 1)))
+                        }
+                      } else {
+                        _vm.galleryMode = $$c
+                      }
                     },
                   },
-                },
-                [_vm._v("Shuffle")]
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "switch" }, [
-                _c("label", [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.galleryMode,
-                        expression: "galleryMode",
-                      },
-                    ],
-                    attrs: { type: "checkbox", disabled: _vm.isShuffling },
-                    domProps: {
-                      checked: Array.isArray(_vm.galleryMode)
-                        ? _vm._i(_vm.galleryMode, null) > -1
-                        : _vm.galleryMode,
-                    },
-                    on: {
-                      click: function ($event) {
-                        return _vm.updateGalleryMode()
-                      },
-                      change: function ($event) {
-                        var $$a = _vm.galleryMode,
-                          $$el = $event.target,
-                          $$c = $$el.checked ? true : false
-                        if (Array.isArray($$a)) {
-                          var $$v = null,
-                            $$i = _vm._i($$a, $$v)
-                          if ($$el.checked) {
-                            $$i < 0 && (_vm.galleryMode = $$a.concat([$$v]))
-                          } else {
-                            $$i > -1 &&
-                              (_vm.galleryMode = $$a
-                                .slice(0, $$i)
-                                .concat($$a.slice($$i + 1)))
-                          }
-                        } else {
-                          _vm.galleryMode = $$c
-                        }
-                      },
-                    },
-                  }),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "lever" }),
-                  _vm._v("\n              Show All\n            "),
-                ]),
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "lever" }),
+                _vm._v(
+                  "\n              " +
+                    _vm._s(_vm.currentModeName) +
+                    "\n            "
+                ),
               ]),
-            ],
-            1
-          ),
+            ]),
+          ]),
           _vm._v(" "),
           _c(
             "div",
@@ -17941,11 +17952,11 @@ exports.default = _default;
             0
           ),
           _vm._v(" "),
-          _c("div", [
+          _c("div", { staticClass: "candidate-navigation" }, [
             _c(
               "a",
               {
-                staticClass: "btn",
+                staticClass: "btn prev-button",
                 attrs: { href: "#", disabled: !_vm.prevEnabled },
                 on: {
                   click: function ($event) {
@@ -17969,7 +17980,7 @@ exports.default = _default;
             _c(
               "a",
               {
-                staticClass: "btn",
+                staticClass: "btn next-button",
                 attrs: { href: "#", disabled: !_vm.nextEnabled },
                 on: {
                   click: function ($event) {
@@ -18277,6 +18288,14 @@ var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
   }
 };
 
+function preProcessQuestion(question) {
+  if (question === ".") {
+    return "";
+  }
+
+  return question.replaceAll(/\\n/g, "\n");
+}
+
 var App =
 /** @class */
 function (_super) {
@@ -18286,7 +18305,7 @@ function (_super) {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
     _this.allCandidates = [];
-    _this.galleryMode = true;
+    _this.galleryMode = false;
     _this.isShuffling = false;
     _this.focusManager = new _focus_manager.default();
     return _this;
@@ -18454,7 +18473,7 @@ function (_super) {
       message: "Enter Question to display (\".\" for No Question)",
       trapFocus: true,
       onConfirm: function onConfirm(value) {
-        _global_config.globalConfig.currentQuestion = value === "." ? "" : value;
+        _global_config.globalConfig.currentQuestion = preProcessQuestion(value);
         (0, _global_config.saveConfig)();
       }
     });
@@ -18522,9 +18541,16 @@ exports.default = _default;
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "app-container" },
+    {
+      staticClass: "app-container",
+      class: {
+        "gallery-mode": _vm.galleryMode,
+        "presentation-mode": !_vm.galleryMode,
+      },
+    },
     [
       _c("app-header", {
+        staticClass: "forum-app-header",
         attrs: {
           "focused-candidate": _vm.focusManager.focusedCandidate,
           "number-candidates": _vm.numberOfCandidates,
@@ -18553,7 +18579,7 @@ exports.default = _default;
       _vm._v(" "),
       _c("Transition", { attrs: { name: "slide" } }, [
         !_vm.galleryMode && _vm.currentQuestion
-          ? _c("div", { staticClass: "current-question" }, [
+          ? _c("div", { staticClass: "current-question forum-app-question" }, [
               _vm._v("\n      " + _vm._s(_vm.currentQuestion) + "\n    "),
             ])
           : _vm._e(),
@@ -18591,43 +18617,50 @@ exports.default = _default;
           : _vm._e(),
       ]),
       _vm._v(" "),
-      _c("main", { class: { "gallery-mode": _vm.galleryMode } }, [
-        _c(
-          "div",
-          { staticClass: "candidates-container" },
-          [
-            _c(
-              "transition-group",
-              {
-                staticClass: "transition-container",
-                attrs: { name: "squish", tag: "div" },
-              },
-              _vm._l(_vm.visibleCandidates, function (candidate, index) {
-                return _c(
-                  "div",
-                  { key: candidate.name, staticClass: "squish-item" },
-                  [
-                    _c("candidate-card", {
-                      class: _vm.getCardClasses(index),
-                      attrs: { candidate: candidate },
-                      on: {
-                        "minimize-candidate": function ($event) {
-                          return _vm.minimizeCandidate(candidate)
+      _c(
+        "main",
+        {
+          staticClass: "forum-app-candidates",
+          class: { "gallery-mode": _vm.galleryMode },
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "candidates-container" },
+            [
+              _c(
+                "transition-group",
+                {
+                  staticClass: "transition-container",
+                  attrs: { name: "squish", tag: "div" },
+                },
+                _vm._l(_vm.visibleCandidates, function (candidate, index) {
+                  return _c(
+                    "div",
+                    { key: candidate.name, staticClass: "squish-item" },
+                    [
+                      _c("candidate-card", {
+                        class: _vm.getCardClasses(index),
+                        attrs: { candidate: candidate },
+                        on: {
+                          "minimize-candidate": function ($event) {
+                            return _vm.minimizeCandidate(candidate)
+                          },
                         },
-                      },
-                    }),
-                  ],
-                  1
-                )
-              }),
-              0
-            ),
-          ],
-          1
-        ),
-      ]),
+                      }),
+                    ],
+                    1
+                  )
+                }),
+                0
+              ),
+            ],
+            1
+          ),
+        ]
+      ),
       _vm._v(" "),
-      _c("footer", {}, [
+      _c("footer", { staticClass: "forum-app-footer" }, [
         _c(
           "div",
           [
@@ -43919,7 +43952,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "3778" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8661" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
