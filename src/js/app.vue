@@ -1,6 +1,10 @@
 <template>
-  <div class="app-container">
+  <div
+    class="app-container"
+    :class="{ 'gallery-mode': galleryMode, 'presentation-mode': !galleryMode }"
+  >
     <app-header
+      class="forum-app-header"
       :focused-candidate="focusManager.focusedCandidate"
       :number-candidates="numberOfCandidates"
       :gallery-mode.sync="galleryMode"
@@ -10,24 +14,27 @@
       @focus-change="focusManager.changeFocus($event, numberOfCandidates - 1)"
     ></app-header>
     <Transition name="slide">
-      <div v-if="!galleryMode && currentQuestion" class="current-question">
+      <div
+        v-if="!galleryMode && currentQuestion"
+        class="current-question forum-app-question"
+      >
         {{ currentQuestion }}
       </div>
     </Transition>
     <Transition name="slide">
-    <div class="time-out-container-container" v-if="hasMinimizedCandidates">
-      <b-taglist class="time-out-container">
-        <b-tag
-          class="is-primary minimized-candidate"
-          v-for="candidate of minimizedCandidates"
-          :key="candidate.name"
-          @click.native="minimizeCandidate(candidate)"
-          >{{ candidate.name }}</b-tag
-        >
-      </b-taglist>
-    </div>
+      <div class="time-out-container-container" v-if="hasMinimizedCandidates">
+        <b-taglist class="time-out-container">
+          <b-tag
+            class="is-primary minimized-candidate"
+            v-for="candidate of minimizedCandidates"
+            :key="candidate.name"
+            @click.native="minimizeCandidate(candidate)"
+            >{{ candidate.name }}</b-tag
+          >
+        </b-taglist>
+      </div>
     </Transition>
-    <main class="" :class="{ 'gallery-mode': galleryMode }">
+    <main class="forum-app-candidates" :class="{ 'gallery-mode': galleryMode }">
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
           <div
@@ -44,7 +51,7 @@
         </transition-group>
       </div>
     </main>
-    <footer class="">
+    <footer class="forum-app-footer">
       <div>
         <span>Set New...</span>
         <b-button @click.prevent="showCandidateDialog()">Candidates</b-button>
@@ -77,10 +84,10 @@ import {
 } from "./global_config";
 
 function preProcessQuestion(question: string): string {
-  if (question === '.') {
-    return '';
+  if (question === ".") {
+    return "";
   }
-  return question.replaceAll(/\\n/g, '\n');
+  return question.replaceAll(/\\n/g, "\n");
 }
 
 @Component({
@@ -88,7 +95,7 @@ function preProcessQuestion(question: string): string {
 })
 export default class App extends Vue {
   allCandidates: Candidate[] = [];
-  galleryMode = true;
+  galleryMode = false;
   isShuffling = false;
 
   focusManager = new FocusManager();
@@ -249,6 +256,37 @@ export default class App extends Vue {
   }
 }
 
+.app-container.presentation-mode {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 0.5fr 2fr 5fr 0.5fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "forum-app-header"
+    "forum-app-question"
+    "forum-app-candidate"
+    "forum-app-footer";
+  width: 100%;
+  height: 100%;
+
+  .forum-app-header {
+    grid-area: forum-app-header;
+  }
+
+  .forum-app-question {
+    grid-area: forum-app-question;
+  }
+
+  .forum-app-candidate {
+    grid-area: forum-app-candidate;
+  }
+
+  .forum-app-footer {
+    grid-area: forum-app-footer;
+  }
+}
+
 footer {
   display: flex;
   justify-content: space-between;
@@ -275,11 +313,12 @@ footer {
 
 .current-question {
   flex: 0 1 min-content;
-  font-size: 36px;
+  font-size: 6vw;
   font-weight: bold;
-  padding: 1em 0;
+  padding: 1rem 0;
   text-align: center;
-  white-space: pre-line;
+  align-self: center;
+  line-height: 1.15;
 }
 
 main.gallery-mode {
@@ -344,10 +383,10 @@ main:not(.gallery-mode) {
 }
 
 .slide-item {
-  transition: all 15s ease-in-out;
+  transition: all 1s ease-in-out;
   transform: scaleY(1);
   opacity: 1;
-  flex:1;
+  flex: 1;
   padding: 1em 0;
 }
 .slide-enter,
@@ -359,5 +398,68 @@ main:not(.gallery-mode) {
   padding: 0em 0;
 }
 
+.app-container.presentation-mode /deep/ .our-header {
+  transition: all 10s ease-in;
+  .logo-img {
+    // transform: scale(0.75);
+    margin-right: 1.15rem;
 
+  }
+  .header-text {
+    // transform: scale(0.75);
+    padding-right: 0.5rem;
+  }
+  .buttons {
+    transition: all 10s linear;
+    // display: grid;
+    // grid-template: 1fr / repeat(2, 1fr);
+    align-items: center;
+
+    .global-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: baseline;
+      justify-content: normal;
+    }
+
+    .time-setters-global {
+      display: grid;
+      grid-template: 1fr 1fr / 1fr 1fr;
+
+      gap: 4px;
+    }
+
+    .candidate-navigation {
+      display: grid;
+
+      grid-template: 1fr / 2fr 1fr 2fr;
+      text-align: center;
+      align-items: center;
+      align-self: baseline;
+      .next-button {
+        text-align: right;
+      }
+      .prev-button {
+        text-align: left;
+      }
+    }
+  }
+  .buttons {  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    "time-setters-global global-controls"
+    "time-setters-global candidate-navigation";
+}
+
+.time-setters-global { grid-area: time-setters-global; }
+
+.global-controls { grid-area: global-controls; }
+
+.candidate-navigation { grid-area: candidate-navigation; }
+
+
+}
 </style>

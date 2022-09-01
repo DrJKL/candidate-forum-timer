@@ -1,6 +1,6 @@
 <template>
   <header class="is-primary is-bold">
-    <div class="hero-body">
+    <div class="">
       <div class="our-header">
         <div class="logo-img">
           <img :src="logoUrl" alt="Organization logo" />
@@ -11,19 +11,21 @@
           </h1>
           <h2 class="subtitle">
             Hosted by
-            <span>{{orgTitle}}</span>
+            <span>{{ orgTitle }}</span>
           </h2>
         </div>
         <div class="spacer"></div>
         <div class="buttons box">
-          <div>
-            <b-button
+          <div class="global-controls">
+            <a
+              class="btn shuffle-button"
               :disabled="isShuffling"
-              icon-right="shuffle"
-              type="is-info"
               @click.prevent="shuffleCandidates()"
-            >Shuffle</b-button>
-            <div class="switch">
+            >
+              Shuffle
+              <i class="material-icons left">shuffle</i>
+              </a>
+            <div class="switch gallery-mode-switch">
               <label>
                 <input
                   type="checkbox"
@@ -32,28 +34,40 @@
                   @click="updateGalleryMode()"
                 />
                 <span class="lever"></span>
-                Show All
+                {{ currentModeName }}
               </label>
             </div>
           </div>
 
           <div class="time-setters-global">
-
-            <a  href="#" class="btn" 
-                v-for="time in [30, 60, 90,120]"
-                :key="time"
-                @click.prevent="setTime(time)">
-              {{time}}
+            <a
+              href="#"
+              class="btn"
+              v-for="time in [30, 60, 90, 120]"
+              :key="time"
+              @click.prevent="setTime(time)"
+            >
+              {{ time }}
               <i class="material-icons left">timer</i>
             </a>
           </div>
-          <div>
-            <a href="#" class="btn" @click.prevent="focusChange(-1)" :disabled="!prevEnabled">
+          <div class="candidate-navigation">
+            <a
+              href="#"
+              class="btn prev-button"
+              @click.prevent="focusChange(-1)"
+              :disabled="!prevEnabled"
+            >
               Prev
               <i class="material-icons left">navigate_before</i>
             </a>
-            <span class="current-focus-number">{{focusedCandidate + 1}}</span>
-            <a href="#" class="btn" @click.prevent="focusChange(1)" :disabled="!nextEnabled">
+            <span class="current-focus-number">{{ focusedCandidate + 1 }}</span>
+            <a
+              href="#"
+              class="btn next-button"
+              @click.prevent="focusChange(1)"
+              :disabled="!nextEnabled"
+            >
               Next
               <i class="material-icons right">navigate_next</i>
             </a>
@@ -115,6 +129,9 @@ export default class Header extends Vue {
   get orgTitle() {
     return globalConfig.eventInfo.orgTitle;
   }
+  get currentModeName() {
+    return this.galleryMode ? "All Candidates" : "Question Time!";
+  }
 
   setTime(time: number) {
     this.candidatesList
@@ -142,10 +159,6 @@ header {
   width: 100%;
 }
 
-.hero-body {
-  padding: 1rem 0.5rem;
-}
-
 .our-header {
   display: flex;
   align-items: center;
@@ -153,6 +166,7 @@ header {
     flex: 0 0 auto;
   }
   > div.logo-img {
+    transition: transform 0.5s ease-in-out;
     margin-right: 2em;
     img {
       height: 5em;
@@ -160,6 +174,7 @@ header {
     }
   }
   .header-text {
+    transition: transform 0.5s ease-in-out;
     flex-shrink: 1;
     padding-right: 1em;
   }
@@ -167,14 +182,13 @@ header {
     flex: 1;
   }
   .buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    display: grid;
+    grid-template: repeat(3, 1fr) / 1fr;
     user-select: none;
-    width: fit-content;
+    padding-bottom: 0.5rem;
     > div {
       flex: 0 1 auto;
-      margin-bottom: 8px;
+      // margin-bottom: 8px;
       display: flex;
       justify-content: space-between;
       width: 100%;
@@ -186,6 +200,12 @@ header {
     .current-focus-number {
       font-weight: bold;
       align-self: center;
+    }
+    .gallery-mode-switch {
+      label {
+        width: 100%;
+        text-align: right;
+      }
     }
   }
   .title /deep/ span,
