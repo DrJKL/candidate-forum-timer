@@ -319,6 +319,7 @@ footer {
   text-align: center;
   align-self: center;
   line-height: 1.15;
+  -webkit-text-stroke: 1px black;
 }
 
 main.gallery-mode {
@@ -342,7 +343,9 @@ main:not(.gallery-mode) {
     &.focused-item {
       /deep/ .card-content .card-title {
         font-size: 6vw;
+        font-weight: 500;
         line-height: initial;
+        -webkit-text-stroke: 1px black;
       }
       display: flex;
       max-height: 33vw;
@@ -353,8 +356,13 @@ main:not(.gallery-mode) {
       /deep/ .card-action {
         display: none !important;
       }
-      /deep/ .card-content > :not(.card-title) {
+      /deep/ .card-content {
+        .card-title {
+          font-weight: 500;
+        }
+        > :not(.card-title) {
         display: none;
+      }
       }
     }
   }
