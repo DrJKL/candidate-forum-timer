@@ -17758,6 +17758,13 @@ function (_super) {
     enumerable: false,
     configurable: true
   });
+  Object.defineProperty(Header.prototype, "currentModeIcon", {
+    get: function get() {
+      return this.galleryMode ? "groups" : "person";
+    },
+    enumerable: false,
+    configurable: true
+  });
 
   Header.prototype.setTime = function (time) {
     var _a;
@@ -17883,6 +17890,9 @@ exports.default = _default;
                 },
               },
               [
+                _c("i", { staticClass: "material-icons right" }, [
+                  _vm._v(_vm._s(_vm.currentModeIcon) + "\n            "),
+                ]),
                 _vm._v(
                   "\n            " +
                     _vm._s(_vm.currentModeName) +
@@ -43921,7 +43931,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "3709" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "14984" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

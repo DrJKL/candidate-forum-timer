@@ -112,7 +112,9 @@ header[data-v-09fc64] {
       width: 100%;
 }
 .our-header .buttons .time-setters-global[data-v-09fc64] {
-      display: flex;
+      display: grid;
+      grid-template: 1fr / 1fr 1fr 1fr 1fr;
+      gap: 4px;
       justify-content: space-between;
 }
 .our-header .buttons .current-focus-number[data-v-09fc64] {
