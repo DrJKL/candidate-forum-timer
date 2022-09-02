@@ -17871,57 +17871,25 @@ exports.default = _default;
             _vm._v(" "),
             _c("div", { staticClass: "controls-spacer" }),
             _vm._v(" "),
-            _c("div", { staticClass: "switch gallery-mode-switch" }, [
-              _c("label", [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.galleryMode,
-                      expression: "galleryMode",
-                    },
-                  ],
-                  attrs: { type: "checkbox", disabled: _vm.isShuffling },
-                  domProps: {
-                    checked: Array.isArray(_vm.galleryMode)
-                      ? _vm._i(_vm.galleryMode, null) > -1
-                      : _vm.galleryMode,
+            _c(
+              "a",
+              {
+                staticClass: "btn gallery-mode-switch",
+                attrs: { disabled: _vm.isShuffling },
+                on: {
+                  click: function ($event) {
+                    return _vm.updateGalleryMode()
                   },
-                  on: {
-                    click: function ($event) {
-                      return _vm.updateGalleryMode()
-                    },
-                    change: function ($event) {
-                      var $$a = _vm.galleryMode,
-                        $$el = $event.target,
-                        $$c = $$el.checked ? true : false
-                      if (Array.isArray($$a)) {
-                        var $$v = null,
-                          $$i = _vm._i($$a, $$v)
-                        if ($$el.checked) {
-                          $$i < 0 && (_vm.galleryMode = $$a.concat([$$v]))
-                        } else {
-                          $$i > -1 &&
-                            (_vm.galleryMode = $$a
-                              .slice(0, $$i)
-                              .concat($$a.slice($$i + 1)))
-                        }
-                      } else {
-                        _vm.galleryMode = $$c
-                      }
-                    },
-                  },
-                }),
-                _vm._v(" "),
-                _c("span", { staticClass: "lever" }),
+                },
+              },
+              [
                 _vm._v(
-                  "\n              " +
+                  "\n            " +
                     _vm._s(_vm.currentModeName) +
-                    "\n            "
+                    "\n          "
                 ),
-              ]),
-            ]),
+              ]
+            ),
           ]),
           _vm._v(" "),
           _c(

@@ -109,14 +109,11 @@ header[data-v-09fc64] {
     padding-bottom: 0.5rem;
 }
 .our-header .buttons > div[data-v-09fc64] {
-      flex: 0 1 auto;
-      display: flex;
-      justify-content: space-between;
       width: 100%;
 }
-.our-header .buttons > div > *[data-v-09fc64] {
-        flex: 0 1 auto;
-        margin-right: 4px;
+.our-header .buttons .time-setters-global[data-v-09fc64] {
+      display: flex;
+      justify-content: space-between;
 }
 .our-header .buttons .current-focus-number[data-v-09fc64] {
       font-weight: bold;
@@ -129,6 +126,11 @@ header[data-v-09fc64] {
 .our-header .buttons .global-controls .gallery-mode-switch label[data-v-09fc64] {
         width: 100%;
         text-align: right;
+}
+.our-header .buttons .candidate-navigation[data-v-09fc64] {
+      text-align: center;
+      display: grid;
+      grid-template: 1fr / 2fr 1fr 2fr;
 }
 .our-header .title[data-v-09fc64] span,
   .our-header .subtitle[data-v-09fc64] span {
@@ -309,13 +311,11 @@ main:not(.gallery-mode) .candidate-card.is-previous[data-v-cd5f52] .card-content
       text-align: center;
       align-items: center;
       align-self: baseline;
-      margin-top: 3px;
 }
 .app-container.presentation-mode[data-v-cd5f52] .our-header .buttons {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas: "time-setters-global global-controls" "time-setters-global candidate-navigation";
 }
