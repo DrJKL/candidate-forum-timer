@@ -433,14 +433,12 @@ main:not(.gallery-mode) {
       text-align: center;
       align-items: center;
       align-self: baseline;
-      margin-top: 3px;
     }
   }
   .buttons {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: 0px 0px;
     grid-auto-flow: row;
     grid-template-areas:
       "time-setters-global global-controls"

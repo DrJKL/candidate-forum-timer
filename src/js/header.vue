@@ -26,18 +26,13 @@
               <i class="material-icons left">shuffle</i>
             </a>
             <div class="controls-spacer"></div>
-            <div class="switch gallery-mode-switch">
-              <label>
-                <input
-                  type="checkbox"
-                  :disabled="isShuffling"
-                  v-model="galleryMode"
-                  @click="updateGalleryMode()"
-                />
-                <span class="lever"></span>
-                {{ currentModeName }}
-              </label>
-            </div>
+            <a
+              class="btn gallery-mode-switch"
+              :disabled="isShuffling"
+              @click="updateGalleryMode()"
+            >
+              {{ currentModeName }}
+            </a>
           </div>
 
           <div class="time-setters-global">
@@ -189,15 +184,12 @@ header {
     user-select: none;
     padding-bottom: 0.5rem;
     > div {
-      flex: 0 1 auto;
-      // margin-bottom: 8px;
+      width: 100%;
+    }
+    .time-setters-global {
+
       display: flex;
       justify-content: space-between;
-      width: 100%;
-      > * {
-        flex: 0 1 auto;
-        margin-right: 4px;
-      }
     }
     .current-focus-number {
       font-weight: bold;
@@ -212,6 +204,11 @@ header {
           text-align: right;
         }
       }
+    }
+    .candidate-navigation {
+text-align: center;
+      display: grid;
+      grid-template: 1fr / 2fr 1fr 2fr;
     }
   }
   .title /deep/ span,
