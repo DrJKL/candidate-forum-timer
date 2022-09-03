@@ -437,8 +437,7 @@ main:not(.gallery-mode) {
   }
   .buttons {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template: 1fr / 1fr 2fr;
     grid-auto-flow: row;
     grid-template-areas:
       "time-setters-global global-controls"

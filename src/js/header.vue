@@ -31,6 +31,8 @@
               :disabled="isShuffling"
               @click="updateGalleryMode()"
             >
+              <i class="material-icons right">{{ currentModeIcon }}
+              </i>
               {{ currentModeName }}
             </a>
           </div>
@@ -129,6 +131,10 @@ export default class Header extends Vue {
     return this.galleryMode ? "All Candidates" : "Question Time!";
   }
 
+  get currentModeIcon() {
+    return this.galleryMode ? "groups" : "person";
+  }
+
   setTime(time: number) {
     this.candidatesList
       ?.map((candidate) => candidate.timer)
@@ -187,8 +193,9 @@ header {
       width: 100%;
     }
     .time-setters-global {
-
-      display: flex;
+      display: grid;
+      grid-template: 1fr / 1fr 1fr 1fr 1fr;
+      gap: 4px;
       justify-content: space-between;
     }
     .current-focus-number {
@@ -206,7 +213,7 @@ header {
       }
     }
     .candidate-navigation {
-text-align: center;
+      text-align: center;
       display: grid;
       grid-template: 1fr / 2fr 1fr 2fr;
     }
