@@ -88,21 +88,22 @@ export default class CandidateCard extends Vue {
 .candidate-card {
   background-color: #607d8b;
   color: #ffffff;
-  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   transition: all .25s linear;
+  width: 100%;
   .card-content {
     display: flex;
     flex-direction: column;
   }
   .card-title {
-    word-wrap: normal;
-    white-space: nowrap;
-    font-size: 26pt;
     display: flex;
+    font-size: 26pt;
+    font-weight: 500;
     justify-content: space-between;
+    white-space: nowrap;
+    word-wrap: normal;
     > * {
       flex: 0 1 auto;
     }

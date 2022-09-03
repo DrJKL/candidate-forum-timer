@@ -31,8 +31,7 @@
               :disabled="isShuffling"
               @click="updateGalleryMode()"
             >
-              <i class="material-icons right">{{ currentModeIcon }}
-              </i>
+              <i class="material-icons right">{{ currentModeIcon }} </i>
               {{ currentModeName }}
             </a>
           </div>
@@ -162,65 +161,77 @@ header {
 }
 
 .our-header {
-  display: flex;
   align-items: center;
-  > div {
-    flex: 0 0 auto;
-  }
-  > div.logo-img {
-    transition: transform 0.5s ease-in-out;
-    margin-right: 2em;
+  display: flex;
+
+  .logo-img {
+    margin-right: 1.15rem;
     img {
       height: 5em;
       width: auto;
     }
   }
   .header-text {
-    transition: transform 0.5s ease-in-out;
     flex-shrink: 1;
-    padding-right: 1em;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+    transition: transform 0.5s ease-in-out;
+
+    .title /deep/ span,
+    .subtitle /deep/ span {
+      display: inline-block;
+    }
   }
   .spacer {
     flex: 1;
   }
   .buttons {
+    align-items: center;
     display: grid;
-    grid-template: repeat(3, 1fr) / 1fr;
     gap: 4px;
-    user-select: none;
+    grid-template: 1fr / 1fr 2fr;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "time-setters-global global-controls"
+      "time-setters-global candidate-navigation";
     padding-bottom: 0.5rem;
+    transition: all 1s linear;
+    user-select: none;
+
     > div {
       width: 100%;
     }
+
     .time-setters-global {
       display: grid;
-      grid-template: 1fr / 1fr 1fr 1fr 1fr;
       gap: 4px;
-      justify-content: space-between;
+      grid-area: time-setters-global;
+      grid-template: 1fr 1fr / 1fr 1fr;
     }
-    .current-focus-number {
-      font-weight: bold;
-      align-self: center;
-    }
+
     .global-controls {
       display: grid;
-      grid-template: 1fr / 2fr 1fr 2fr;
+      grid-template: 1fr / 4fr 1fr 4fr;
+      grid-area: global-controls;
+
       .gallery-mode-switch {
-        label {
-          width: 100%;
-          text-align: right;
-        }
+        min-width: 12rem;
       }
     }
+
     .candidate-navigation {
-      text-align: center;
+      align-items: center;
+      align-self: baseline;
       display: grid;
-      grid-template: 1fr / 2fr 1fr 2fr;
+      grid-area: candidate-navigation;
+      grid-template: 1fr / 4fr 1fr 4fr;
+      text-align: center;
+
+      .current-focus-number {
+        font-weight: bold;
+        align-self: center;
+      }
     }
-  }
-  .title /deep/ span,
-  .subtitle /deep/ span {
-    display: inline-block;
   }
 }
 </style>

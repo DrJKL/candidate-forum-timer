@@ -24,6 +24,7 @@
     "index.html"
   ],
   "dependencies": {
+    "@ivanv/vue-collapse-transition": "^1.0.2",
     "@mdi/font": "^7.0.96",
     "@types/materialize-css": "^1.0.8",
     "@types/vue": "^2.0.0",
