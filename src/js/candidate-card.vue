@@ -17,12 +17,17 @@
             {{ candidate.timer.getTimeLeft() }}
             {{ candidate.timer.isTimeUp ? "over" : "remaining" }}
           </div>
-          <div :class="{ 'time-up': candidate.timer.isTimeUp }">
-            <b-progress
-              :value="progressValue"
-              size="is-large"
-              :type="candidate.timer.isTimeUp ? 'is-danger' : 'is-info'"
-            ></b-progress>
+          <div
+            class="progress"
+            :class="{ 'time-up': candidate.timer.isTimeUp }"
+          >
+            <div
+              :class="{
+                determinate: !candidate.timer.isTimeUp,
+                indeterminate: candidate.timer.isTimeUp,
+              }"
+              :style="{ width: `${progressValue}%` }"
+            ></div>
           </div>
         </div>
       </collapse-transition>
@@ -140,9 +145,17 @@ export default class CandidateCard extends Vue {
       flex: 0 1 auto;
     }
   }
-  .time-left {
-    user-select: none;
-    font-size: 30pt;
+  .time-section {
+    .time-left {
+      user-select: none;
+      font-size: 30pt;
+    }
+    .time-up.progress {
+      background-color: pink;
+      .indeterminate {
+        background-color: #ff3344;
+      }
+    }
   }
   &.plenty-time {
     border-color: green;

@@ -3,7 +3,6 @@ import moment from "moment";
 import images from "../assets/*.png";
 
 export class Config {
-    currentQuestion = 'What is your favorite color?';
     timeLimitTotal = moment.duration(90, 's');
     timeGranularity = 100;
     timeDelta = moment.duration(1, 's');
@@ -26,6 +25,9 @@ export class Config {
             "Li Zhang",
             "Justin Cohen",
         ],
+        questions: [
+            'What is your favorite color?',
+        ],
     }
     get candidates() {
         return this.eventInfo.candidatesList.map(name => new Candidate(name));
@@ -33,16 +35,28 @@ export class Config {
     set candidates(newCandidates: Candidate[]) {
         this.eventInfo.candidatesList = newCandidates.map(candidate => candidate.name);
     }
+    
+    addQuestion(newQuestion: string) {
+        if (!newQuestion) { 
+            return;
+         }
+        this.eventInfo.questions.unshift(newQuestion);
+        const uniqueQuestions = [...new Set(this.eventInfo.questions)];
+        this.eventInfo.questions = uniqueQuestions;
+    }
+
 }
 export const globalConfig = new Config();
 
 const CONFIG_KEY = 'saved_candidate_config';
 
 export function restoreConfig() {
-    console.log("restoring");
+    console.log("Restoring config");
     const savedConfig = localStorage.getItem(CONFIG_KEY);
     if (!savedConfig) {
+        console.log('Initializing Default Config');
         globalConfig.eventInfo = new Config().eventInfo;
+        console.log('Info', globalConfig.eventInfo);
         return;
     }
     const parsedConfig = JSON.parse(savedConfig);

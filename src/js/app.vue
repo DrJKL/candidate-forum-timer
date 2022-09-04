@@ -18,6 +18,8 @@
         v-show="currentQuestion"
         class="current-question forum-app-question"
         contenteditable="true"
+        @blur="questionEditDone"
+        @keydown.enter.prevent="questionBlur"
       >
         {{ currentQuestion }}
       </div>
@@ -27,15 +29,16 @@
         class="time-out-container-container"
         :class="{ 'has-minimized': hasMinimizedCandidates }"
       >
-        <b-taglist class="time-out-container">
-          <b-tag
-            class="is-primary minimized-candidate"
+        <div class="time-out-container">
+          <a
+            class="chip is-primary minimized-candidate"
             v-for="candidate of minimizedCandidates"
             :key="candidate.name"
-            @click.native="minimizeCandidate(candidate)"
-            >{{ candidate.name }}</b-tag
+            @click.prevent="minimizeCandidate(candidate)"
           >
-        </b-taglist>
+            {{ candidate.name }}
+          </a>
+        </div>
       </div>
     </collapse-transition>
     <main class="forum-app-candidates" :class="{ 'gallery-mode': galleryMode }">
@@ -58,18 +61,40 @@
     <footer class="forum-app-footer">
       <div>
         <span>Set New...</span>
-        <b-button @click.prevent="showCandidateDialog()">Candidates</b-button>
-        <b-button @click.prevent="showLogoDialog()">Logo</b-button>
-        <b-button @click.prevent="showTitleDialog()">Title</b-button>
-        <b-button @click.prevent="showOrgDialog()">Org</b-button>
-        <b-button @click.prevent="showQuestionDialog()">Set Question</b-button>
-        <b-button class="red-text" @click.prevent="resetConfig()"
-          >Reset All</b-button
+        <a
+          class="waves-effect waves-teal btn-flat"
+          @click.prevent="showCandidateDialog()"
+          >Candidates</a
+        >
+        <a
+          class="waves-effect waves-teal btn-flat"
+          @click.prevent="showLogoDialog()"
+          >Logo</a
+        >
+        <a
+          class="waves-effect waves-teal btn-flat"
+          @click.prevent="showTitleDialog()"
+          >Title</a
+        >
+        <a
+          class="waves-effect waves-teal btn-flat"
+          @click.prevent="showOrgDialog()"
+          >Org</a
+        >
+        <a
+          class="waves-effect waves-teal btn-flat"
+          @click.prevent="dumpQuestions"
+          >?</a
+        >
+        <a
+          class="waves-effect waves-teal btn-flat red-text"
+          @click.prevent="resetConfig()"
+          >Reset All</a
         >
       </div>
       <span class="attribution-label">
         Built by Alex Brown for the
-        <a href="https://mvmha.com">MVMHA</a> (2020)
+        <a href="https://mvmha.com">MVMHA</a> (updated 2022)
       </span>
     </footer>
   </div>
@@ -92,7 +117,7 @@ function preProcessQuestion(question: string): string {
   if (question === ".") {
     return "";
   }
-  return question.replaceAll(/\\n/g, "\n");
+  return question.replaceAll(/\\n/g, "\n").trim();
 }
 
 @Component({
@@ -100,6 +125,7 @@ function preProcessQuestion(question: string): string {
 })
 export default class App extends Vue {
   allCandidates: Candidate[] = [];
+  currentQuestion: string = "";
   galleryMode = true;
   isShuffling = false;
 
@@ -131,10 +157,6 @@ export default class App extends Vue {
     this.galleryMode = wasGallery;
   }
 
-  get currentQuestion() {
-    return `${globalConfig.currentQuestion}`;
-  }
-
   get visibleCandidates() {
     return this.allCandidates.filter((candidate) => !candidate.isMinimized);
   }
@@ -151,6 +173,28 @@ export default class App extends Vue {
   minimizeCandidate(candidate: Candidate) {
     candidate.toggleMinimized();
     this.focusManager.checkFocus(this.numberOfCandidates - 1);
+  }
+
+  questionBlur(event: Event) {
+    if (!(event.target instanceof HTMLDivElement)) {
+      return;
+    }
+    event.target.blur();
+  }
+
+  questionEditDone(event: Event) {
+    if (!(event.target instanceof HTMLDivElement)) {
+      return;
+    }
+    const newQuestion = event.target.innerText;
+    console.log("Question Edit Done", newQuestion);
+    globalConfig.addQuestion(preProcessQuestion(newQuestion));
+    saveConfig();
+    this.currentQuestion = globalConfig.eventInfo.questions[0];
+  }
+
+  dumpQuestions() {
+    console.log(JSON.stringify(globalConfig.eventInfo.questions, undefined, 2));
   }
 
   showCandidateDialog() {
@@ -202,7 +246,7 @@ export default class App extends Vue {
       trapFocus: true,
       onConfirm: (value) => {
         console.log(`new Question: ${value}`);
-        globalConfig.currentQuestion = preProcessQuestion(value);
+        globalConfig.eventInfo.questions.unshift(preProcessQuestion(value));
         saveConfig();
       },
     });
@@ -236,6 +280,8 @@ export default class App extends Vue {
     this.allCandidates = globalConfig.eventInfo.candidatesList.map(
       (name) => new Candidate(name)
     );
+
+    this.currentQuestion = globalConfig.eventInfo.questions[0];
   }
 }
 </script>
@@ -265,12 +311,16 @@ export default class App extends Vue {
 
   .forum-app-question {
     -webkit-text-stroke: 1px black;
+    align-items: center;
     align-self: center;
+    display: flex;
+    flex-direction: column;
     font-size: 6vw;
     font-weight: bold;
     grid-area: forum-app-question;
+    height: 100%;
+    justify-content: center;
     line-height: 1;
-    text-align: center;
   }
 
   .time-out-container-container {
@@ -385,6 +435,8 @@ footer {
   &:focus {
     border: none;
     outline: none;
+    // background-color: green;
+    // text-shadow: 1px 1px 4px #aa0000aa;
   }
 }
 
