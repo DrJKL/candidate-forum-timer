@@ -6,12 +6,22 @@
           <img :src="logoUrl" alt="Organization logo" />
         </div>
         <div class="header-text">
-          <h1 class="title" v-html="eventTitle">
+          <h1
+            class="title event-title"
+            v-html="eventTitle"
+            @keydown.enter.prevent="blurElement"
+            @keydown.esc.prevent="blurElement"
+          >
             <!-- Unknown Event -->
           </h1>
           <h2 class="subtitle">
             Hosted by
-            <span>{{ orgTitle }}</span>
+            <span
+              class="org-title"
+              @keydown.enter.prevent="blurElement"
+              @keydown.esc.prevent="blurElement"
+              >{{ orgTitle }}</span
+            >
           </h2>
         </div>
         <div class="spacer"></div>
@@ -114,6 +124,7 @@ export default class Header extends Vue {
 
   @Watch("config", { deep: true, immediate: true })
   configChanged(newConfig: Config) {
+    console.log("Config changed");
     this.$forceUpdate();
   }
 
@@ -153,6 +164,13 @@ export default class Header extends Vue {
       this.focusedCandidate < this.numberCandidates - 1
     );
   }
+
+  blurElement(event: Event) {
+    if (!(event.target instanceof HTMLElement)) {
+      return;
+    }
+    event.target.blur();
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -181,6 +199,24 @@ header {
     .title /deep/ span,
     .subtitle /deep/ span {
       display: inline-block;
+    }
+    .title,
+    .subtitle {
+      line-height: 1.25;
+      padding: 0;
+      word-break: break-word;
+    }
+    .title {
+      color: #363636;
+      font-size: 2rem;
+      font-weight: 600;
+      margin: 0 0 1.5rem;
+    }
+    .subtitle {
+      color: #4a4a4a;
+      margin: -1.25rem 0 0;
+      font-size: 1.25rem;
+      font-weight: 400;
     }
   }
   .spacer {
@@ -233,6 +269,17 @@ header {
         align-self: center;
       }
     }
+  }
+}
+
+[contenteditable="true"] {
+  position: relative;
+  &:active,
+  &:focus {
+    border: none;
+    outline: none;
+    // background-color: green;
+    // text-shadow: 1px 1px 4px #aa0000aa;
   }
 }
 </style>

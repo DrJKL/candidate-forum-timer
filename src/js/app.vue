@@ -17,9 +17,9 @@
       <div
         v-show="currentQuestion"
         class="current-question forum-app-question"
-        contenteditable="true"
-        @blur="questionEditDone"
-        @keydown.enter.prevent="questionBlur"
+        @dblclick="setQuestionEditable"
+        @keydown.esc.prevent="blurElement"
+        @keydown.enter.prevent="blurElement"
       >
         {{ currentQuestion }}
       </div>
@@ -175,19 +175,30 @@ export default class App extends Vue {
     this.focusManager.checkFocus(this.numberOfCandidates - 1);
   }
 
-  questionBlur(event: Event) {
-    if (!(event.target instanceof HTMLDivElement)) {
+  blurElement(event: Event) {
+    if (!(event.target instanceof HTMLElement)) {
       return;
     }
     event.target.blur();
   }
 
+  setQuestionEditable(event: MouseEvent) {
+    const element = document.getElementsByClassName("current-question")[0];
+    if (!(element instanceof HTMLElement)) {
+      return;
+    }
+    setEditableElement(element, (newValue) => {
+      globalConfig.addQuestion(preProcessQuestion(newValue));
+      saveConfig();
+      this.currentQuestion = globalConfig.eventInfo.questions[0];
+    });
+  }
+
   questionEditDone(event: Event) {
-    if (!(event.target instanceof HTMLDivElement)) {
+    if (!(event.target instanceof HTMLElement)) {
       return;
     }
     const newQuestion = event.target.innerText;
-    console.log("Question Edit Done", newQuestion);
     globalConfig.addQuestion(preProcessQuestion(newQuestion));
     saveConfig();
     this.currentQuestion = globalConfig.eventInfo.questions[0];
@@ -221,36 +232,25 @@ export default class App extends Vue {
     });
   }
   showTitleDialog() {
-    this.$buefy.dialog.prompt({
-      message: `Enter new Event Title`,
-      trapFocus: true,
-      onConfirm: (value) => {
-        globalConfig.eventInfo.eventTitle = value;
-        saveConfig();
-      },
+    const eventTitleElement = document.getElementsByClassName("event-title")[0];
+    if (!(eventTitleElement instanceof HTMLElement)) {
+      return;
+    }
+    setEditableElement(eventTitleElement, (newEvent) => {
+      globalConfig.eventInfo.eventTitle = newEvent;
     });
   }
+
   showOrgDialog() {
-    this.$buefy.dialog.prompt({
-      message: `Enter new Host Organization Title`,
-      trapFocus: true,
-      onConfirm: (value) => {
-        globalConfig.eventInfo.orgTitle = value;
-        saveConfig();
-      },
+    const orgTitleElement = document.getElementsByClassName("org-title")[0];
+    if (!(orgTitleElement instanceof HTMLElement)) {
+      return;
+    }
+    setEditableElement(orgTitleElement, (newOrg) => {
+      globalConfig.eventInfo.orgTitle = newOrg;
     });
   }
-  showQuestionDialog() {
-    this.$buefy.dialog.prompt({
-      message: `Enter Question to display ("." for No Question)`,
-      trapFocus: true,
-      onConfirm: (value) => {
-        console.log(`new Question: ${value}`);
-        globalConfig.eventInfo.questions.unshift(preProcessQuestion(value));
-        saveConfig();
-      },
-    });
-  }
+
   resetConfig() {
     this.$buefy.dialog.confirm({
       title: "Resetting Config",
@@ -283,6 +283,34 @@ export default class App extends Vue {
 
     this.currentQuestion = globalConfig.eventInfo.questions[0];
   }
+}
+function setEditableElement(
+  el: HTMLElement,
+  valueCallback: (value: string) => void
+) {
+  el.setAttribute("contenteditable", "true");
+  function onBlur(event: FocusEvent) {
+    if (!(event.target instanceof HTMLElement)) {
+      return;
+    }
+    const newValue = event.target.innerText;
+
+    valueCallback(newValue);
+    event.target.removeAttribute("contenteditable");
+    event.target.removeEventListener("blur", onBlur);
+    saveConfig();
+  }
+  el.addEventListener("blur", onBlur);
+
+  el.focus();
+  selectElementContents(el);
+}
+function selectElementContents(el: HTMLElement) {
+  var range = document.createRange();
+  range.selectNodeContents(el);
+  var sel = window.getSelection();
+  sel?.removeAllRanges();
+  sel?.addRange(range);
 }
 </script>
 <style lang="scss" scoped>
