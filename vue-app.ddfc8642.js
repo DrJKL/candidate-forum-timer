@@ -11029,7 +11029,10 @@ function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "functio
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-},{"vue":"node_modules/vue/dist/vue.runtime.esm.js","vue-class-component":"node_modules/vue-class-component/dist/vue-class-component.esm.js","./decorators/Emit":"node_modules/vue-property-decorator/lib/decorators/Emit.js","./decorators/Inject":"node_modules/vue-property-decorator/lib/decorators/Inject.js","./decorators/InjectReactive":"node_modules/vue-property-decorator/lib/decorators/InjectReactive.js","./decorators/Model":"node_modules/vue-property-decorator/lib/decorators/Model.js","./decorators/ModelSync":"node_modules/vue-property-decorator/lib/decorators/ModelSync.js","./decorators/Prop":"node_modules/vue-property-decorator/lib/decorators/Prop.js","./decorators/PropSync":"node_modules/vue-property-decorator/lib/decorators/PropSync.js","./decorators/Provide":"node_modules/vue-property-decorator/lib/decorators/Provide.js","./decorators/ProvideReactive":"node_modules/vue-property-decorator/lib/decorators/ProvideReactive.js","./decorators/Ref":"node_modules/vue-property-decorator/lib/decorators/Ref.js","./decorators/VModel":"node_modules/vue-property-decorator/lib/decorators/VModel.js","./decorators/Watch":"node_modules/vue-property-decorator/lib/decorators/Watch.js"}],"node_modules/moment/moment.js":[function(require,module,exports) {
+},{"vue":"node_modules/vue/dist/vue.runtime.esm.js","vue-class-component":"node_modules/vue-class-component/dist/vue-class-component.esm.js","./decorators/Emit":"node_modules/vue-property-decorator/lib/decorators/Emit.js","./decorators/Inject":"node_modules/vue-property-decorator/lib/decorators/Inject.js","./decorators/InjectReactive":"node_modules/vue-property-decorator/lib/decorators/InjectReactive.js","./decorators/Model":"node_modules/vue-property-decorator/lib/decorators/Model.js","./decorators/ModelSync":"node_modules/vue-property-decorator/lib/decorators/ModelSync.js","./decorators/Prop":"node_modules/vue-property-decorator/lib/decorators/Prop.js","./decorators/PropSync":"node_modules/vue-property-decorator/lib/decorators/PropSync.js","./decorators/Provide":"node_modules/vue-property-decorator/lib/decorators/Provide.js","./decorators/ProvideReactive":"node_modules/vue-property-decorator/lib/decorators/ProvideReactive.js","./decorators/Ref":"node_modules/vue-property-decorator/lib/decorators/Ref.js","./decorators/VModel":"node_modules/vue-property-decorator/lib/decorators/VModel.js","./decorators/Watch":"node_modules/vue-property-decorator/lib/decorators/Watch.js"}],"node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js":[function(require,module,exports) {
+var define;
+!function(e,t){if("object"==typeof exports&&"object"==typeof module)module.exports=t();else if("function"==typeof define&&define.amd)define([],t);else{var n=t();for(var i in n)("object"==typeof exports?exports:e)[i]=n[i]}}(this,(function(){return function(e){var t={};function n(i){if(t[i])return t[i].exports;var s=t[i]={i:i,l:!1,exports:{}};return e[i].call(s.exports,s,s.exports,n),s.l=!0,s.exports}return n.m=e,n.c=t,n.d=function(e,t,i){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:i})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var i=Object.create(null);if(n.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var s in e)n.d(i,s,function(t){return e[t]}.bind(null,s));return i},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/",n(n.s=1)}([function(e,t,n){"use strict";var i=function(e,t,n,i,s,o,r,a){var c,l="function"==typeof e?e.options:e;if(t&&(l.render=t,l.staticRenderFns=n,l._compiled=!0),i&&(l.functional=!0),o&&(l._scopeId="data-v-"+o),r?(c=function(e){(e=e||this.$vnode&&this.$vnode.ssrContext||this.parent&&this.parent.$vnode&&this.parent.$vnode.ssrContext)||"undefined"==typeof __VUE_SSR_CONTEXT__||(e=__VUE_SSR_CONTEXT__),s&&s.call(this,e),e&&e._registeredComponents&&e._registeredComponents.add(r)},l._ssrRegister=c):s&&(c=a?function(){s.call(this,(l.functional?this.parent:this).$root.$options.shadowRoot)}:s),c)if(l.functional){l._injectStyles=c;var u=l.render;l.render=function(e,t){return c.call(t),u(e,t)}}else{var f=l.beforeCreate;l.beforeCreate=f?[].concat(f,c):[c]}return{exports:e,options:l}}({name:"CollapseTransition",props:{name:{type:String,required:!1,default:"collapse"},dimension:{type:String,required:!1,default:"height",validator:function(e){return["height","width"].includes(e)}},duration:{type:Number,required:!1,default:300},easing:{type:String,required:!1,default:"ease-in-out"}},watch:{dimension:function(){this.clearCachedDimensions()}},data:function(){return{cachedStyles:null}},computed:{transition:function(){var e=this,t=[];return Object.keys(this.cachedStyles).forEach((function(n){t.push("".concat(e.convertToCssProperty(n)," ").concat(e.duration,"ms ").concat(e.easing))})),t.join(", ")}},methods:{beforeAppear:function(e){this.$emit("before-appear",e)},appear:function(e){this.$emit("appear",e)},afterAppear:function(e){this.$emit("after-appear",e)},appearCancelled:function(e){this.$emit("appear-cancelled",e)},beforeEnter:function(e){this.$emit("before-enter",e)},enter:function(e,t){this.detectAndCacheDimensions(e),this.setClosedDimensions(e),this.hideOverflow(e),this.forceRepaint(e),this.setTransition(e),this.setOpenedDimensions(e),this.$emit("enter",e,t),setTimeout(t,this.duration)},afterEnter:function(e){this.unsetOverflow(e),this.unsetTransition(e),this.unsetDimensions(e),this.clearCachedDimensions(),this.$emit("after-enter",e)},enterCancelled:function(e){this.$emit("enter-cancelled",e)},beforeLeave:function(e){this.$emit("before-leave",e)},leave:function(e,t){this.detectAndCacheDimensions(e),this.setOpenedDimensions(e),this.hideOverflow(e),this.forceRepaint(e),this.setTransition(e),this.setClosedDimensions(e),this.$emit("leave",e,t),setTimeout(t,this.duration)},afterLeave:function(e){this.unsetOverflow(e),this.unsetTransition(e),this.unsetDimensions(e),this.clearCachedDimensions(),this.$emit("after-leave",e)},leaveCancelled:function(e){this.$emit("leave-cancelled",e)},detectAndCacheDimensions:function(e){if(!this.cachedStyles){var t=e.style.visibility,n=e.style.display;e.style.visibility="hidden",e.style.display="",this.cachedStyles=this.detectRelevantDimensions(e),e.style.visibility=t,e.style.display=n}},clearCachedDimensions:function(){this.cachedStyles=null},detectRelevantDimensions:function(e){return"height"===this.dimension?{height:e.offsetHeight+"px",paddingTop:e.style.paddingTop||this.getCssValue(e,"padding-top"),paddingBottom:e.style.paddingBottom||this.getCssValue(e,"padding-bottom")}:"width"===this.dimension?{width:e.offsetWidth+"px",paddingLeft:e.style.paddingLeft||this.getCssValue(e,"padding-left"),paddingRight:e.style.paddingRight||this.getCssValue(e,"padding-right")}:{}},setTransition:function(e){e.style.transition=this.transition},unsetTransition:function(e){e.style.transition=""},hideOverflow:function(e){e.style.overflow="hidden"},unsetOverflow:function(e){e.style.overflow=""},setClosedDimensions:function(e){Object.keys(this.cachedStyles).forEach((function(t){e.style[t]="0"}))},setOpenedDimensions:function(e){var t=this;Object.keys(this.cachedStyles).forEach((function(n){e.style[n]=t.cachedStyles[n]}))},unsetDimensions:function(e){Object.keys(this.cachedStyles).forEach((function(t){e.style[t]=""}))},forceRepaint:function(e){getComputedStyle(e)[this.dimension]},getCssValue:function(e,t){return getComputedStyle(e,null).getPropertyValue(t)},convertToCssProperty:function(e){var t=e.match(/([A-Z])/g);if(!t)return e;for(var n=0,i=t.length;n<i;n++)e=e.replace(new RegExp(t[n]),"-"+t[n].toLowerCase());return"-"===e.slice(0,1)&&(e=e.slice(1)),e}}},(function(){var e=this,t=e.$createElement;return(e._self._c||t)("transition",{attrs:{name:e.name},on:{"before-appear":e.beforeAppear,appear:e.appear,"after-appear":e.afterAppear,"appear-cancelled":e.appearCancelled,"before-enter":e.beforeEnter,enter:e.enter,"after-enter":e.afterEnter,"enter-cancelled":e.enterCancelled,"before-leave":e.beforeLeave,leave:e.leave,"after-leave":e.afterLeave,"leave-cancelled":e.leaveCancelled}},[e._t("default")],2)}),[],!1,null,null,null);t.a=i.exports},function(e,t,n){e.exports=n(2)},function(e,t,n){"use strict";n.r(t),function(e){n.d(t,"install",(function(){return s}));var i=n(0);function s(e){e.component("CollapseTransition",i.a)}n.d(t,"CollapseTransition",(function(){return i.a})),t.default=i.a;var o={install:s},r=null;"undefined"!=typeof window?r=window.Vue:void 0!==e&&(r=e.Vue),r&&r.use(o)}.call(this,n(3))},function(e,t){var n;n=function(){return this}();try{n=n||new Function("return this")()}catch(e){"object"==typeof window&&(n=window)}e.exports=n}])}));
+},{}],"node_modules/moment/moment.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
 //! moment.js
@@ -16718,25 +16721,25 @@ var global = arguments[3];
 
 })));
 
-},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
-module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
-},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
-module.exports = "/lwv-logo.87fe3171.png";
+},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
+module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open (1).437ccd50.png";
+},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
+module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
-  "just_homes_logo": require("./just_homes_logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
-  "lwv-logo": require("./lwv-logo.png"),
+  "just_homes_logo": require("./just_homes_logo.png"),
   "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
+  "lwv-logo": require("./lwv-logo.png"),
   "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16756,11 +16759,28 @@ var _ = _interopRequireDefault(require("../assets/*.png"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Config =
-/** @class */
-function () {
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var Config = /*#__PURE__*/function () {
   function Config() {
-    this.currentQuestion = 'What is your favorite color?';
+    _classCallCheck(this, Config);
+
     this.timeLimitTotal = _moment.default.duration(90, 's');
     this.timeGranularity = 100;
     this.timeDelta = _moment.default.duration(1, 's');
@@ -16773,11 +16793,13 @@ function () {
       // "the League of Women Voters",
       eventTitle: //
       "2022\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>",
-      candidatesList: ["Lucas Ramirez", "Alison Hicks", "Ellen Kamei", "Li Zhang", "Justin Cohen"]
+      candidatesList: ["Lucas Ramirez", "Alison Hicks", "Ellen Kamei", "Li Zhang", "Justin Cohen"],
+      questions: ['What is your favorite color?']
     };
   }
 
-  Object.defineProperty(Config.prototype, "candidates", {
+  _createClass(Config, [{
+    key: "candidates",
     get: function get() {
       return this.eventInfo.candidatesList.map(function (name) {
         return new _candidates.Candidate(name);
@@ -16787,10 +16809,22 @@ function () {
       this.eventInfo.candidatesList = newCandidates.map(function (candidate) {
         return candidate.name;
       });
-    },
-    enumerable: false,
-    configurable: true
-  });
+    }
+  }, {
+    key: "addQuestion",
+    value: function addQuestion(newQuestion) {
+      if (!newQuestion) {
+        return;
+      }
+
+      this.eventInfo.questions.unshift(newQuestion);
+
+      var uniqueQuestions = _toConsumableArray(new Set(this.eventInfo.questions));
+
+      this.eventInfo.questions = uniqueQuestions;
+    }
+  }]);
+
   return Config;
 }();
 
@@ -16800,11 +16834,13 @@ exports.globalConfig = globalConfig;
 var CONFIG_KEY = 'saved_candidate_config';
 
 function restoreConfig() {
-  console.log("restoring");
+  console.log("Restoring config");
   var savedConfig = localStorage.getItem(CONFIG_KEY);
 
   if (!savedConfig) {
+    console.log('Initializing Default Config');
     globalConfig.eventInfo = new Config().eventInfo;
+    console.log('Info', globalConfig.eventInfo);
     return;
   }
 
@@ -16838,87 +16874,93 @@ var _moment = _interopRequireDefault(require("moment"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Timer =
-/** @class */
-function () {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var Timer = /*#__PURE__*/function () {
   function Timer() {
+    _classCallCheck(this, Timer);
+
     this.timeLeft = _global_config.globalConfig.timeLimitTotal.clone();
     this.timeLimit = _global_config.globalConfig.timeLimitTotal.clone();
     this.countingDown = null;
   }
 
-  Timer.prototype.toggleTimer = function (force) {
-    var _this = this;
+  _createClass(Timer, [{
+    key: "toggleTimer",
+    value: function toggleTimer() {
+      var _this = this;
 
-    if (force === void 0) {
-      force = true;
+      var force = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
+      if (this.countingDown) {
+        clearInterval(this.countingDown);
+        this.countingDown = null;
+        return;
+      }
+
+      if (force === true) {
+        this.countingDown = setInterval(function () {
+          _this.timeLeft.subtract(_global_config.globalConfig.timeGranularity, 'ms');
+        }, _global_config.globalConfig.timeGranularity);
+      }
     }
-
-    if (this.countingDown) {
-      clearInterval(this.countingDown);
-      this.countingDown = null;
-      return;
+  }, {
+    key: "addTime",
+    value: function addTime() {
+      this.timeLeft.add(_global_config.globalConfig.timeDelta);
     }
-
-    if (force === true) {
-      this.countingDown = setInterval(function () {
-        _this.timeLeft.subtract(_global_config.globalConfig.timeGranularity, 'ms');
-      }, _global_config.globalConfig.timeGranularity);
+  }, {
+    key: "removeTime",
+    value: function removeTime() {
+      this.timeLeft.subtract(_global_config.globalConfig.timeDelta);
     }
-  };
-
-  Timer.prototype.addTime = function () {
-    this.timeLeft.add(_global_config.globalConfig.timeDelta);
-  };
-
-  Timer.prototype.removeTime = function () {
-    this.timeLeft.subtract(_global_config.globalConfig.timeDelta);
-  };
-
-  Timer.prototype.setTime = function (num, unit) {
-    this.timeLimit = _moment.default.duration(num, unit);
-    this.resetTime();
-  };
-
-  Timer.prototype.resetTime = function () {
-    this.timeLeft = this.timeLimit.clone();
-  };
-
-  Timer.prototype.isRunning = function () {
-    return !!this.countingDown;
-  };
-
-  Timer.prototype.getTimeLeft = function () {
-    var timeToUse = this.isTimeUp ? _moment.default.duration().subtract(this.timeLeft) : this.timeLeft;
-    return "".concat(timeToUse.minutes().toString().padStart(2, '0'), ":") + "".concat(timeToUse.seconds().toString().padStart(2, '0'), ".") + "".concat(timeToUse.milliseconds().toString().substr(0, 1));
-  };
-
-  Object.defineProperty(Timer.prototype, "millisLeft", {
+  }, {
+    key: "setTime",
+    value: function setTime(num, unit) {
+      this.timeLimit = _moment.default.duration(num, unit);
+      this.resetTime();
+    }
+  }, {
+    key: "resetTime",
+    value: function resetTime() {
+      this.timeLeft = this.timeLimit.clone();
+    }
+  }, {
+    key: "isRunning",
+    value: function isRunning() {
+      return !!this.countingDown;
+    }
+  }, {
+    key: "getTimeLeft",
+    value: function getTimeLeft() {
+      var timeToUse = this.isTimeUp ? _moment.default.duration().subtract(this.timeLeft) : this.timeLeft;
+      return "".concat(timeToUse.minutes().toString().padStart(2, '0'), ":") + "".concat(timeToUse.seconds().toString().padStart(2, '0'), ".") + "".concat(timeToUse.milliseconds().toString().substr(0, 1));
+    }
+  }, {
+    key: "millisLeft",
     get: function get() {
       return this.timeLeft.asMilliseconds();
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Timer.prototype, "progressPercent", {
+    }
+  }, {
+    key: "progressPercent",
     get: function get() {
       return 100 * (this.millisLeft / this.timeLimit.asMilliseconds());
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Timer.prototype, "isTimeUp", {
+    }
+  }, {
+    key: "isTimeUp",
     get: function get() {
       return this.millisLeft <= 0;
-    },
-    enumerable: false,
-    configurable: true
-  });
+    }
+  }]);
+
   return Timer;
 }();
 
-var _default = Timer;
-exports.default = _default;
+exports.default = Timer;
 },{"./global_config":"src/js/global_config.ts","moment":"node_modules/moment/moment.js"}],"src/js/candidates.ts":[function(require,module,exports) {
 "use strict";
 
@@ -16932,19 +16974,28 @@ var _timer = _interopRequireDefault(require("./timer"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Candidate =
-/** @class */
-function () {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var Candidate = /*#__PURE__*/function () {
   function Candidate(name) {
+    _classCallCheck(this, Candidate);
+
     this.name = name;
     this.timer = new _timer.default();
     this.isMinimized = false;
     this.name = name;
   }
 
-  Candidate.prototype.toggleMinimized = function () {
-    this.isMinimized = !this.isMinimized;
-  };
+  _createClass(Candidate, [{
+    key: "toggleMinimized",
+    value: function toggleMinimized() {
+      this.isMinimized = !this.isMinimized;
+    }
+  }]);
 
   return Candidate;
 }();
@@ -17322,35 +17373,29 @@ var _vuePropertyDecorator = require("vue-property-decorator");
 
 var _candidates = require("./candidates");
 
+var _vueCollapseTransition = require("@ivanv/vue-collapse-transition");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-var __extends = void 0 && (void 0).__extends || function () {
-  var _extendStatics = function extendStatics(d, b) {
-    _extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) {
-        if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
-      }
-    };
-
-    return _extendStatics(d, b);
-  };
-
-  return function (d, b) {
-    if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-
-    _extendStatics(d, b);
-
-    function __() {
-      this.constructor = d;
-    }
-
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
 
 var __decorate = void 0 && (void 0).__decorate || function (decorators, target, key, desc) {
   var c = arguments.length,
@@ -17366,59 +17411,61 @@ var __metadata = void 0 && (void 0).__metadata || function (k, v) {
   if ((typeof Reflect === "undefined" ? "undefined" : _typeof(Reflect)) === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-var CandidateCard =
-/** @class */
-function (_super) {
-  __extends(CandidateCard, _super);
+var _a;
+
+var CandidateCard = /*#__PURE__*/function (_Vue) {
+  _inherits(CandidateCard, _Vue);
+
+  var _super = _createSuper(CandidateCard);
 
   function CandidateCard() {
-    return _super !== null && _super.apply(this, arguments) || this;
+    _classCallCheck(this, CandidateCard);
+
+    return _super.apply(this, arguments);
   }
 
-  CandidateCard.prototype.minimizeCandidate = function () {};
-
-  Object.defineProperty(CandidateCard.prototype, "progressPercent", {
+  _createClass(CandidateCard, [{
+    key: "minimizeCandidate",
+    value: function minimizeCandidate() {}
+  }, {
+    key: "progressPercent",
     get: function get() {
       return this.candidate.timer.progressPercent;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(CandidateCard.prototype, "progressValue", {
+    }
+  }, {
+    key: "progressValue",
     get: function get() {
       if (this.candidate.timer.isTimeUp) {
         return this.candidate.timer.isRunning() ? undefined : 100;
       }
 
       return this.progressPercent;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(CandidateCard.prototype, "timeClass", {
+    }
+  }, {
+    key: "timeClass",
     get: function get() {
       return {
         "plenty-time": this.progressPercent >= 50,
         "running-out": this.progressPercent < 50 && this.progressPercent >= 25,
         "almost-done": this.progressPercent < 25
       };
-    },
-    enumerable: false,
-    configurable: true
-  });
+    }
+  }]);
 
-  var _a;
-
-  __decorate([(0, _vuePropertyDecorator.Prop)({
-    required: true
-  }), __metadata("design:type", typeof (_a = typeof _candidates.Candidate !== "undefined" && _candidates.Candidate) === "function" ? _a : Object)], CandidateCard.prototype, "candidate", void 0);
-
-  __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], CandidateCard.prototype, "minimizeCandidate", null);
-
-  CandidateCard = __decorate([(0, _vuePropertyDecorator.Component)({})], CandidateCard);
   return CandidateCard;
 }(_vuePropertyDecorator.Vue);
 
+__decorate([(0, _vuePropertyDecorator.Prop)({
+  required: true
+}), __metadata("design:type", typeof (_a = typeof _candidates.Candidate !== "undefined" && _candidates.Candidate) === "function" ? _a : Object)], CandidateCard.prototype, "candidate", void 0);
+
+__decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], CandidateCard.prototype, "minimizeCandidate", null);
+
+CandidateCard = __decorate([(0, _vuePropertyDecorator.Component)({
+  components: {
+    CollapseTransition: _vueCollapseTransition.CollapseTransition
+  }
+})], CandidateCard);
 var _default = CandidateCard;
 exports.default = _default;
         var $03db96 = exports.default || module.exports;
@@ -17437,53 +17484,64 @@ exports.default = _default;
     "div",
     { staticClass: "candidate-card card z-depth-2", class: _vm.timeClass },
     [
-      _c("div", { staticClass: "card-content" }, [
-        _c("div", { staticClass: "card-title" }, [
-          _c("span", [_vm._v(_vm._s(_vm.candidate.name))]),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn-floating btn-flat",
-              attrs: { href: "#" },
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.minimizeCandidate()
+      _c(
+        "div",
+        { staticClass: "card-content" },
+        [
+          _c("div", { staticClass: "card-title" }, [
+            _c("span", [_vm._v(_vm._s(_vm.candidate.name))]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn-floating btn-flat",
+                attrs: { href: "#" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.minimizeCandidate()
+                  },
                 },
               },
-            },
-            [_c("i", { staticClass: "material-icons" }, [_vm._v("minimize")])]
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "time-left" }, [
-          _vm._v(
-            "\n      " +
-              _vm._s(_vm.candidate.timer.getTimeLeft()) +
-              " " +
-              _vm._s(_vm.candidate.timer.isTimeUp ? "over" : "remaining") +
-              "\n    "
-          ),
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "spacer" }),
-        _vm._v(" "),
-        _c(
-          "div",
-          { class: { "time-up": _vm.candidate.timer.isTimeUp } },
-          [
-            _c("b-progress", {
-              attrs: {
-                value: _vm.progressValue,
-                size: "is-large",
-                type: _vm.candidate.timer.isTimeUp ? "is-danger" : "is-info",
-              },
-            }),
-          ],
-          1
-        ),
-      ]),
+              [_c("i", { staticClass: "material-icons" }, [_vm._v("minimize")])]
+            ),
+          ]),
+          _vm._v(" "),
+          _c("collapse-transition", [
+            _c("div", { staticClass: "time-section" }, [
+              _c("div", { staticClass: "time-left" }, [
+                _vm._v(
+                  "\n          " +
+                    _vm._s(_vm.candidate.timer.getTimeLeft()) +
+                    "\n          " +
+                    _vm._s(
+                      _vm.candidate.timer.isTimeUp ? "over" : "remaining"
+                    ) +
+                    "\n        "
+                ),
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "progress",
+                  class: { "time-up": _vm.candidate.timer.isTimeUp },
+                },
+                [
+                  _c("div", {
+                    class: {
+                      determinate: !_vm.candidate.timer.isTimeUp,
+                      indeterminate: _vm.candidate.timer.isTimeUp,
+                    },
+                    style: { width: _vm.progressValue + "%" },
+                  }),
+                ]
+              ),
+            ]),
+          ]),
+        ],
+        1
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "card-action" }, [
         _c("div", { staticClass: "action-row" }, [
@@ -17648,7 +17706,7 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/index.js","./candidates":"src/js/candidates.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/header.vue":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/index.js","./candidates":"src/js/candidates.ts","@ivanv/vue-collapse-transition":"node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"src/js/header.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17660,35 +17718,27 @@ var _vuePropertyDecorator = require("vue-property-decorator");
 
 var _global_config = require("./global_config");
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-var __extends = void 0 && (void 0).__extends || function () {
-  var _extendStatics = function extendStatics(d, b) {
-    _extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) {
-        if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
-      }
-    };
-
-    return _extendStatics(d, b);
-  };
-
-  return function (d, b) {
-    if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-
-    _extendStatics(d, b);
-
-    function __() {
-      this.constructor = d;
-    }
-
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
 
 var __decorate = void 0 && (void 0).__decorate || function (decorators, target, key, desc) {
   var c = arguments.length,
@@ -17704,121 +17754,125 @@ var __metadata = void 0 && (void 0).__metadata || function (k, v) {
   if ((typeof Reflect === "undefined" ? "undefined" : _typeof(Reflect)) === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
-var Header =
-/** @class */
-function (_super) {
-  __extends(Header, _super);
+var _a;
+
+var Header = /*#__PURE__*/function (_Vue) {
+  _inherits(Header, _Vue);
+
+  var _super = _createSuper(Header);
 
   function Header() {
-    var _this = _super !== null && _super.apply(this, arguments) || this;
+    var _this;
 
+    _classCallCheck(this, Header);
+
+    _this = _super.apply(this, arguments);
     _this.config = _global_config.globalConfig;
     return _this;
   }
 
-  Header.prototype.shuffleCandidates = function () {};
-
-  Header.prototype.focusChange = function (num) {
-    return num;
-  };
-
-  Header.prototype.updateGalleryMode = function () {
-    return !this.galleryMode;
-  };
-
-  Header.prototype.configChanged = function (newConfig) {
-    this.$forceUpdate();
-  };
-
-  Object.defineProperty(Header.prototype, "logoUrl", {
+  _createClass(Header, [{
+    key: "shuffleCandidates",
+    value: function shuffleCandidates() {}
+  }, {
+    key: "focusChange",
+    value: function focusChange(num) {
+      return num;
+    }
+  }, {
+    key: "updateGalleryMode",
+    value: function updateGalleryMode() {
+      return !this.galleryMode;
+    }
+  }, {
+    key: "configChanged",
+    value: function configChanged(newConfig) {
+      console.log("Config changed");
+      this.$forceUpdate();
+    }
+  }, {
+    key: "logoUrl",
     get: function get() {
       return _global_config.globalConfig.eventInfo.logoUrl;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Header.prototype, "eventTitle", {
+    }
+  }, {
+    key: "eventTitle",
     get: function get() {
       return _global_config.globalConfig.eventInfo.eventTitle;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Header.prototype, "orgTitle", {
+    }
+  }, {
+    key: "orgTitle",
     get: function get() {
       return _global_config.globalConfig.eventInfo.orgTitle;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Header.prototype, "currentModeName", {
+    }
+  }, {
+    key: "currentModeName",
     get: function get() {
       return this.galleryMode ? "All Candidates" : "Question Time!";
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Header.prototype, "currentModeIcon", {
+    }
+  }, {
+    key: "currentModeIcon",
     get: function get() {
       return this.galleryMode ? "groups" : "person";
-    },
-    enumerable: false,
-    configurable: true
-  });
+    }
+  }, {
+    key: "setTime",
+    value: function setTime(time) {
+      var _a;
 
-  Header.prototype.setTime = function (time) {
-    var _a;
-
-    (_a = this.candidatesList) === null || _a === void 0 ? void 0 : _a.map(function (candidate) {
-      return candidate.timer;
-    }).forEach(function (timer) {
-      timer.toggleTimer(false);
-      timer.setTime(time, "s");
-    });
-  };
-
-  Object.defineProperty(Header.prototype, "prevEnabled", {
+      (_a = this.candidatesList) === null || _a === void 0 ? void 0 : _a.map(function (candidate) {
+        return candidate.timer;
+      }).forEach(function (timer) {
+        timer.toggleTimer(false);
+        timer.setTime(time, "s");
+      });
+    }
+  }, {
+    key: "prevEnabled",
     get: function get() {
       return this.focusedCandidate !== undefined && this.focusedCandidate > 0;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(Header.prototype, "nextEnabled", {
+    }
+  }, {
+    key: "nextEnabled",
     get: function get() {
       return this.focusedCandidate !== undefined && this.numberCandidates !== undefined && this.focusedCandidate < this.numberCandidates - 1;
-    },
-    enumerable: false,
-    configurable: true
-  });
+    }
+  }, {
+    key: "blurElement",
+    value: function blurElement(event) {
+      if (!(event.target instanceof HTMLElement)) {
+        return;
+      }
 
-  var _a;
+      event.target.blur();
+    }
+  }]);
 
-  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Array)], Header.prototype, "candidatesList", void 0);
-
-  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Boolean)], Header.prototype, "galleryMode", void 0);
-
-  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Boolean)], Header.prototype, "isShuffling", void 0);
-
-  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)], Header.prototype, "focusedCandidate", void 0);
-
-  __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)], Header.prototype, "numberCandidates", void 0);
-
-  __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "shuffleCandidates", null);
-
-  __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", [Number]), __metadata("design:returntype", void 0)], Header.prototype, "focusChange", null);
-
-  __decorate([(0, _vuePropertyDecorator.Emit)("update:galleryMode"), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "updateGalleryMode", null);
-
-  __decorate([(0, _vuePropertyDecorator.Watch)("config", {
-    deep: true,
-    immediate: true
-  }), __metadata("design:type", Function), __metadata("design:paramtypes", [typeof (_a = typeof _global_config.Config !== "undefined" && _global_config.Config) === "function" ? _a : Object]), __metadata("design:returntype", void 0)], Header.prototype, "configChanged", null);
-
-  Header = __decorate([(0, _vuePropertyDecorator.Component)({})], Header);
   return Header;
 }(_vuePropertyDecorator.Vue);
 
+__decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Array)], Header.prototype, "candidatesList", void 0);
+
+__decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Boolean)], Header.prototype, "galleryMode", void 0);
+
+__decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Boolean)], Header.prototype, "isShuffling", void 0);
+
+__decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)], Header.prototype, "focusedCandidate", void 0);
+
+__decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)], Header.prototype, "numberCandidates", void 0);
+
+__decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "shuffleCandidates", null);
+
+__decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", [Number]), __metadata("design:returntype", void 0)], Header.prototype, "focusChange", null);
+
+__decorate([(0, _vuePropertyDecorator.Emit)("update:galleryMode"), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "updateGalleryMode", null);
+
+__decorate([(0, _vuePropertyDecorator.Watch)("config", {
+  deep: true,
+  immediate: true
+}), __metadata("design:type", Function), __metadata("design:paramtypes", [typeof (_a = typeof _global_config.Config !== "undefined" && _global_config.Config) === "function" ? _a : Object]), __metadata("design:returntype", void 0)], Header.prototype, "configChanged", null);
+
+Header = __decorate([(0, _vuePropertyDecorator.Component)({})], Header);
 var _default = Header;
 exports.default = _default;
         var $09fc64 = exports.default || module.exports;
@@ -17842,13 +17896,73 @@ exports.default = _default;
         _vm._v(" "),
         _c("div", { staticClass: "header-text" }, [
           _c("h1", {
-            staticClass: "title",
+            staticClass: "title event-title",
             domProps: { innerHTML: _vm._s(_vm.eventTitle) },
+            on: {
+              keydown: [
+                function ($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  $event.preventDefault()
+                  return _vm.blurElement.apply(null, arguments)
+                },
+                function ($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "esc", 27, $event.key, [
+                      "Esc",
+                      "Escape",
+                    ])
+                  ) {
+                    return null
+                  }
+                  $event.preventDefault()
+                  return _vm.blurElement.apply(null, arguments)
+                },
+              ],
+            },
           }),
           _vm._v(" "),
           _c("h2", { staticClass: "subtitle" }, [
             _vm._v("\n          Hosted by\n          "),
-            _c("span", [_vm._v(_vm._s(_vm.orgTitle))]),
+            _c(
+              "span",
+              {
+                staticClass: "org-title",
+                on: {
+                  keydown: [
+                    function ($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      $event.preventDefault()
+                      return _vm.blurElement.apply(null, arguments)
+                    },
+                    function ($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "esc", 27, $event.key, [
+                          "Esc",
+                          "Escape",
+                        ])
+                      ) {
+                        return null
+                      }
+                      $event.preventDefault()
+                      return _vm.blurElement.apply(null, arguments)
+                    },
+                  ],
+                },
+              },
+              [_vm._v(_vm._s(_vm.orgTitle))]
+            ),
           ]),
         ]),
         _vm._v(" "),
@@ -17891,7 +18005,7 @@ exports.default = _default;
               },
               [
                 _c("i", { staticClass: "material-icons right" }, [
-                  _vm._v(_vm._s(_vm.currentModeIcon) + "\n            "),
+                  _vm._v(_vm._s(_vm.currentModeIcon) + " "),
                 ]),
                 _vm._v(
                   "\n            " +
@@ -18021,46 +18135,59 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var FocusManager =
-/** @class */
-function () {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+var FocusManager = /*#__PURE__*/function () {
   function FocusManager() {
+    _classCallCheck(this, FocusManager);
+
     this.focusedCandidate = 0;
   }
 
-  FocusManager.prototype.checkFocus = function (limit) {
-    this.checkFocusNaN();
-    this.focusedCandidate = Math.max(Math.min(this.focusedCandidate, limit), 0);
-  };
-
-  FocusManager.prototype.checkFocusNaN = function () {
-    if (isNaN(this.focusedCandidate)) {
-      this.focusedCandidate = 0;
+  _createClass(FocusManager, [{
+    key: "checkFocus",
+    value: function checkFocus(limit) {
+      this.checkFocusNaN();
+      this.focusedCandidate = Math.max(Math.min(this.focusedCandidate, limit), 0);
     }
-  };
-
-  FocusManager.prototype.changeFocus = function (num, limit) {
-    this.focusedCandidate += num;
-    this.checkFocus(limit);
-  };
-
-  FocusManager.prototype.isFocused = function (index) {
-    return this.focusedCandidate === index;
-  };
-
-  FocusManager.prototype.isNext = function (index) {
-    return this.focusedCandidate === index - 1;
-  };
-
-  FocusManager.prototype.isPrev = function (index) {
-    return this.focusedCandidate === index + 1;
-  };
+  }, {
+    key: "checkFocusNaN",
+    value: function checkFocusNaN() {
+      if (isNaN(this.focusedCandidate)) {
+        this.focusedCandidate = 0;
+      }
+    }
+  }, {
+    key: "changeFocus",
+    value: function changeFocus(num, limit) {
+      this.focusedCandidate += num;
+      this.checkFocus(limit);
+    }
+  }, {
+    key: "isFocused",
+    value: function isFocused(index) {
+      return this.focusedCandidate === index;
+    }
+  }, {
+    key: "isNext",
+    value: function isNext(index) {
+      return this.focusedCandidate === index - 1;
+    }
+  }, {
+    key: "isPrev",
+    value: function isPrev(index) {
+      return this.focusedCandidate === index + 1;
+    }
+  }]);
 
   return FocusManager;
 }();
 
-var _default = FocusManager;
-exports.default = _default;
+exports.default = FocusManager;
 },{}],"src/js/app.vue":[function(require,module,exports) {
 "use strict";
 
@@ -18070,6 +18197,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 var _vuePropertyDecorator = require("vue-property-decorator");
+
+var _vueCollapseTransition = require("@ivanv/vue-collapse-transition");
 
 var _candidates = require("./candidates");
 
@@ -18083,35 +18212,29 @@ var _global_config = require("./global_config");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
-var __extends = void 0 && (void 0).__extends || function () {
-  var _extendStatics = function extendStatics(d, b) {
-    _extendStatics = Object.setPrototypeOf || {
-      __proto__: []
-    } instanceof Array && function (d, b) {
-      d.__proto__ = b;
-    } || function (d, b) {
-      for (var p in b) {
-        if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
-      }
-    };
-
-    return _extendStatics(d, b);
-  };
-
-  return function (d, b) {
-    if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-
-    _extendStatics(d, b);
-
-    function __() {
-      this.constructor = d;
-    }
-
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-}();
 
 var __decorate = void 0 && (void 0).__decorate || function (decorators, target, key, desc) {
   var c = arguments.length,
@@ -18155,357 +18278,307 @@ var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P
   });
 };
 
-var __generator = void 0 && (void 0).__generator || function (thisArg, body) {
-  var _ = {
-    label: 0,
-    sent: function sent() {
-      if (t[0] & 1) throw t[1];
-      return t[1];
-    },
-    trys: [],
-    ops: []
-  },
-      f,
-      y,
-      t,
-      g;
-  return g = {
-    next: verb(0),
-    "throw": verb(1),
-    "return": verb(2)
-  }, typeof Symbol === "function" && (g[Symbol.iterator] = function () {
-    return this;
-  }), g;
-
-  function verb(n) {
-    return function (v) {
-      return step([n, v]);
-    };
-  }
-
-  function step(op) {
-    if (f) throw new TypeError("Generator is already executing.");
-
-    while (_) {
-      try {
-        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-        if (y = 0, t) op = [op[0] & 2, t.value];
-
-        switch (op[0]) {
-          case 0:
-          case 1:
-            t = op;
-            break;
-
-          case 4:
-            _.label++;
-            return {
-              value: op[1],
-              done: false
-            };
-
-          case 5:
-            _.label++;
-            y = op[1];
-            op = [0];
-            continue;
-
-          case 7:
-            op = _.ops.pop();
-
-            _.trys.pop();
-
-            continue;
-
-          default:
-            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-              _ = 0;
-              continue;
-            }
-
-            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-              _.label = op[1];
-              break;
-            }
-
-            if (op[0] === 6 && _.label < t[1]) {
-              _.label = t[1];
-              t = op;
-              break;
-            }
-
-            if (t && _.label < t[2]) {
-              _.label = t[2];
-
-              _.ops.push(op);
-
-              break;
-            }
-
-            if (t[2]) _.ops.pop();
-
-            _.trys.pop();
-
-            continue;
-        }
-
-        op = body.call(thisArg, _);
-      } catch (e) {
-        op = [6, e];
-        y = 0;
-      } finally {
-        f = t = 0;
-      }
-    }
-
-    if (op[0] & 5) throw op[1];
-    return {
-      value: op[0] ? op[1] : void 0,
-      done: true
-    };
-  }
-};
-
 function preProcessQuestion(question) {
   if (question === ".") {
     return "";
   }
 
-  return question.replaceAll(/\\n/g, "\n");
+  return question.replaceAll(/\\n/g, "\n").trim();
 }
 
-var App =
-/** @class */
-function (_super) {
-  __extends(App, _super);
+var App = /*#__PURE__*/function (_Vue) {
+  _inherits(App, _Vue);
+
+  var _super = _createSuper(App);
 
   function App() {
-    var _this = _super !== null && _super.apply(this, arguments) || this;
+    var _this;
 
+    _classCallCheck(this, App);
+
+    _this = _super.apply(this, arguments);
     _this.allCandidates = [];
-    _this.galleryMode = false;
+    _this.currentQuestion = "";
+    _this.galleryMode = true;
     _this.isShuffling = false;
     _this.focusManager = new _focus_manager.default();
     return _this;
   }
 
-  App.prototype.getCardClasses = function (index) {
-    return {
-      "focused-item": this.focusManager.isFocused(index),
-      "previous-item": this.focusManager.isPrev(index),
-      "on-deck": this.focusManager.isNext(index)
-    };
-  };
+  _createClass(App, [{
+    key: "getCardClasses",
+    value: function getCardClasses(index) {
+      return {
+        "focused-item": this.focusManager.isFocused(index),
+        "is-previous": this.focusManager.isPrev(index),
+        "on-deck": this.focusManager.isNext(index)
+      };
+    }
+  }, {
+    key: "shuffleCandidates",
+    value: function shuffleCandidates() {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var wasGallery;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                wasGallery = this.galleryMode;
+                this.isShuffling = true;
 
-  App.prototype.shuffleCandidates = function () {
-    return __awaiter(this, void 0, void 0, function () {
-      var wasGallery;
-      return __generator(this, function (_a) {
-        switch (_a.label) {
-          case 0:
-            wasGallery = this.galleryMode;
-            this.isShuffling = true;
-            if (!!wasGallery) return [3
-            /*break*/
-            , 2];
-            this.galleryMode = true;
-            return [4
-            /*yield*/
-            , new Promise(function (resolve) {
-              return setTimeout(resolve, 700);
-            })];
+                if (wasGallery) {
+                  _context.next = 6;
+                  break;
+                }
 
-          case 1:
-            _a.sent();
+                this.galleryMode = true;
+                _context.next = 6;
+                return new Promise(function (resolve) {
+                  return setTimeout(resolve, 700);
+                });
 
-            _a.label = 2;
+              case 6:
+                this.allCandidates = (0, _candidates.shuffle)(this.allCandidates);
+                _context.next = 9;
+                return new Promise(function (resolve) {
+                  return setTimeout(resolve, 100);
+                });
 
-          case 2:
-            this.allCandidates = (0, _candidates.shuffle)(this.allCandidates);
-            return [4
-            /*yield*/
-            , new Promise(function (resolve) {
-              return setTimeout(resolve, 100);
-            })];
+              case 9:
+                this.focusManager.focusedCandidate = 0;
+                _context.next = 12;
+                return new Promise(function (resolve) {
+                  return setTimeout(resolve, 1000);
+                });
 
-          case 3:
-            _a.sent();
+              case 12:
+                this.isShuffling = false;
+                this.galleryMode = wasGallery;
 
-            this.focusManager.focusedCandidate = 0;
-            return [4
-            /*yield*/
-            , new Promise(function (resolve) {
-              return setTimeout(resolve, 1000);
-            })];
-
-          case 4:
-            _a.sent();
-
-            this.isShuffling = false;
-            this.galleryMode = wasGallery;
-            return [2
-            /*return*/
-            ];
-        }
-      });
-    });
-  };
-
-  Object.defineProperty(App.prototype, "currentQuestion", {
-    get: function get() {
-      return "".concat(_global_config.globalConfig.currentQuestion);
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App.prototype, "visibleCandidates", {
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+    }
+  }, {
+    key: "visibleCandidates",
     get: function get() {
       return this.allCandidates.filter(function (candidate) {
         return !candidate.isMinimized;
       });
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App.prototype, "minimizedCandidates", {
+    }
+  }, {
+    key: "minimizedCandidates",
     get: function get() {
       return this.allCandidates.filter(function (candidate) {
         return candidate.isMinimized;
       });
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App.prototype, "numberOfCandidates", {
+    }
+  }, {
+    key: "numberOfCandidates",
     get: function get() {
       return this.visibleCandidates.length;
-    },
-    enumerable: false,
-    configurable: true
-  });
-  Object.defineProperty(App.prototype, "hasMinimizedCandidates", {
+    }
+  }, {
+    key: "hasMinimizedCandidates",
     get: function get() {
       return this.minimizedCandidates.length > 0;
-    },
-    enumerable: false,
-    configurable: true
-  });
-
-  App.prototype.minimizeCandidate = function (candidate) {
-    candidate.toggleMinimized();
-    this.focusManager.checkFocus(this.numberOfCandidates - 1);
-  };
-
-  App.prototype.showCandidateDialog = function () {
-    var _this = this;
-
-    this.$buefy.dialog.prompt({
-      message: "List the candidates, comma separated",
-      inputAttrs: {
-        placeholder: "e.g. Joe, Jan, Jill, Jazz"
-      },
-      trapFocus: true,
-      onConfirm: function onConfirm(value) {
-        _this.setCandidates(value.split(","));
-
-        (0, _global_config.saveConfig)();
-      }
-    });
-  };
-
-  App.prototype.showLogoDialog = function () {
-    this.$buefy.dialog.prompt({
-      message: "Enter image URL for logo",
-      trapFocus: true,
-      onConfirm: function onConfirm(value) {
-        _global_config.globalConfig.eventInfo.logoUrl = value;
-        (0, _global_config.saveConfig)();
-      }
-    });
-  };
-
-  App.prototype.showTitleDialog = function () {
-    this.$buefy.dialog.prompt({
-      message: "Enter new Event Title",
-      trapFocus: true,
-      onConfirm: function onConfirm(value) {
-        _global_config.globalConfig.eventInfo.eventTitle = value;
-        (0, _global_config.saveConfig)();
-      }
-    });
-  };
-
-  App.prototype.showOrgDialog = function () {
-    this.$buefy.dialog.prompt({
-      message: "Enter new Host Organization Title",
-      trapFocus: true,
-      onConfirm: function onConfirm(value) {
-        _global_config.globalConfig.eventInfo.orgTitle = value;
-        (0, _global_config.saveConfig)();
-      }
-    });
-  };
-
-  App.prototype.showQuestionDialog = function () {
-    this.$buefy.dialog.prompt({
-      message: "Enter Question to display (\".\" for No Question)",
-      trapFocus: true,
-      onConfirm: function onConfirm(value) {
-        console.log("new Question: ".concat(value));
-        _global_config.globalConfig.currentQuestion = preProcessQuestion(value);
-        (0, _global_config.saveConfig)();
-      }
-    });
-  };
-
-  App.prototype.resetConfig = function () {
-    var _this = this;
-
-    this.$buefy.dialog.confirm({
-      title: "Resetting Config",
-      message: "Are you sure you want to <b>Reset</b> all fields? This action cannot be undone.",
-      confirmText: "Reset Page",
-      type: "is-danger",
-      hasIcon: true,
-      onConfirm: function onConfirm() {
-        (0, _global_config.actuallyResetConfig)();
-
-        _this.resetCandidates();
-
-        _this.$buefy.toast.open("Options Reset!");
-      }
-    });
-  };
-
-  App.prototype.setCandidates = function (candidateNames) {
-    _global_config.globalConfig.eventInfo.candidatesList = candidateNames;
-    this.allCandidates = candidateNames.map(function (name) {
-      return new _candidates.Candidate(name);
-    });
-  };
-
-  App.prototype.mounted = function () {
-    (0, _global_config.restoreConfig)();
-    this.resetCandidates();
-  };
-
-  App.prototype.resetCandidates = function () {
-    this.allCandidates = _global_config.globalConfig.eventInfo.candidatesList.map(function (name) {
-      return new _candidates.Candidate(name);
-    });
-  };
-
-  App = __decorate([(0, _vuePropertyDecorator.Component)({
-    components: {
-      AppHeader: _header.default,
-      CandidateCard: _candidateCard.default
     }
-  })], App);
+  }, {
+    key: "minimizeCandidate",
+    value: function minimizeCandidate(candidate) {
+      candidate.toggleMinimized();
+      this.focusManager.checkFocus(this.numberOfCandidates - 1);
+    }
+  }, {
+    key: "blurElement",
+    value: function blurElement(event) {
+      if (!(event.target instanceof HTMLElement)) {
+        return;
+      }
+
+      event.target.blur();
+    }
+  }, {
+    key: "setQuestionEditable",
+    value: function setQuestionEditable(event) {
+      var _this2 = this;
+
+      var element = document.getElementsByClassName("current-question")[0];
+
+      if (!(element instanceof HTMLElement)) {
+        return;
+      }
+
+      setEditableElement(element, function (newValue) {
+        _global_config.globalConfig.addQuestion(preProcessQuestion(newValue));
+
+        (0, _global_config.saveConfig)();
+        _this2.currentQuestion = _global_config.globalConfig.eventInfo.questions[0];
+      });
+    }
+  }, {
+    key: "questionEditDone",
+    value: function questionEditDone(event) {
+      if (!(event.target instanceof HTMLElement)) {
+        return;
+      }
+
+      var newQuestion = event.target.innerText;
+
+      _global_config.globalConfig.addQuestion(preProcessQuestion(newQuestion));
+
+      (0, _global_config.saveConfig)();
+      this.currentQuestion = _global_config.globalConfig.eventInfo.questions[0];
+    }
+  }, {
+    key: "dumpQuestions",
+    value: function dumpQuestions() {
+      console.log(JSON.stringify(_global_config.globalConfig.eventInfo.questions, undefined, 2));
+    }
+  }, {
+    key: "showCandidateDialog",
+    value: function showCandidateDialog() {
+      var _this3 = this;
+
+      this.$buefy.dialog.prompt({
+        message: "List the candidates, comma separated",
+        inputAttrs: {
+          placeholder: "e.g. Joe, Jan, Jill, Jazz"
+        },
+        trapFocus: true,
+        onConfirm: function onConfirm(value) {
+          _this3.setCandidates(value.split(","));
+
+          (0, _global_config.saveConfig)();
+        }
+      });
+    }
+  }, {
+    key: "showLogoDialog",
+    value: function showLogoDialog() {
+      this.$buefy.dialog.prompt({
+        message: "Enter image URL for logo",
+        trapFocus: true,
+        onConfirm: function onConfirm(value) {
+          _global_config.globalConfig.eventInfo.logoUrl = value;
+          (0, _global_config.saveConfig)();
+        }
+      });
+    }
+  }, {
+    key: "showTitleDialog",
+    value: function showTitleDialog() {
+      var eventTitleElement = document.getElementsByClassName("event-title")[0];
+
+      if (!(eventTitleElement instanceof HTMLElement)) {
+        return;
+      }
+
+      setEditableElement(eventTitleElement, function (newEvent) {
+        _global_config.globalConfig.eventInfo.eventTitle = newEvent;
+      });
+    }
+  }, {
+    key: "showOrgDialog",
+    value: function showOrgDialog() {
+      var orgTitleElement = document.getElementsByClassName("org-title")[0];
+
+      if (!(orgTitleElement instanceof HTMLElement)) {
+        return;
+      }
+
+      setEditableElement(orgTitleElement, function (newOrg) {
+        _global_config.globalConfig.eventInfo.orgTitle = newOrg;
+      });
+    }
+  }, {
+    key: "resetConfig",
+    value: function resetConfig() {
+      var _this4 = this;
+
+      this.$buefy.dialog.confirm({
+        title: "Resetting Config",
+        message: "Are you sure you want to <b>Reset</b> all fields? This action cannot be undone.",
+        confirmText: "Reset Page",
+        type: "is-danger",
+        hasIcon: true,
+        onConfirm: function onConfirm() {
+          (0, _global_config.actuallyResetConfig)();
+
+          _this4.resetCandidates();
+
+          _this4.$buefy.toast.open("Options Reset!");
+        }
+      });
+    }
+  }, {
+    key: "setCandidates",
+    value: function setCandidates(candidateNames) {
+      _global_config.globalConfig.eventInfo.candidatesList = candidateNames;
+      this.allCandidates = candidateNames.map(function (name) {
+        return new _candidates.Candidate(name);
+      });
+    }
+  }, {
+    key: "mounted",
+    value: function mounted() {
+      (0, _global_config.restoreConfig)();
+      this.resetCandidates();
+    }
+  }, {
+    key: "resetCandidates",
+    value: function resetCandidates() {
+      this.allCandidates = _global_config.globalConfig.eventInfo.candidatesList.map(function (name) {
+        return new _candidates.Candidate(name);
+      });
+      this.currentQuestion = _global_config.globalConfig.eventInfo.questions[0];
+    }
+  }]);
+
   return App;
 }(_vuePropertyDecorator.Vue);
 
+App = __decorate([(0, _vuePropertyDecorator.Component)({
+  components: {
+    AppHeader: _header.default,
+    CandidateCard: _candidateCard.default,
+    CollapseTransition: _vueCollapseTransition.CollapseTransition
+  }
+})], App);
 var _default = App;
 exports.default = _default;
+
+function setEditableElement(el, valueCallback) {
+  el.setAttribute("contenteditable", "true");
+
+  function onBlur(event) {
+    if (!(event.target instanceof HTMLElement)) {
+      return;
+    }
+
+    var newValue = event.target.innerText;
+    valueCallback(newValue);
+    event.target.removeAttribute("contenteditable");
+    event.target.removeEventListener("blur", onBlur);
+    (0, _global_config.saveConfig)();
+  }
+
+  el.addEventListener("blur", onBlur);
+  el.focus();
+  selectElementContents(el);
+}
+
+function selectElementContents(el) {
+  var range = document.createRange();
+  range.selectNodeContents(el);
+  var sel = window.getSelection();
+  sel === null || sel === void 0 ? void 0 : sel.removeAllRanges();
+  sel === null || sel === void 0 ? void 0 : sel.addRange(range);
+}
         var $cd5f52 = exports.default || module.exports;
       
       if (typeof $cd5f52 === 'function') {
@@ -18556,44 +18629,87 @@ exports.default = _default;
         },
       }),
       _vm._v(" "),
-      _c("Transition", { attrs: { name: "slide" } }, [
-        !_vm.galleryMode && _vm.currentQuestion
-          ? _c("div", { staticClass: "current-question forum-app-question" }, [
-              _vm._v("\n      " + _vm._s(_vm.currentQuestion) + "\n    "),
-            ])
-          : _vm._e(),
+      _c("collapse-transition", [
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.currentQuestion,
+                expression: "currentQuestion",
+              },
+            ],
+            staticClass: "current-question forum-app-question",
+            on: {
+              dblclick: _vm.setQuestionEditable,
+              keydown: [
+                function ($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "esc", 27, $event.key, [
+                      "Esc",
+                      "Escape",
+                    ])
+                  ) {
+                    return null
+                  }
+                  $event.preventDefault()
+                  return _vm.blurElement.apply(null, arguments)
+                },
+                function ($event) {
+                  if (
+                    !$event.type.indexOf("key") &&
+                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                  ) {
+                    return null
+                  }
+                  $event.preventDefault()
+                  return _vm.blurElement.apply(null, arguments)
+                },
+              ],
+            },
+          },
+          [_vm._v("\n      " + _vm._s(_vm.currentQuestion) + "\n    ")]
+        ),
       ]),
       _vm._v(" "),
-      _c("Transition", { attrs: { name: "slide" } }, [
-        _vm.hasMinimizedCandidates
-          ? _c(
+      _c("collapse-transition", [
+        _c(
+          "div",
+          {
+            staticClass: "time-out-container-container",
+            class: { "has-minimized": _vm.hasMinimizedCandidates },
+          },
+          [
+            _c(
               "div",
-              { staticClass: "time-out-container-container" },
-              [
-                _c(
-                  "b-taglist",
-                  { staticClass: "time-out-container" },
-                  _vm._l(_vm.minimizedCandidates, function (candidate) {
-                    return _c(
-                      "b-tag",
-                      {
-                        key: candidate.name,
-                        staticClass: "is-primary minimized-candidate",
-                        nativeOn: {
-                          click: function ($event) {
-                            return _vm.minimizeCandidate(candidate)
-                          },
-                        },
+              { staticClass: "time-out-container" },
+              _vm._l(_vm.minimizedCandidates, function (candidate) {
+                return _c(
+                  "a",
+                  {
+                    key: candidate.name,
+                    staticClass: "chip is-primary minimized-candidate",
+                    on: {
+                      click: function ($event) {
+                        $event.preventDefault()
+                        return _vm.minimizeCandidate(candidate)
                       },
-                      [_vm._v(_vm._s(candidate.name))]
-                    )
-                  }),
-                  1
-                ),
-              ],
-              1
-            )
-          : _vm._e(),
+                    },
+                  },
+                  [
+                    _vm._v(
+                      "\n          " + _vm._s(candidate.name) + "\n        "
+                    ),
+                  ]
+                )
+              }),
+              0
+            ),
+          ]
+        ),
       ]),
       _vm._v(" "),
       _c(
@@ -18640,92 +18756,93 @@ exports.default = _default;
       ),
       _vm._v(" "),
       _c("footer", { staticClass: "forum-app-footer" }, [
-        _c(
-          "div",
-          [
-            _c("span", [_vm._v("Set New...")]),
-            _vm._v(" "),
-            _c(
-              "b-button",
-              {
-                on: {
-                  click: function ($event) {
-                    $event.preventDefault()
-                    return _vm.showCandidateDialog()
-                  },
+        _c("div", [
+          _c("span", [_vm._v("Set New...")]),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "waves-effect waves-teal btn-flat",
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.showCandidateDialog()
                 },
               },
-              [_vm._v("Candidates")]
-            ),
-            _vm._v(" "),
-            _c(
-              "b-button",
-              {
-                on: {
-                  click: function ($event) {
-                    $event.preventDefault()
-                    return _vm.showLogoDialog()
-                  },
+            },
+            [_vm._v("Candidates")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "waves-effect waves-teal btn-flat",
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.showLogoDialog()
                 },
               },
-              [_vm._v("Logo")]
-            ),
-            _vm._v(" "),
-            _c(
-              "b-button",
-              {
-                on: {
-                  click: function ($event) {
-                    $event.preventDefault()
-                    return _vm.showTitleDialog()
-                  },
+            },
+            [_vm._v("Logo")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "waves-effect waves-teal btn-flat",
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.showTitleDialog()
                 },
               },
-              [_vm._v("Title")]
-            ),
-            _vm._v(" "),
-            _c(
-              "b-button",
-              {
-                on: {
-                  click: function ($event) {
-                    $event.preventDefault()
-                    return _vm.showOrgDialog()
-                  },
+            },
+            [_vm._v("Title")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "waves-effect waves-teal btn-flat",
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.showOrgDialog()
                 },
               },
-              [_vm._v("Org")]
-            ),
-            _vm._v(" "),
-            _c(
-              "b-button",
-              {
-                on: {
-                  click: function ($event) {
-                    $event.preventDefault()
-                    return _vm.showQuestionDialog()
-                  },
+            },
+            [_vm._v("Org")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "waves-effect waves-teal btn-flat",
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.dumpQuestions.apply(null, arguments)
                 },
               },
-              [_vm._v("Set Question")]
-            ),
-            _vm._v(" "),
-            _c(
-              "b-button",
-              {
-                staticClass: "red-text",
-                on: {
-                  click: function ($event) {
-                    $event.preventDefault()
-                    return _vm.resetConfig()
-                  },
+            },
+            [_vm._v("?")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "waves-effect waves-teal btn-flat red-text",
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.resetConfig()
                 },
               },
-              [_vm._v("Reset All")]
-            ),
-          ],
-          1
-        ),
+            },
+            [_vm._v("Reset All")]
+          ),
+        ]),
         _vm._v(" "),
         _vm._m(0),
       ]),
@@ -18741,7 +18858,7 @@ var staticRenderFns = [
     return _c("span", { staticClass: "attribution-label" }, [
       _vm._v("\n      Built by Alex Brown for the\n      "),
       _c("a", { attrs: { href: "https://mvmha.com" } }, [_vm._v("MVMHA")]),
-      _vm._v(" (2020)\n    "),
+      _vm._v(" (updated 2022)\n    "),
     ])
   },
 ]
@@ -18777,7 +18894,7 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/index.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","./focus_manager":"src/js/focus_manager.ts","./global_config":"src/js/global_config.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-455cdeae.js":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/index.js","@ivanv/vue-collapse-transition":"node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js","./candidates":"src/js/candidates.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","./focus_manager":"src/js/focus_manager.ts","./global_config":"src/js/global_config.ts","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/buefy/dist/esm/chunk-455cdeae.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -43931,7 +44048,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "9023" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8256" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
