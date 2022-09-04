@@ -14,7 +14,11 @@
       @focus-change="focusManager.changeFocus($event, numberOfCandidates - 1)"
     ></app-header>
     <collapse-transition>
-      <div v-show="currentQuestion" class="current-question forum-app-question">
+      <div
+        v-show="currentQuestion"
+        class="current-question forum-app-question"
+        contenteditable="true"
+      >
         {{ currentQuestion }}
       </div>
     </collapse-transition>
@@ -286,6 +290,70 @@ export default class App extends Vue {
     grid-area: forum-app-footer;
   }
 }
+
+.forum-app-candidates {
+  &.gallery-mode {
+    .candidates-container .transition-container {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      justify-content: space-evenly;
+      > div,
+      > candidate-card {
+        transition: all 0.2s ease-in-out;
+        margin: 0 0.5em;
+        visibility: visible;
+        flex-basis: 30vw;
+      }
+    }
+  }
+  &:not(.gallery-mode) {
+    .candidate-card {
+      display: none;
+      &.focused-item,
+      &.is-previous,
+      &.on-deck {
+        display: flex;
+      }
+      &.focused-item {
+        /deep/ .card-content .card-title {
+          font-size: 6vw;
+          font-weight: 500;
+          line-height: initial;
+          -webkit-text-stroke: 1px black;
+        }
+      }
+      &.is-previous,
+      &.on-deck {
+        /deep/ {
+          .card-content {
+            padding: 12px;
+            .card-title {
+              font-weight: 500;
+            }
+            .time-section {
+              display: none;
+              transform: scaleY(0);
+            }
+          }
+          .card-action {
+            display: none !important;
+          }
+        }
+      }
+    }
+  }
+  .candidate-card.focused-item {
+    /deep/ .card-content .card-title {
+      transition: font-size 0.2s ease-in-out;
+      font-size: 30pt;
+    }
+  }
+}
+
+.focused-item {
+  outline: 10px solid;
+}
+
 footer {
   align-items: center;
   display: flex;
@@ -311,63 +379,13 @@ footer {
   }
 }
 
-.forum-app-candidates {
-  &.gallery-mode {
-    .candidates-container .transition-container {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      justify-content: space-evenly;
-      > div,
-      > candidate-card {
-        transition: all 0.2s ease-in-out;
-        margin: 0 0.5em;
-        visibility: visible;
-        flex-basis: 30vw;
-      }
-    }
+[contenteditable="true"] {
+  position: relative;
+  &:active,
+  &:focus {
+    border: none;
+    outline: none;
   }
-  &:not(.gallery-mode) {
-    .candidate-card {
-      display: none;
-      &.focused-item, &.is-previous, &.on-deck {
-        display: flex;
-      }
-      &.focused-item {
-        /deep/ .card-content .card-title {
-          font-size: 6vw;
-          font-weight: 500;
-          line-height: initial;
-          -webkit-text-stroke: 1px black;
-        }
-      }
-      &.is-previous,
-      &.on-deck {
-        /deep/ {
-          .card-content {
-            .card-title {
-              font-weight: 500;
-            }
-            > :not(.card-title) {
-              display: none;
-            }
-          }
-          .card-action {
-            display: none !important;
-          }
-        }
-      }
-    }
-  }
-  .candidate-card.focused-item {
-    /deep/ .card-content .card-title {
-      transition: font-size 0.2s ease-in-out;
-      font-size: 30pt;
-    }
-  }
-}
-
-.focused-item {
-  outline: 10px solid;
 }
 
 .squish-enter-to,

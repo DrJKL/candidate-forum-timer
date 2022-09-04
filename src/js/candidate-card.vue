@@ -2,36 +2,48 @@
   <div class="candidate-card card z-depth-2" :class="timeClass">
     <div class="card-content">
       <div class="card-title">
-        <span>{{candidate.name}}</span>
-        <a href="#" class="btn-floating btn-flat" @click.prevent="minimizeCandidate()">
+        <span>{{ candidate.name }}</span>
+        <a
+          href="#"
+          class="btn-floating btn-flat"
+          @click.prevent="minimizeCandidate()"
+        >
           <i class="material-icons">minimize</i>
         </a>
       </div>
-      <div class="time-left">
-        {{candidate.timer.getTimeLeft()}} {{candidate.timer.isTimeUp ? 'over' :
-        'remaining'}}
-      </div>
-      <div class="spacer"></div>
-      <div :class="{'time-up': candidate.timer.isTimeUp}">
-        <b-progress
-          :value="progressValue"
-          size="is-large"
-          :type="candidate.timer.isTimeUp ? 'is-danger' : 'is-info'"
-        ></b-progress>
-      </div>
+      <collapse-transition>
+        <div class="time-section">
+          <div class="time-left">
+            {{ candidate.timer.getTimeLeft() }}
+            {{ candidate.timer.isTimeUp ? "over" : "remaining" }}
+          </div>
+          <div :class="{ 'time-up': candidate.timer.isTimeUp }">
+            <b-progress
+              :value="progressValue"
+              size="is-large"
+              :type="candidate.timer.isTimeUp ? 'is-danger' : 'is-info'"
+            ></b-progress>
+          </div>
+        </div>
+      </collapse-transition>
     </div>
     <div class="card-action">
       <div class="action-row">
         <a
           href="#"
           class="btn startstop"
-          @click.prevent="candidate.timer.toggleTimer();"
-        >{{candidate.timer.isRunning() ? 'Stop': 'Start'}}</a>
-        
-        <a href="#" class="btn resetTime" @click.prevent="candidate.timer.resetTime()">
+          @click.prevent="candidate.timer.toggleTimer()"
+          >{{ candidate.timer.isRunning() ? "Stop" : "Start" }}</a
+        >
+
+        <a
+          href="#"
+          class="btn resetTime"
+          @click.prevent="candidate.timer.resetTime()"
+        >
           <i class="material-icons">restore</i>
         </a>
-        
+
         <div class="inc-dec-buttons">
           <a href="#" class="btn" @click.prevent="candidate.timer.addTime()">
             <i class="material-icons">add</i>
@@ -42,10 +54,27 @@
         </div>
       </div>
       <div class="action-row time-setters">
-        <a href="#" class="btn" @click.prevent="candidate.timer.setTime(0,'s')">0</a>
-        <a href="#" class="btn" @click.prevent="candidate.timer.setTime(30,'s')">30</a>
-        <a href="#" class="btn" @click.prevent="candidate.timer.setTime(60,'s')">60</a>
-        <a href="#" class="btn" @click.prevent="candidate.timer.setTime(90,'s')">90</a>
+        <a href="#" class="btn" @click.prevent="candidate.timer.setTime(0, 's')"
+          >0</a
+        >
+        <a
+          href="#"
+          class="btn"
+          @click.prevent="candidate.timer.setTime(30, 's')"
+          >30</a
+        >
+        <a
+          href="#"
+          class="btn"
+          @click.prevent="candidate.timer.setTime(60, 's')"
+          >60</a
+        >
+        <a
+          href="#"
+          class="btn"
+          @click.prevent="candidate.timer.setTime(90, 's')"
+          >90</a
+        >
       </div>
     </div>
   </div>
@@ -55,7 +84,9 @@
 import { Component, Vue, Prop, Emit } from "vue-property-decorator";
 import { Candidate } from "./candidates";
 
-@Component({})
+import { CollapseTransition } from "@ivanv/vue-collapse-transition";
+
+@Component({ components: { CollapseTransition } })
 export default class CandidateCard extends Vue {
   @Prop({ required: true })
   candidate!: Candidate;
@@ -91,7 +122,7 @@ export default class CandidateCard extends Vue {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all .25s linear;
+  transition: all 0.25s linear;
   width: 100%;
   .card-content {
     display: flex;
@@ -102,6 +133,7 @@ export default class CandidateCard extends Vue {
     font-size: 26pt;
     font-weight: 500;
     justify-content: space-between;
+    user-select: none;
     white-space: nowrap;
     word-wrap: normal;
     > * {
@@ -109,6 +141,7 @@ export default class CandidateCard extends Vue {
     }
   }
   .time-left {
+    user-select: none;
     font-size: 30pt;
   }
   &.plenty-time {

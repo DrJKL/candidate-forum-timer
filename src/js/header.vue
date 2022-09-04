@@ -163,6 +163,7 @@ header {
 .our-header {
   align-items: center;
   display: flex;
+  user-select: none;
 
   .logo-img {
     margin-right: 1.15rem;
