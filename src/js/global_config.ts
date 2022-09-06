@@ -1,83 +1,99 @@
 import { Candidate } from './candidates';
-import moment from "moment";
-import images from "../assets/*.png";
+import moment from 'moment';
+import images from '../assets/*.png';
 
 export interface EventInfo {
-    logoUrl: string;
-    orgTitle: string;
-    eventTitle: string;
-    candidatesList: readonly string[];
-    questions: string[];
+  logoUrl: string;
+  orgTitle: string;
+  eventTitle: string;
+  candidatesList: readonly string[];
+  questions: string[];
 }
 
 export class Config {
-    timeLimitTotal = moment.duration(90, 's');
-    timeGranularity = 100;
-    timeDelta = moment.duration(1, 's');
-    eventInfo: EventInfo = {
-        logoUrl: //
-             images['just_homes_logo'],
-            // images['lwv-logo'],
-        orgTitle: // 
-            "Mountain View Mobile Home Alliance",
-            // "the League of Women Voters",
-        eventTitle: //
-            `<span>2022</span>
+  timeLimitTotal = moment.duration(90, 's');
+  timeGranularity = 100;
+  timeDelta = moment.duration(1, 's');
+  eventInfo: EventInfo = {
+    //
+    logoUrl: images['just_homes_logo'],
+    // images['lwv-logo'],
+    //
+    orgTitle: 'Mountain View Mobile Home Alliance',
+    // "the League of Women Voters",
+    //
+    eventTitle: `<span>2022</span>
             <span>Mountain View</span>
             <span>City Council</span>
             <span>Candidate Forum</span>`,
-        candidatesList: [
-            "Lucas Ramirez",
-            "Alison Hicks",
-            "Ellen Kamei",
-            "Li Zhang",
-            "Justin Cohen",
-        ],
-        questions: [
-            'What is your favorite color?',
-        ],
-    }
-    get candidates() {
-        return this.eventInfo.candidatesList.map(name => new Candidate(name));
-    }
-    set candidates(newCandidates: Candidate[]) {
-        this.eventInfo.candidatesList = newCandidates.map(candidate => candidate.name);
-    }
-    
-    addQuestion(newQuestion: string) {
-        if (!newQuestion) { 
-            return;
-         }
-        this.eventInfo.questions.unshift(newQuestion);
-        const uniqueQuestions = [...new Set(this.eventInfo.questions)];
-        this.eventInfo.questions = uniqueQuestions;
-    }
+    candidatesList: [
+      'Lucas Ramirez',
+      'Alison Hicks',
+      'Ellen Kamei',
+      'Li Zhang',
+      'Justin Cohen',
+    ],
+    questions: ['What is your favorite color?'],
+  };
+  get candidates() {
+    return this.eventInfo.candidatesList.map((name) => new Candidate(name));
+  }
+  set candidates(newCandidates: Candidate[]) {
+    this.eventInfo.candidatesList = newCandidates.map(
+      (candidate) => candidate.name
+    );
+  }
 
+  addQuestion(newQuestion: string) {
+    const processedQuestion = preProcessQuestion(newQuestion);
+    if (!processedQuestion) {
+      return;
+    }
+    this.eventInfo.questions.unshift(newQuestion);
+    const uniqueQuestions = [...new Set(this.eventInfo.questions)];
+    this.eventInfo.questions = uniqueQuestions;
+    saveConfig();
+  }
+  updateOrg(newOrg: string) {
+    this.eventInfo.orgTitle = newOrg;
+    saveConfig();
+  }
+  updateEvent(newEvent: string) {
+    this.eventInfo.eventTitle = newEvent;
+    saveConfig();
+  }
 }
 export const globalConfig = new Config();
 
 const CONFIG_KEY = 'saved_candidate_config';
 
 export function restoreConfig() {
-    console.log("Restoring config");
-    const savedConfig = localStorage.getItem(CONFIG_KEY);
-    if (!savedConfig) {
-        console.log('Initializing Default Config');
-        globalConfig.eventInfo = new Config().eventInfo;
-        console.log('Info', globalConfig.eventInfo);
-        return;
-    }
-    const parsedConfig = JSON.parse(savedConfig);
-    console.log(parsedConfig);
-    Object.assign(globalConfig.eventInfo, parsedConfig);
-    console.log(globalConfig.eventInfo);
+  console.log('Restoring config');
+  const savedConfig = localStorage.getItem(CONFIG_KEY);
+  if (!savedConfig) {
+    console.log('Initializing Default Config');
+    globalConfig.eventInfo = new Config().eventInfo;
+    console.log('Info', globalConfig.eventInfo);
+    return;
+  }
+  const parsedConfig = JSON.parse(savedConfig);
+  console.log(parsedConfig);
+  Object.assign(globalConfig.eventInfo, parsedConfig);
+  console.log(globalConfig.eventInfo);
 }
 export function saveConfig() {
-    console.log("saving");
-    localStorage.setItem(CONFIG_KEY, JSON.stringify(globalConfig.eventInfo));
-    console.log(globalConfig.eventInfo)
+  console.log('saving');
+  localStorage.setItem(CONFIG_KEY, JSON.stringify(globalConfig.eventInfo));
+  console.log(globalConfig.eventInfo);
 }
 export function actuallyResetConfig() {
-    localStorage.removeItem(CONFIG_KEY);
-    restoreConfig();
+  localStorage.removeItem(CONFIG_KEY);
+  restoreConfig();
+}
+
+function preProcessQuestion(question: string): string {
+  if (!question || question === '.') {
+    return '';
+  }
+  return question.replaceAll(/\\n/g, '\n').trim();
 }

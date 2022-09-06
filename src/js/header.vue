@@ -10,8 +10,7 @@
             class="title event-title"
             v-html="eventTitle"
             @keydown.enter.prevent="blurElement"
-            @keydown.esc.prevent="blurElement"
-          >
+            @keydown.esc.prevent="blurElement">
             <!-- Unknown Event -->
           </h1>
           <h2 class="subtitle">
@@ -30,8 +29,7 @@
             <a
               class="btn shuffle-button"
               :disabled="isShuffling"
-              @click.prevent="shuffleCandidates()"
-            >
+              @click.prevent="shuffleCandidates()">
               Shuffle
               <i class="material-icons left">shuffle</i>
             </a>
@@ -39,8 +37,7 @@
             <a
               class="btn gallery-mode-switch"
               :disabled="isShuffling"
-              @click="updateGalleryMode()"
-            >
+              @click="updateGalleryMode()">
               <i class="material-icons right">{{ currentModeIcon }} </i>
               {{ currentModeName }}
             </a>
@@ -52,8 +49,7 @@
               class="btn"
               v-for="time in [30, 60, 90, 120]"
               :key="time"
-              @click.prevent="setTime(time)"
-            >
+              @click.prevent="setTime(time)">
               {{ time }}
               <i class="material-icons left">timer</i>
             </a>
@@ -63,8 +59,7 @@
               href="#"
               class="btn prev-button"
               @click.prevent="focusChange(-1)"
-              :disabled="!prevEnabled"
-            >
+              :disabled="!prevEnabled">
               Prev
               <i class="material-icons left">navigate_before</i>
             </a>
@@ -73,8 +68,7 @@
               href="#"
               class="btn next-button"
               @click.prevent="focusChange(1)"
-              :disabled="!nextEnabled"
-            >
+              :disabled="!nextEnabled">
               Next
               <i class="material-icons right">navigate_next</i>
             </a>
@@ -85,10 +79,10 @@
   </header>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, Emit, Watch } from "vue-property-decorator";
-import moment from "moment";
-import { Candidate } from "./candidates";
-import { globalConfig, Config } from "./global_config";
+import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
+import { Candidate } from './candidates';
+import { globalConfig, Config } from './global_config';
+import { blurElement } from './common';
 
 @Component({})
 export default class Header extends Vue {
@@ -108,6 +102,7 @@ export default class Header extends Vue {
   numberCandidates?: number;
 
   config = globalConfig;
+  blurElement = blurElement;
 
   @Emit()
   shuffleCandidates() {}
@@ -117,14 +112,13 @@ export default class Header extends Vue {
     return num;
   }
 
-  @Emit("update:galleryMode")
+  @Emit('update:galleryMode')
   updateGalleryMode() {
     return !this.galleryMode;
   }
 
-  @Watch("config", { deep: true, immediate: true })
+  @Watch('config', { deep: true, immediate: true })
   configChanged(newConfig: Config) {
-    console.log("Config changed");
     this.$forceUpdate();
   }
 
@@ -138,11 +132,11 @@ export default class Header extends Vue {
     return globalConfig.eventInfo.orgTitle;
   }
   get currentModeName() {
-    return this.galleryMode ? "All Candidates" : "Question Time!";
+    return this.galleryMode ? 'All Candidates' : 'Question Time!';
   }
 
   get currentModeIcon() {
-    return this.galleryMode ? "groups" : "person";
+    return this.galleryMode ? 'groups' : 'person';
   }
 
   setTime(time: number) {
@@ -150,7 +144,7 @@ export default class Header extends Vue {
       ?.map((candidate) => candidate.timer)
       .forEach((timer) => {
         timer.toggleTimer(false);
-        timer.setTime(time, "s");
+        timer.setTime(time, 's');
       });
   }
 
@@ -163,13 +157,6 @@ export default class Header extends Vue {
       this.numberCandidates !== undefined &&
       this.focusedCandidate < this.numberCandidates - 1
     );
-  }
-
-  blurElement(event: Event) {
-    if (!(event.target instanceof HTMLElement)) {
-      return;
-    }
-    event.target.blur();
   }
 }
 </script>
@@ -229,8 +216,8 @@ header {
     grid-template: 1fr / 1fr 2fr;
     grid-auto-flow: row;
     grid-template-areas:
-      "time-setters-global global-controls"
-      "time-setters-global candidate-navigation";
+      'time-setters-global global-controls'
+      'time-setters-global candidate-navigation';
     padding-bottom: 0.5rem;
     transition: all 1s linear;
     user-select: none;
@@ -272,7 +259,7 @@ header {
   }
 }
 
-[contenteditable="true"] {
+[contenteditable='true'] {
   position: relative;
   &:active,
   &:focus {

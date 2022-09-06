@@ -1,8 +1,7 @@
 <template>
   <div
     class="app-container"
-    :class="{ 'gallery-mode': galleryMode, 'presentation-mode': !galleryMode }"
-  >
+    :class="{ 'gallery-mode': galleryMode, 'presentation-mode': !galleryMode }">
     <app-header
       class="forum-app-header"
       :focused-candidate="focusManager.focusedCandidate"
@@ -11,31 +10,29 @@
       :is-shuffling="isShuffling"
       :candidates-list="allCandidates"
       @shuffle-candidates="shuffleCandidates()"
-      @focus-change="focusManager.changeFocus($event, numberOfCandidates - 1)"
-    ></app-header>
+      @focus-change="
+        focusManager.changeFocus($event, numberOfCandidates - 1)
+      "></app-header>
     <collapse-transition>
       <div
         v-show="currentQuestion"
         class="current-question forum-app-question flow-text"
         @dblclick="setQuestionEditable"
         @keydown.esc.prevent="blurElement"
-        @keydown.enter.prevent="blurElement"
-      >
+        @keydown.enter.prevent="blurElement">
         {{ currentQuestion }}
       </div>
     </collapse-transition>
     <collapse-transition>
       <div
         class="time-out-container-container"
-        :class="{ 'has-minimized': hasMinimizedCandidates }"
-      >
+        :class="{ 'has-minimized': hasMinimizedCandidates }">
         <div class="time-out-container">
           <a
             class="chip is-primary minimized-candidate"
             v-for="candidate of minimizedCandidates"
             :key="candidate.name"
-            @click.prevent="minimizeCandidate(candidate)"
-          >
+            @click.prevent="minimizeCandidate(candidate)">
             {{ candidate.name }}
           </a>
         </div>
@@ -47,13 +44,13 @@
           <div
             v-for="(candidate, index) of visibleCandidates"
             :key="candidate.name"
-            class="squish-item"
-          >
+            class="squish-item">
             <candidate-card
               :candidate="candidate"
               :class="getCardClasses(index)"
-              @minimize-candidate="minimizeCandidate(candidate)"
-            ></candidate-card>
+              @minimize-candidate="
+                minimizeCandidate(candidate)
+              "></candidate-card>
           </div>
         </transition-group>
       </div>
@@ -63,79 +60,111 @@
         <span>Set New...</span>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="showCandidateDialog()"
-          >Candidates</a
-        >
+          @click.prevent="showCandidateDialog()">
+          Candidates
+        </a>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="showLogoDialog()"
-          >Logo</a
-        >
+          @click.prevent="showLogoDialog()">
+          Logo
+        </a>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="showTitleDialog()"
-          >Title</a
-        >
+          @click.prevent="setTitleEditable()">
+          Title
+        </a>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="showOrgDialog()"
-          >Org</a
-        >
+          @click.prevent="setOrgEditable()">
+          Org
+        </a>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="dumpQuestions"
-          >?</a
-        >
+          @click.prevent="dumpQuestions">
+          ?
+        </a>
         <a
           class="waves-effect waves-teal btn-flat red-text"
-          @click.prevent="resetConfig()"
-          >Reset All</a
-        >
+          @click.prevent="resetConfig()">
+          Reset All
+        </a>
       </div>
       <span class="attribution-label">
         Built by Alex Brown for the
         <a href="https://mvmha.com">MVMHA</a> (updated 2022)
       </span>
     </footer>
+    <dialog
+      id="reset-config-dialog"
+      ref="reset-config-dialog"
+      @close="resetDialogClosed"
+      @cancel="resetDialogCanceled">
+      <div class="card reset-wrapper">
+        <h1 class="header">Resetting Config!</h1>
+        <p class="card-content">
+          Are you sure you want to <b>Reset</b> all fields? This action cannot
+          be undone.
+        </p>
+        <form method="dialog" class="card-action">
+          <button
+            class="btn red darken-4 z-depth-2 reset-please-button"
+            type="submit"
+            value="reset_please">
+            RESET IT ALL
+          </button>
+          <button class="btn" type="submit" value="reset_cancel">Cancel</button>
+        </form>
+      </div>
+    </dialog>
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from "vue-property-decorator";
-import { CollapseTransition } from "@ivanv/vue-collapse-transition";
-import { Candidate, shuffle } from "./candidates";
-import CandidateCard from "./candidate-card.vue";
-import AppHeader from "./header.vue";
-import FocusManager from "./focus_manager";
+import { Component, Vue, Prop, Watch, Ref } from 'vue-property-decorator';
+import { CollapseTransition } from '@ivanv/vue-collapse-transition';
+import { Candidate } from './candidates';
+import { shuffle, blurElement } from './common';
+import CandidateCard from './candidate-card.vue';
+import AppHeader from './header.vue';
+import FocusManager from './focus_manager';
 import {
   globalConfig,
   saveConfig,
   restoreConfig,
   actuallyResetConfig,
-} from "./global_config";
-
-function preProcessQuestion(question: string): string {
-  if (question === ".") {
-    return "";
-  }
-  return question.replaceAll(/\\n/g, "\n").trim();
-}
+  Config,
+} from './global_config';
+import M from 'materialize-css';
 
 @Component({
   components: { AppHeader, CandidateCard, CollapseTransition },
 })
 export default class App extends Vue {
   allCandidates: Candidate[] = [];
-  currentQuestion: string = "";
   galleryMode = true;
   isShuffling = false;
 
   focusManager = new FocusManager();
+  blurElement = blurElement;
+  config = globalConfig;
+
+  @Watch('config', { deep: true, immediate: true })
+  configChanged(newConfig: Config) {
+    this.$forceUpdate();
+  }
+
+  @Ref('reset-config-dialog')
+  resetDialog?: HTMLDialogElement;
+
+  mounted() {
+    restoreConfig();
+    this.resetCandidates();
+  }
 
   getCardClasses(index: number) {
     return {
-      "focused-item": this.focusManager.isFocused(index),
-      "is-previous": this.focusManager.isPrev(index),
-      "on-deck": this.focusManager.isNext(index),
+      'focused-item': this.focusManager.isFocused(index),
+      'is-previous': this.focusManager.isPrev(index),
+      'on-deck': this.focusManager.isNext(index),
     };
   }
 
@@ -169,28 +198,23 @@ export default class App extends Vue {
   get hasMinimizedCandidates() {
     return this.minimizedCandidates.length > 0;
   }
+  get currentQuestion() {
+    return this.config.eventInfo.questions[0];
+  }
 
   minimizeCandidate(candidate: Candidate) {
     candidate.toggleMinimized();
     this.focusManager.checkFocus(this.numberOfCandidates - 1);
   }
 
-  blurElement(event: Event) {
-    if (!(event.target instanceof HTMLElement)) {
-      return;
-    }
-    event.target.blur();
-  }
-
-  setQuestionEditable(event: MouseEvent) {
-    if (!(event.target instanceof HTMLElement)) {
-      return;
-    }
-    setEditableElement(event.target, (newValue) => {
-      globalConfig.addQuestion(preProcessQuestion(newValue));
-      saveConfig();
-      this.currentQuestion = globalConfig.eventInfo.questions[0];
-    });
+  dumpQuestions() {
+    const questionsString = JSON.stringify(
+      globalConfig.eventInfo.questions,
+      undefined,
+      2
+    );
+    console.log(questionsString);
+    M.toast({ html: questionsString });
   }
 
   questionEditDone(event: Event) {
@@ -198,24 +222,18 @@ export default class App extends Vue {
       return;
     }
     const newQuestion = event.target.innerText;
-    globalConfig.addQuestion(preProcessQuestion(newQuestion));
-    saveConfig();
-    this.currentQuestion = globalConfig.eventInfo.questions[0];
-  }
-
-  dumpQuestions() {
-    console.log(JSON.stringify(globalConfig.eventInfo.questions, undefined, 2));
+    globalConfig.addQuestion(newQuestion);
   }
 
   showCandidateDialog() {
     this.$buefy.dialog.prompt({
       message: `List the candidates, comma separated`,
       inputAttrs: {
-        placeholder: "e.g. Joe, Jan, Jill, Jazz",
+        placeholder: 'e.g. Joe, Jan, Jill, Jazz',
       },
       trapFocus: true,
       onConfirm: (value) => {
-        this.setCandidates(value.split(","));
+        this.setCandidates(value.split(','));
         saveConfig();
       },
     });
@@ -230,40 +248,58 @@ export default class App extends Vue {
       },
     });
   }
-  showTitleDialog() {
-    const eventTitleElement = document.getElementsByClassName("event-title")[0];
-    if (!(eventTitleElement instanceof HTMLElement)) {
+
+  setQuestionEditable(event: MouseEvent) {
+    if (!(event.target instanceof HTMLElement)) {
       return;
     }
-    setEditableElement(eventTitleElement, (newEvent) => {
-      globalConfig.eventInfo.eventTitle = newEvent;
+    setEditableElement(event.target, (newValue) => {
+      globalConfig.addQuestion(newValue);
     });
   }
 
-  showOrgDialog() {
-    const orgTitleElement = document.getElementsByClassName("org-title")[0];
-    if (!(orgTitleElement instanceof HTMLElement)) {
+  setTitleEditable() {
+    const element = document.getElementsByClassName('event-title')[0];
+    if (!(element instanceof HTMLElement)) {
       return;
     }
-    setEditableElement(orgTitleElement, (newOrg) => {
-      globalConfig.eventInfo.orgTitle = newOrg;
+    setEditableElement(element, (newValue) => {
+      globalConfig.updateEvent(newValue);
     });
   }
 
+  setOrgEditable() {
+    const element = document.getElementsByClassName('org-title')[0];
+    if (!(element instanceof HTMLElement)) {
+      return;
+    }
+    setEditableElement(element, (newValue) => {
+      globalConfig.updateOrg(newValue);
+    });
+  }
+  resetDialogClosed(event: Event) {
+    if (!this.resetDialog?.returnValue) {
+      return;
+    }
+    if (this.resetDialog.returnValue !== 'reset_please') {
+      console.log(
+        'Not actually resetting, dialog value:',
+        this.resetDialog.returnValue,
+        '\nProbably need to be more polite about it.'
+      );
+      return;
+    }
+    actuallyResetConfig();
+    this.resetCandidates();
+    M.toast({ html: 'Options Reset!' });
+  }
+  resetDialogCanceled(event: Event) {
+    console.log('Reset Cancel', event, this.resetDialog?.returnValue);
+  }
   resetConfig() {
-    this.$buefy.dialog.confirm({
-      title: "Resetting Config",
-      message:
-        "Are you sure you want to <b>Reset</b> all fields? This action cannot be undone.",
-      confirmText: "Reset Page",
-      type: "is-danger",
-      hasIcon: true,
-      onConfirm: () => {
-        actuallyResetConfig();
-        this.resetCandidates();
-        this.$buefy.toast.open("Options Reset!");
-      },
-    });
+    if (this.resetDialog) {
+      this.resetDialog.showModal();
+    }
   }
 
   setCandidates(candidateNames: string[]) {
@@ -271,23 +307,17 @@ export default class App extends Vue {
     this.allCandidates = candidateNames.map((name) => new Candidate(name));
   }
 
-  mounted() {
-    restoreConfig();
-    this.resetCandidates();
-  }
   private resetCandidates() {
     this.allCandidates = globalConfig.eventInfo.candidatesList.map(
       (name) => new Candidate(name)
     );
-
-    this.currentQuestion = globalConfig.eventInfo.questions[0];
   }
 }
 function setEditableElement(
   el: HTMLElement,
   valueCallback: (value: string) => void
 ) {
-  el.setAttribute("contenteditable", "true");
+  el.setAttribute('contenteditable', 'true');
   function onBlur(event: FocusEvent) {
     if (!(event.target instanceof HTMLElement)) {
       return;
@@ -295,11 +325,10 @@ function setEditableElement(
     const newValue = event.target.innerText;
 
     valueCallback(newValue);
-    event.target.removeAttribute("contenteditable");
-    event.target.removeEventListener("blur", onBlur);
-    saveConfig();
+    event.target.removeAttribute('contenteditable');
+    event.target.removeEventListener('blur', onBlur);
   }
-  el.addEventListener("blur", onBlur);
+  el.addEventListener('blur', onBlur);
 
   el.focus();
   selectElementContents(el);
@@ -326,11 +355,11 @@ function selectElementContents(el: HTMLElement) {
   transition: all 0.5s linear;
 
   grid-template-areas:
-    "forum-app-header"
-    "forum-app-question"
-    "forum-app-time-out"
-    "forum-app-candidates"
-    "forum-app-footer";
+    'forum-app-header'
+    'forum-app-question'
+    'forum-app-time-out'
+    'forum-app-candidates'
+    'forum-app-footer';
 
   .forum-app-header {
     grid-area: forum-app-header;
@@ -456,7 +485,7 @@ footer {
   }
 }
 
-[contenteditable="true"] {
+[contenteditable='true'] {
   position: relative;
   &:active,
   &:focus {
@@ -464,6 +493,29 @@ footer {
     outline: none;
     // background-color: green;
     // text-shadow: 1px 1px 4px #aa0000aa;
+  }
+}
+
+dialog#reset-config-dialog {
+  padding: 0;
+  > .reset-wrapper {
+    margin: 0;
+    padding: 1.5rem;
+
+    > .header {
+      margin-top: 0;
+    }
+    .card-action {
+      display: flex;
+      justify-content: space-between;
+    }
+    .reset-please-button {
+      font-weight: 700;
+    }
+  }
+
+  &::backdrop {
+    background-color: rgba(5, 0, 0, 0.8);
   }
 }
 
@@ -492,14 +544,10 @@ footer {
 }
 .slide-enter-to,
 .slide-leave-from {
-  // transform: scaleY(1);
   opacity: 1;
-  // padding: 1em 0;
 }
 .slide-enter-from,
 .slide-leave-to {
-  // transform: scaleY(0);
   opacity: 0;
-  // padding: 0em 0;
 }
 </style>
