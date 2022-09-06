@@ -54,12 +54,18 @@ export class Config {
     this.eventInfo.questions = uniqueQuestions;
     saveConfig();
   }
-  updateOrg(newOrg: string) {
-    this.eventInfo.orgTitle = newOrg;
-    saveConfig();
+  updateOrg(orgTitle: string) {
+    this.updateInfo({ orgTitle });
   }
-  updateEvent(newEvent: string) {
-    this.eventInfo.eventTitle = newEvent;
+  updateEvent(eventTitle: string) {
+    this.updateInfo({ eventTitle });
+  }
+  updateLogo(logoUrl: string) {
+    this.updateInfo({ logoUrl });
+  }
+
+  updateInfo(newInfo: Partial<EventInfo>) {
+    this.eventInfo = { ...this.eventInfo, ...newInfo };
     saveConfig();
   }
 }
