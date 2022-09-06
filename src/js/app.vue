@@ -97,9 +97,8 @@
     <dialog
       id="reset-config-dialog"
       ref="reset-config-dialog"
-      @close="resetDialogClosed"
-      @cancel="resetDialogCanceled">
-      <div class="card reset-wrapper">
+      @close="resetDialogClosed">
+      <div class="card content-wrapper">
         <h1 class="header">Resetting Config!</h1>
         <p class="card-content">
           Are you sure you want to <b>Reset</b> all fields? This action cannot
@@ -107,12 +106,69 @@
         </p>
         <form method="dialog" class="card-action">
           <button
-            class="btn red darken-4 z-depth-2 reset-please-button"
+            class="btn red darken-4 z-depth-2 please-button"
             type="submit"
             value="reset_please">
             RESET IT ALL
           </button>
           <button class="btn" type="submit" value="reset_cancel">Cancel</button>
+        </form>
+      </div>
+    </dialog>
+    <dialog
+      id="logo-config-dialog"
+      ref="logo-config-dialog"
+      @close="logoDialogClosed">
+      <div class="card content-wrapper">
+        <h1 class="header">Set new Logo</h1>
+        <div class="card-content">
+          <div class="logo-instructions">
+            <p>Input url for logo</p>
+            <img v-if="tempImg" :src="tempImg" alt="preview for the logo" />
+          </div>
+          <input type="text" id="new-logo-input" v-model="tempImg" />
+        </div>
+        <form method="dialog" class="card-action">
+          <button
+            class="btn blue darken-4 z-depth-2 please-button"
+            type="submit"
+            :value="tempImg">
+            Set New Logo
+          </button>
+          <button class="btn" type="submit" value="cancel">Cancel</button>
+        </form>
+      </div>
+    </dialog>
+    <dialog
+      id="candidates-config-dialog"
+      ref="candidates-config-dialog"
+      @close="candidatesDialogClosed">
+      <div class="card content-wrapper">
+        <h1 class="header">Set new Candidates</h1>
+        <div class="card-content">
+          <p>List the candidates, comma separated</p>
+          <input
+            type="text"
+            id="new-candidates-input"
+            placeholder="e.g. Joe, Jan, Jill, Jazz"
+            v-model="tempCandidates" />
+          <ul>
+            <li
+              v-for="candidate in toCandidates(tempCandidates)"
+              :key="candidate"
+              class="candidate-name">
+              {{ candidate }}
+            </li>
+          </ul>
+        </div>
+        <form method="dialog" class="card-action">
+          <button
+            class="btn blue darken-4 z-depth-2 please-button"
+            type="submit"
+            :value="tempCandidates">
+            Set New Candidates
+          </button>
+          <button class="btn" type="submit" value="cancel">Cancel</button>
         </form>
       </div>
     </dialog>
@@ -142,6 +198,8 @@ export default class App extends Vue {
   allCandidates: Candidate[] = [];
   galleryMode = true;
   isShuffling = false;
+  tempImg = '';
+  tempCandidates = '';
 
   focusManager = new FocusManager();
   blurElement = blurElement;
@@ -155,6 +213,12 @@ export default class App extends Vue {
   @Ref('reset-config-dialog')
   resetDialog?: HTMLDialogElement;
 
+  @Ref('logo-config-dialog')
+  logoDialog?: HTMLDialogElement;
+
+  @Ref('candidates-config-dialog')
+  candidatesDialog?: HTMLDialogElement;
+
   mounted() {
     restoreConfig();
     this.resetCandidates();
@@ -166,6 +230,13 @@ export default class App extends Vue {
       'is-previous': this.focusManager.isPrev(index),
       'on-deck': this.focusManager.isNext(index),
     };
+  }
+
+  toCandidates(commaSeparated: string) {
+    return commaSeparated
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
   }
 
   async shuffleCandidates() {
@@ -226,27 +297,18 @@ export default class App extends Vue {
   }
 
   showCandidateDialog() {
-    this.$buefy.dialog.prompt({
-      message: `List the candidates, comma separated`,
-      inputAttrs: {
-        placeholder: 'e.g. Joe, Jan, Jill, Jazz',
-      },
-      trapFocus: true,
-      onConfirm: (value) => {
-        this.setCandidates(value.split(','));
-        saveConfig();
-      },
-    });
+    this.tempCandidates = this.allCandidates
+      .map((candidate) => candidate.name)
+      .join(', ');
+    if (this.candidatesDialog) {
+      this.candidatesDialog.showModal();
+    }
   }
   showLogoDialog() {
-    this.$buefy.dialog.prompt({
-      message: `Enter image URL for logo`,
-      trapFocus: true,
-      onConfirm: (value) => {
-        globalConfig.eventInfo.logoUrl = value;
-        saveConfig();
-      },
-    });
+    this.tempImg = this.config.eventInfo.logoUrl;
+    if (this.logoDialog) {
+      this.logoDialog.showModal();
+    }
   }
 
   setQuestionEditable(event: MouseEvent) {
@@ -259,7 +321,7 @@ export default class App extends Vue {
   }
 
   setTitleEditable() {
-    const element = document.getElementsByClassName('event-title')[0];
+    const element = document.getElementById('event-title');
     if (!(element instanceof HTMLElement)) {
       return;
     }
@@ -269,7 +331,7 @@ export default class App extends Vue {
   }
 
   setOrgEditable() {
-    const element = document.getElementsByClassName('org-title')[0];
+    const element = document.getElementById('org-title');
     if (!(element instanceof HTMLElement)) {
       return;
     }
@@ -277,6 +339,7 @@ export default class App extends Vue {
       globalConfig.updateOrg(newValue);
     });
   }
+
   resetDialogClosed(event: Event) {
     if (!this.resetDialog?.returnValue) {
       return;
@@ -293,13 +356,28 @@ export default class App extends Vue {
     this.resetCandidates();
     M.toast({ html: 'Options Reset!' });
   }
-  resetDialogCanceled(event: Event) {
-    console.log('Reset Cancel', event, this.resetDialog?.returnValue);
-  }
   resetConfig() {
     if (this.resetDialog) {
       this.resetDialog.showModal();
     }
+  }
+  logoDialogClosed(event: Event) {
+    if (
+      !this.logoDialog?.returnValue ||
+      this.logoDialog.returnValue === 'cancel'
+    ) {
+      return;
+    }
+    this.config.updateLogo(this.logoDialog.returnValue);
+  }
+  candidatesDialogClosed(event: Event) {
+    if (
+      !this.candidatesDialog?.returnValue ||
+      this.candidatesDialog.returnValue === 'cancel'
+    ) {
+      return;
+    }
+    this.setCandidates(this.toCandidates(this.candidatesDialog.returnValue));
   }
 
   setCandidates(candidateNames: string[]) {
@@ -496,9 +574,11 @@ footer {
   }
 }
 
-dialog#reset-config-dialog {
+dialog#reset-config-dialog,
+dialog#logo-config-dialog,
+dialog#candidates-config-dialog {
   padding: 0;
-  > .reset-wrapper {
+  > .content-wrapper {
     margin: 0;
     padding: 1.5rem;
 
@@ -509,7 +589,7 @@ dialog#reset-config-dialog {
       display: flex;
       justify-content: space-between;
     }
-    .reset-please-button {
+    .please-button {
       font-weight: 700;
     }
   }

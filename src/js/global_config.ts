@@ -2,7 +2,7 @@ import { Candidate } from './candidates';
 import moment from 'moment';
 import images from '../assets/*.png';
 
-export interface EventInfo {
+export declare interface EventInfo {
   logoUrl: string;
   orgTitle: string;
   eventTitle: string;

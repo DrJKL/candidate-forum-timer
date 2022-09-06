@@ -32,7 +32,6 @@
     "acorn": "^8.8.0",
     "app.vue": "^0.1.10",
     "babel-types": "^6.26.0",
-    "buefy": "^0.9.21",
     "cross-env": "^7.0.2",
     "css-loader": "^6.7.1",
     "materialize-css": "^1.0.0",

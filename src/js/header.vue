@@ -7,6 +7,7 @@
         </div>
         <div class="header-text flow-text">
           <h1
+            id="event-title"
             class="title event-title"
             v-html="eventTitle"
             @keydown.enter.prevent="blurElement"
@@ -16,6 +17,7 @@
           <h2 class="subtitle">
             Hosted by
             <span
+              id="org-title"
               class="org-title"
               @keydown.enter.prevent="blurElement"
               @keydown.esc.prevent="blurElement"
@@ -211,6 +213,9 @@ header {
   }
   .buttons {
     align-items: center;
+    border-radius: 6px;
+    box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.15),
+      0 0px 0 1px rgba(10, 10, 10, 0.02);
     display: grid;
     gap: 4px;
     grid-template: 1fr / 1fr 2fr;
@@ -218,7 +223,7 @@ header {
     grid-template-areas:
       'time-setters-global global-controls'
       'time-setters-global candidate-navigation';
-    padding-bottom: 0.5rem;
+    padding: 1.25rem 1.25rem 0.5rem;
     transition: all 1s linear;
     user-select: none;
 

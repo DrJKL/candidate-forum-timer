@@ -6,8 +6,7 @@
         <a
           href="#"
           class="btn-floating btn-flat"
-          @click.prevent="minimizeCandidate()"
-        >
+          @click.prevent="minimizeCandidate()">
           <i class="material-icons">minimize</i>
         </a>
       </div>
@@ -15,19 +14,17 @@
         <div class="time-section">
           <div class="time-left">
             {{ candidate.timer.getTimeLeft() }}
-            {{ candidate.timer.isTimeUp ? "over" : "remaining" }}
+            {{ candidate.timer.isTimeUp ? 'over' : 'remaining' }}
           </div>
           <div
             class="progress"
-            :class="{ 'time-up': candidate.timer.isTimeUp }"
-          >
+            :class="{ 'time-up': candidate.timer.isTimeUp }">
             <div
               :class="{
                 determinate: !candidate.timer.isTimeUp,
                 indeterminate: candidate.timer.isTimeUp,
               }"
-              :style="{ width: `${progressValue}%` }"
-            ></div>
+              :style="{ width: `${progressValue}%` }"></div>
           </div>
         </div>
       </collapse-transition>
@@ -38,14 +35,13 @@
           href="#"
           class="btn startstop"
           @click.prevent="candidate.timer.toggleTimer()"
-          >{{ candidate.timer.isRunning() ? "Stop" : "Start" }}</a
+          >{{ candidate.timer.isRunning() ? 'Stop' : 'Start' }}</a
         >
 
         <a
           href="#"
           class="btn resetTime"
-          @click.prevent="candidate.timer.resetTime()"
-        >
+          @click.prevent="candidate.timer.resetTime()">
           <i class="material-icons">restore</i>
         </a>
 
@@ -86,10 +82,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from "vue-property-decorator";
-import { Candidate } from "./candidates";
+import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
+import { Candidate } from './candidates';
 
-import { CollapseTransition } from "@ivanv/vue-collapse-transition";
+import { CollapseTransition } from '@ivanv/vue-collapse-transition';
 
 @Component({ components: { CollapseTransition } })
 export default class CandidateCard extends Vue {
@@ -112,9 +108,9 @@ export default class CandidateCard extends Vue {
 
   get timeClass() {
     return {
-      "plenty-time": this.progressPercent >= 50,
-      "running-out": this.progressPercent < 50 && this.progressPercent >= 25,
-      "almost-done": this.progressPercent < 25,
+      'plenty-time': this.progressPercent >= 50,
+      'running-out': this.progressPercent < 50 && this.progressPercent >= 25,
+      'almost-done': this.progressPercent < 25,
     };
   }
 }
@@ -129,10 +125,6 @@ export default class CandidateCard extends Vue {
   justify-content: space-between;
   transition: all 0.25s linear;
   width: 100%;
-  .card-content {
-    display: flex;
-    flex-direction: column;
-  }
   .card-title {
     display: flex;
     font-size: 26pt;
@@ -145,6 +137,11 @@ export default class CandidateCard extends Vue {
       flex: 0 1 auto;
     }
   }
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0.5rem;
+  }
   .time-section {
     .time-left {
       user-select: none;
@@ -155,6 +152,10 @@ export default class CandidateCard extends Vue {
       .indeterminate {
         background-color: #ff3344;
       }
+    }
+    .progress {
+      height: 2rem;
+      margin-bottom: 0.5rem;
     }
   }
   &.plenty-time {
