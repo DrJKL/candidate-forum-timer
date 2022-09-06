@@ -20,7 +20,7 @@ export default class Timer {
             return;
         }
         if (force === true) {
-            this.countingDown = setInterval(() => {
+            this.countingDown = window.setInterval(() => {
                 this.timeLeft.subtract(globalConfig.timeGranularity, 'ms');
             }, globalConfig.timeGranularity);
         }
