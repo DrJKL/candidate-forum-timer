@@ -5,7 +5,7 @@
         <div class="logo-img">
           <img :src="logoUrl" alt="Organization logo" />
         </div>
-        <div class="header-text">
+        <div class="header-text flow-text">
           <h1
             class="title event-title"
             v-html="eventTitle"

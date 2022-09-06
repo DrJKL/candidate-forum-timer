@@ -16,7 +16,7 @@
     <collapse-transition>
       <div
         v-show="currentQuestion"
-        class="current-question forum-app-question"
+        class="current-question forum-app-question flow-text"
         @dblclick="setQuestionEditable"
         @keydown.esc.prevent="blurElement"
         @keydown.enter.prevent="blurElement"
