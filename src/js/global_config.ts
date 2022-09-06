@@ -2,11 +2,19 @@ import { Candidate } from './candidates';
 import moment from "moment";
 import images from "../assets/*.png";
 
+export interface EventInfo {
+    logoUrl: string;
+    orgTitle: string;
+    eventTitle: string;
+    candidatesList: readonly string[];
+    questions: string[];
+}
+
 export class Config {
     timeLimitTotal = moment.duration(90, 's');
     timeGranularity = 100;
     timeDelta = moment.duration(1, 's');
-    eventInfo = {
+    eventInfo: EventInfo = {
         logoUrl: //
              images['just_homes_logo'],
             // images['lwv-logo'],
@@ -14,7 +22,7 @@ export class Config {
             "Mountain View Mobile Home Alliance",
             // "the League of Women Voters",
         eventTitle: //
-            `2022
+            `<span>2022</span>
             <span>Mountain View</span>
             <span>City Council</span>
             <span>Candidate Forum</span>`,
