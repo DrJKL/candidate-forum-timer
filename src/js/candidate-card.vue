@@ -154,6 +154,7 @@ export default class CandidateCard extends Vue {
       }
     }
     .progress {
+      border-radius: 5px;
       height: 2rem;
       margin-bottom: 0.5rem;
     }

@@ -60,32 +60,39 @@
         <span>Set New...</span>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="showCandidateDialog()">
+          @click.prevent="showCandidateDialog">
           Candidates
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="showLogoDialog()">
+          @click.prevent="showLogoDialog">
           Logo
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="setTitleEditable()">
+          @click.prevent="setTitleEditable">
           Title
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="setOrgEditable()">
+          @click.prevent="setOrgEditable">
           Org
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
-          @click.prevent="dumpQuestions">
+          @click.prevent="dumpQuestions"
+          title="See Current Questions">
           ?
         </a>
         <a
+          class="waves-effect waves-teal btn-flat"
+          @click.prevent="showQuestionsDialog"
+          title="Edit Questions">
+          <i class="material-icons left">quiz</i>
+        </a>
+        <a
           class="waves-effect waves-teal btn-flat red-text"
-          @click.prevent="resetConfig()">
+          @click.prevent="resetConfig">
           Reset All
         </a>
       </div>
@@ -95,7 +102,7 @@
       </span>
     </footer>
     <dialog
-      id="reset-config-dialog"
+      class="config-dialog"
       ref="reset-config-dialog"
       @close="resetDialogClosed">
       <div class="card content-wrapper">
@@ -116,19 +123,23 @@
       </div>
     </dialog>
     <dialog
-      id="logo-config-dialog"
+      class="config-dialog"
       ref="logo-config-dialog"
       @close="logoDialogClosed">
       <div class="card content-wrapper">
-        <h1 class="header">Set new Logo</h1>
+        <h1 class="header">Set New Logo</h1>
         <div class="card-content">
           <div class="logo-instructions">
             <p>Input url for logo</p>
             <img v-if="tempImg" :src="tempImg" alt="preview for the logo" />
           </div>
-          <input type="text" id="new-logo-input" v-model="tempImg" />
+          <input
+            type="text"
+            id="new-logo-input"
+            form="logo-form"
+            v-model="tempImg" />
         </div>
-        <form method="dialog" class="card-action">
+        <form id="logo-form" method="dialog" class="card-action">
           <button
             class="btn blue darken-4 z-depth-2 please-button"
             type="submit"
@@ -140,16 +151,17 @@
       </div>
     </dialog>
     <dialog
-      id="candidates-config-dialog"
+      class="config-dialog"
       ref="candidates-config-dialog"
       @close="candidatesDialogClosed">
       <div class="card content-wrapper">
-        <h1 class="header">Set new Candidates</h1>
+        <h1 class="header">Set New Candidates</h1>
         <div class="card-content">
           <p>List the candidates, comma separated</p>
           <input
             type="text"
             id="new-candidates-input"
+            form="candidates-form"
             placeholder="e.g. Joe, Jan, Jill, Jazz"
             v-model="tempCandidates" />
           <ul>
@@ -161,12 +173,46 @@
             </li>
           </ul>
         </div>
-        <form method="dialog" class="card-action">
+        <form id="candidates-form" method="dialog" class="card-action">
           <button
             class="btn blue darken-4 z-depth-2 please-button"
             type="submit"
             :value="tempCandidates">
             Set New Candidates
+          </button>
+          <button class="btn" type="submit" value="cancel">Cancel</button>
+        </form>
+      </div>
+    </dialog>
+    <dialog
+      class="config-dialog"
+      ref="questions-config-dialog"
+      @close="questionsDialogClosed">
+      <div class="card content-wrapper">
+        <h1 class="header">Set new Questions</h1>
+        <div class="card-content">
+          <p>Setup Questions in advance</p>
+          <input
+            type="text"
+            id="new-questions-input"
+            form="questions-form"
+            placeholder="How much wood would a woodchuck chuck...?"
+            v-model="tempQuestion" />
+          <ul>
+            <li
+              v-for="question in tempQuestions"
+              :key="question"
+              class="question-text">
+              {{ question }}
+            </li>
+          </ul>
+        </div>
+        <form id="questions-form" method="dialog" class="card-action">
+          <button
+            class="btn blue darken-4 z-depth-2 please-button"
+            type="submit"
+            value="new_questions_please">
+            Set New Questions List
           </button>
           <button class="btn" type="submit" value="cancel">Cancel</button>
         </form>
@@ -184,7 +230,6 @@ import AppHeader from './header.vue';
 import FocusManager from './focus_manager';
 import {
   globalConfig,
-  saveConfig,
   restoreConfig,
   actuallyResetConfig,
   Config,
@@ -198,8 +243,11 @@ export default class App extends Vue {
   allCandidates: Candidate[] = [];
   galleryMode = true;
   isShuffling = false;
+
   tempImg = '';
   tempCandidates = '';
+  tempQuestions: string[] = [];
+  tempQuestion = '';
 
   focusManager = new FocusManager();
   blurElement = blurElement;
@@ -218,6 +266,9 @@ export default class App extends Vue {
 
   @Ref('candidates-config-dialog')
   candidatesDialog?: HTMLDialogElement;
+
+  @Ref('questions-config-dialog')
+  questionsDialog?: HTMLDialogElement;
 
   mounted() {
     restoreConfig();
@@ -310,6 +361,14 @@ export default class App extends Vue {
       this.logoDialog.showModal();
     }
   }
+  showQuestionsDialog() {
+    // this.tempImg = this.config.eventInfo.logoUrl;
+    this.tempQuestions = this.config.eventInfo.questions;
+    this.tempQuestion = this.tempQuestion[0];
+    if (this.questionsDialog) {
+      this.questionsDialog.showModal();
+    }
+  }
 
   setQuestionEditable(event: MouseEvent) {
     if (!(event.target instanceof HTMLElement)) {
@@ -378,6 +437,15 @@ export default class App extends Vue {
       return;
     }
     this.setCandidates(this.toCandidates(this.candidatesDialog.returnValue));
+  }
+  questionsDialogClosed(event: Event) {
+    if (
+      !this.questionsDialog?.returnValue ||
+      this.questionsDialog.returnValue === 'cancel'
+    ) {
+      return;
+    }
+    // this.setCandidates(this.t(this.questionsDialog.returnValue));
   }
 
   setCandidates(candidateNames: string[]) {
@@ -574,16 +642,21 @@ footer {
   }
 }
 
-dialog#reset-config-dialog,
-dialog#logo-config-dialog,
-dialog#candidates-config-dialog {
+dialog.config-dialog {
+  border: 0;
+  border-radius: 10px;
   padding: 0;
+  box-shadow: 0px 0px 20px 10px rgba(200, 255, 200, 0.5);
   > .content-wrapper {
     margin: 0;
     padding: 1.5rem;
 
     > .header {
+      font-variant: small-caps;
       margin-top: 0;
+    }
+    .card-content {
+      margin: 24px;
     }
     .card-action {
       display: flex;
