@@ -183,11 +183,10 @@ export default class App extends Vue {
   }
 
   setQuestionEditable(event: MouseEvent) {
-    const element = document.getElementsByClassName("current-question")[0];
-    if (!(element instanceof HTMLElement)) {
+    if (!(event.target instanceof HTMLElement)) {
       return;
     }
-    setEditableElement(element, (newValue) => {
+    setEditableElement(event.target, (newValue) => {
       globalConfig.addQuestion(preProcessQuestion(newValue));
       saveConfig();
       this.currentQuestion = globalConfig.eventInfo.questions[0];
