@@ -16739,26 +16739,13 @@ module.exports = {
   "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
   "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/list_management.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Config = void 0;
-exports.actuallyResetConfig = actuallyResetConfig;
-exports.addUniqueQuestion = addUniqueQuestion;
-exports.globalConfig = void 0;
-exports.restoreConfig = restoreConfig;
-exports.saveConfig = saveConfig;
-
-var _candidates = require("./candidates");
-
-var _moment = _interopRequireDefault(require("moment"));
-
-var _ = _interopRequireDefault(require("../assets/*.png"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+exports.addUniqueItem = addUniqueItem;
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -16771,6 +16758,45 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function addUniqueItem(newItem, existingItems) {
+  var processedQuestion = preProcessQuestion(newItem);
+
+  if (!processedQuestion) {
+    return _toConsumableArray(existingItems);
+  }
+
+  return _toConsumableArray(new Set([newItem].concat(_toConsumableArray(existingItems))));
+}
+
+function preProcessQuestion(question) {
+  if (!question || question === '.') {
+    return '';
+  }
+
+  return question.replaceAll(/\\n/g, '\n').trim();
+}
+},{}],"src/js/global_config.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Config = void 0;
+exports.actuallyResetConfig = actuallyResetConfig;
+exports.globalConfig = void 0;
+exports.restoreConfig = restoreConfig;
+exports.saveConfig = saveConfig;
+
+var _candidates = require("./candidates");
+
+var _moment = _interopRequireDefault(require("moment"));
+
+var _ = _interopRequireDefault(require("../assets/*.png"));
+
+var _list_management = require("./list_management");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -16795,7 +16821,7 @@ var Config = /*#__PURE__*/function () {
       //
       eventTitle: "<span>2022</span>\n            <span>Mountain View</span>\n            <span>City Council</span>\n            <span>Candidate Forum</span>",
       candidatesList: ['Lucas Ramirez', 'Alison Hicks', 'Ellen Kamei', 'Li Zhang', 'Justin Cohen'],
-      questions: ['What is your favorite color?']
+      questions: ['What is your favorite color?', 'What is your favorite animal?', 'What steps can the City do in the next 4 years to alleviate the harms of our Housing Crisis?']
     };
   }
 
@@ -16814,7 +16840,7 @@ var Config = /*#__PURE__*/function () {
   }, {
     key: "addQuestion",
     value: function addQuestion(newQuestion) {
-      var uniqueQuestions = addUniqueQuestion(newQuestion, this.eventInfo.questions);
+      var uniqueQuestions = (0, _list_management.addUniqueItem)(newQuestion, this.eventInfo.questions);
       this.eventInfo.questions = uniqueQuestions;
       saveConfig();
     }
@@ -16882,25 +16908,7 @@ function actuallyResetConfig() {
   localStorage.removeItem(CONFIG_KEY);
   restoreConfig();
 }
-
-function addUniqueQuestion(newQuestion, questions) {
-  var processedQuestion = preProcessQuestion(newQuestion);
-
-  if (!processedQuestion) {
-    return _toConsumableArray(questions);
-  }
-
-  return _toConsumableArray(new Set([newQuestion].concat(_toConsumableArray(questions))));
-}
-
-function preProcessQuestion(question) {
-  if (!question || question === '.') {
-    return '';
-  }
-
-  return question.replaceAll(/\\n/g, '\n').trim();
-}
-},{"./candidates":"src/js/candidates.ts","moment":"node_modules/moment/moment.js","../assets/*.png":"src/assets/*.png"}],"src/js/timer.ts":[function(require,module,exports) {
+},{"./candidates":"src/js/candidates.ts","moment":"node_modules/moment/moment.js","../assets/*.png":"src/assets/*.png","./list_management":"src/js/list_management.ts"}],"src/js/timer.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18014,7 +18022,7 @@ exports.default = _default;
             },
           }),
           _vm._v(" "),
-          _c("h2", { staticClass: "subtitle" }, [
+          _c("h2", { staticClass: "subtitle flow-text" }, [
             _vm._v("\n          Hosted by\n          "),
             _c(
               "span",
@@ -18061,7 +18069,7 @@ exports.default = _default;
             _c(
               "a",
               {
-                staticClass: "btn shuffle-button",
+                staticClass: "btn shuffle-button flow-text",
                 attrs: { disabled: _vm.isShuffling },
                 on: {
                   click: function ($event) {
@@ -18083,7 +18091,7 @@ exports.default = _default;
             _c(
               "a",
               {
-                staticClass: "btn gallery-mode-switch",
+                staticClass: "btn gallery-mode-switch flow-text",
                 attrs: { disabled: _vm.isShuffling },
                 on: {
                   click: function ($event) {
@@ -18136,7 +18144,7 @@ exports.default = _default;
             _c(
               "a",
               {
-                staticClass: "btn prev-button",
+                staticClass: "btn prev-button flow-text",
                 attrs: { href: "#", disabled: !_vm.prevEnabled },
                 on: {
                   click: function ($event) {
@@ -18160,7 +18168,7 @@ exports.default = _default;
             _c(
               "a",
               {
-                staticClass: "btn next-button",
+                staticClass: "btn next-button flow-text",
                 attrs: { href: "#", disabled: !_vm.nextEnabled },
                 on: {
                   click: function ($event) {
@@ -30678,6 +30686,8 @@ var _focus_manager = _interopRequireDefault(require("./focus_manager"));
 
 var _global_config = require("./global_config");
 
+var _list_management = require("./list_management");
+
 var _materializeCss = _interopRequireDefault(require("materialize-css"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -30778,6 +30788,7 @@ var App = /*#__PURE__*/function (_Vue) {
 
     _this = _super.apply(this, arguments);
     _this.allCandidates = [];
+    _this.candidateColumns = 3;
     _this.galleryMode = true;
     _this.isShuffling = false;
     _this.questionIdx = 0;
@@ -30795,6 +30806,11 @@ var App = /*#__PURE__*/function (_Vue) {
     key: "configChanged",
     value: function configChanged(newConfig) {
       this.$forceUpdate();
+    }
+  }, {
+    key: "candidatesChanged",
+    value: function candidatesChanged() {
+      this.candidateColumns = this.howManyColumns(this.visibleCandidates.length);
     }
   }, {
     key: "mounted",
@@ -30966,7 +30982,7 @@ var App = /*#__PURE__*/function (_Vue) {
   }, {
     key: "addNewQuestion",
     value: function addNewQuestion(newQuestion) {
-      this.tempQuestions = (0, _global_config.addUniqueQuestion)(newQuestion, this.tempQuestions);
+      this.tempQuestions = (0, _list_management.addUniqueItem)(newQuestion, this.tempQuestions);
       this.tempQuestion = '';
     }
   }, {
@@ -31080,6 +31096,21 @@ var App = /*#__PURE__*/function (_Vue) {
       this.allCandidates = candidateNames.map(function (name) {
         return new _candidates.Candidate(name);
       });
+      this.candidateColumns = this.howManyColumns(this.visibleCandidates.length);
+    }
+  }, {
+    key: "howManyColumns",
+    value: function howManyColumns(howManyCandidates) {
+      switch (true) {
+        case howManyCandidates === 1:
+          return 1;
+
+        case howManyCandidates % 2 === 0 && howManyCandidates < 5:
+          return 2;
+
+        default:
+          return 3;
+      }
     }
   }, {
     key: "resetCandidates",
@@ -31097,6 +31128,11 @@ __decorate([(0, _vuePropertyDecorator.Watch)('config', {
   deep: true,
   immediate: true
 }), __metadata("design:type", Function), __metadata("design:paramtypes", [typeof (_a = typeof _global_config.Config !== "undefined" && _global_config.Config) === "function" ? _a : Object]), __metadata("design:returntype", void 0)], App.prototype, "configChanged", null);
+
+__decorate([(0, _vuePropertyDecorator.Watch)('allCandidates', {
+  deep: true,
+  immediate: true
+}), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], App.prototype, "candidatesChanged", null);
 
 __decorate([(0, _vuePropertyDecorator.Ref)('reset-config-dialog'), __metadata("design:type", typeof (_b = typeof HTMLDialogElement !== "undefined" && HTMLDialogElement) === "function" ? _b : Object)], App.prototype, "resetDialog", void 0);
 
@@ -31279,7 +31315,12 @@ function selectElementContents(el) {
         "main",
         {
           staticClass: "forum-app-candidates",
-          class: { "gallery-mode": _vm.galleryMode },
+          class: {
+            "gallery-mode": _vm.galleryMode,
+          },
+          style: {
+            "--candidate-columns": _vm.candidateColumns,
+          },
         },
         [
           _c(
@@ -31869,7 +31910,7 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/index.js","@ivanv/vue-collapse-transition":"node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js","./candidates":"src/js/candidates.ts","./common":"src/js/common/index.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","./focus_manager":"src/js/focus_manager.ts","./global_config":"src/js/global_config.ts","materialize-css":"node_modules/materialize-css/dist/js/materialize.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/@mdi/font/css/materialdesignicons.css":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/index.js","@ivanv/vue-collapse-transition":"node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js","./candidates":"src/js/candidates.ts","./common":"src/js/common/index.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","./focus_manager":"src/js/focus_manager.ts","./global_config":"src/js/global_config.ts","./list_management":"src/js/list_management.ts","materialize-css":"node_modules/materialize-css/dist/js/materialize.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/@mdi/font/css/materialdesignicons.css":[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -31920,7 +31961,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "10552" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8793" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
