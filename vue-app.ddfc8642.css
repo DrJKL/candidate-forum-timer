@@ -221,6 +221,9 @@ header[data-v-09fc64] {
 .app-container .time-out-container-container.has-minimized[data-v-cd5f52] {
       transform: scaleY(1);
 }
+.app-container .time-out-container-container .minimized-candidate[data-v-cd5f52] {
+      cursor: pointer;
+}
 .app-container .candidates-container[data-v-cd5f52] {
     grid-area: forum-app-candidates;
 }
@@ -324,6 +327,24 @@ dialog.config-dialog > .content-wrapper .card-action[data-v-cd5f52] {
 }
 dialog.config-dialog > .content-wrapper .please-button[data-v-cd5f52] {
       font-weight: 700;
+}
+dialog.config-dialog > .content-wrapper .remove-item-button[data-v-cd5f52],
+    dialog.config-dialog > .content-wrapper .add-item-button[data-v-cd5f52] {
+      cursor: pointer;
+}
+dialog.config-dialog > .content-wrapper .remove-item-button[data-v-cd5f52]:hover,
+      dialog.config-dialog > .content-wrapper .add-item-button[data-v-cd5f52]:hover {
+        text-shadow: 1px 1px 5px red;
+}
+dialog.config-dialog > .content-wrapper .remove-item-button[data-v-cd5f52]:hover {
+      text-shadow: 1px 1px 5px red;
+}
+dialog.config-dialog > .content-wrapper .add-item-button[data-v-cd5f52]:hover {
+      text-shadow: 0 0 5px green;
+}
+dialog.config-dialog > .content-wrapper .items-list .list-item[data-v-cd5f52] {
+      display: flex;
+      gap: 8px;
 }
 dialog.config-dialog[data-v-cd5f52]::backdrop {
     background-color: rgba(5, 0, 0, 0.8);

@@ -16721,25 +16721,25 @@ var global = arguments[3];
 
 })));
 
-},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
-module.exports = "/lwv-logo_color_open (1).437ccd50.png";
 },{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
 module.exports = "/just_homes_logo.5f11e9bb.png";
-},{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
-module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
 },{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
 module.exports = "/lwv-logo.87fe3171.png";
+},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
+module.exports = "/lwv-logo_color_open (1).437ccd50.png";
+},{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
+module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
-  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
   "just_homes_logo": require("./just_homes_logo.png"),
-  "lwv-logo_color_open": require("./lwv-logo_color_open.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
-  "lwv-logo": require("./lwv-logo.png")
+  "lwv-logo": require("./lwv-logo.png"),
+  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
+  "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png"}],"src/js/global_config.ts":[function(require,module,exports) {
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/global_config.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16747,6 +16747,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Config = void 0;
 exports.actuallyResetConfig = actuallyResetConfig;
+exports.addUniqueQuestion = addUniqueQuestion;
 exports.globalConfig = void 0;
 exports.restoreConfig = restoreConfig;
 exports.saveConfig = saveConfig;
@@ -16813,16 +16814,7 @@ var Config = /*#__PURE__*/function () {
   }, {
     key: "addQuestion",
     value: function addQuestion(newQuestion) {
-      var processedQuestion = preProcessQuestion(newQuestion);
-
-      if (!processedQuestion) {
-        return;
-      }
-
-      this.eventInfo.questions.unshift(newQuestion);
-
-      var uniqueQuestions = _toConsumableArray(new Set(this.eventInfo.questions));
-
+      var uniqueQuestions = addUniqueQuestion(newQuestion, this.eventInfo.questions);
       this.eventInfo.questions = uniqueQuestions;
       saveConfig();
     }
@@ -16889,6 +16881,16 @@ function saveConfig() {
 function actuallyResetConfig() {
   localStorage.removeItem(CONFIG_KEY);
   restoreConfig();
+}
+
+function addUniqueQuestion(newQuestion, questions) {
+  var processedQuestion = preProcessQuestion(newQuestion);
+
+  if (!processedQuestion) {
+    return _toConsumableArray(questions);
+  }
+
+  return _toConsumableArray(new Set([newQuestion].concat(_toConsumableArray(questions))));
 }
 
 function preProcessQuestion(question) {
@@ -30680,6 +30682,18 @@ var _materializeCss = _interopRequireDefault(require("materialize-css"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return generator._invoke = function (innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; }(innerFn, self, context), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; this._invoke = function (method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); }; } function maybeInvokeDelegate(delegate, context) { var method = delegate.iterator[context.method]; if (undefined === method) { if (context.delegate = null, "throw" === context.method) { if (delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel; context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method"); } return ContinueSentinel; } var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) { if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; } return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (object) { var keys = []; for (var key in object) { keys.push(key); } return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) { "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); } }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -30766,6 +30780,7 @@ var App = /*#__PURE__*/function (_Vue) {
     _this.allCandidates = [];
     _this.galleryMode = true;
     _this.isShuffling = false;
+    _this.questionIdx = 0;
     _this.tempImg = '';
     _this.tempCandidates = '';
     _this.tempQuestions = [];
@@ -30879,7 +30894,7 @@ var App = /*#__PURE__*/function (_Vue) {
   }, {
     key: "currentQuestion",
     get: function get() {
-      return this.config.eventInfo.questions[0];
+      return this.config.eventInfo.questions[this.questionIdx];
     }
   }, {
     key: "minimizeCandidate",
@@ -30888,9 +30903,19 @@ var App = /*#__PURE__*/function (_Vue) {
       this.focusManager.checkFocus(this.numberOfCandidates - 1);
     }
   }, {
+    key: "incrementQuestion",
+    value: function incrementQuestion() {
+      var dir = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      var numQuestions = this.config.eventInfo.questions.length;
+      this.questionIdx += dir + numQuestions;
+      this.questionIdx = this.questionIdx % numQuestions;
+      console.log(numQuestions, this.questionIdx);
+    }
+  }, {
     key: "dumpQuestions",
     value: function dumpQuestions() {
-      var questionsString = JSON.stringify(_global_config.globalConfig.eventInfo.questions, undefined, 2);
+      var questionsString = _global_config.globalConfig.eventInfo.questions.join('\n');
+
       console.log(questionsString);
 
       _materializeCss.default.toast({
@@ -30931,13 +30956,23 @@ var App = /*#__PURE__*/function (_Vue) {
   }, {
     key: "showQuestionsDialog",
     value: function showQuestionsDialog() {
-      // this.tempImg = this.config.eventInfo.logoUrl;
-      this.tempQuestions = this.config.eventInfo.questions;
-      this.tempQuestion = this.tempQuestion[0];
+      this.tempQuestion = '';
+      this.tempQuestions = _toConsumableArray(this.config.eventInfo.questions);
 
       if (this.questionsDialog) {
         this.questionsDialog.showModal();
       }
+    }
+  }, {
+    key: "addNewQuestion",
+    value: function addNewQuestion(newQuestion) {
+      this.tempQuestions = (0, _global_config.addUniqueQuestion)(newQuestion, this.tempQuestions);
+      this.tempQuestion = '';
+    }
+  }, {
+    key: "removeQuestion",
+    value: function removeQuestion(index, question) {
+      this.tempQuestions.splice(index, 1);
     }
   }, {
     key: "setQuestionEditable",
@@ -31033,8 +31068,10 @@ var App = /*#__PURE__*/function (_Vue) {
 
       if (!((_a = this.questionsDialog) === null || _a === void 0 ? void 0 : _a.returnValue) || this.questionsDialog.returnValue === 'cancel') {
         return;
-      } // this.setCandidates(this.t(this.questionsDialog.returnValue));
+      }
 
+      this.questionIdx = 0;
+      this.config.eventInfo.questions = _toConsumableArray(this.tempQuestions);
     }
   }, {
     key: "setCandidates",
@@ -31353,7 +31390,11 @@ function selectElementContents(el) {
                 },
               },
             },
-            [_vm._v("\n        ?\n      ")]
+            [
+              _c("i", { staticClass: "material-icons" }, [
+                _vm._v("question_mark"),
+              ]),
+            ]
           ),
           _vm._v(" "),
           _c(
@@ -31368,7 +31409,45 @@ function selectElementContents(el) {
                 },
               },
             },
-            [_c("i", { staticClass: "material-icons left" }, [_vm._v("quiz")])]
+            [_c("i", { staticClass: "material-icons" }, [_vm._v("quiz")])]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "waves-effect waves-teal btn-flat",
+              attrs: { title: "Decrement Question" },
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.incrementQuestion(-1)
+                },
+              },
+            },
+            [
+              _c("i", { staticClass: "material-icons" }, [
+                _vm._v("navigate_before"),
+              ]),
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "waves-effect waves-teal btn-flat",
+              attrs: { title: "Increment Question" },
+              on: {
+                click: function ($event) {
+                  $event.preventDefault()
+                  return _vm.incrementQuestion(1)
+                },
+              },
+            },
+            [
+              _c("i", { staticClass: "material-icons" }, [
+                _vm._v("navigate_next"),
+              ]),
+            ]
           ),
           _vm._v(" "),
           _c(
@@ -31519,12 +31598,16 @@ function selectElementContents(el) {
               _vm._v(" "),
               _c(
                 "ul",
+                { staticClass: "items-list" },
                 _vm._l(
                   _vm.toCandidates(_vm.tempCandidates),
                   function (candidate) {
                     return _c(
                       "li",
-                      { key: candidate, staticClass: "candidate-name" },
+                      {
+                        key: candidate,
+                        staticClass: "candidate-name list-item",
+                      },
                       [
                         _vm._v(
                           "\n            " + _vm._s(candidate) + "\n          "
@@ -31576,46 +31659,94 @@ function selectElementContents(el) {
         },
         [
           _c("div", { staticClass: "card content-wrapper" }, [
-            _c("h1", { staticClass: "header" }, [_vm._v("Set new Questions")]),
+            _c("h1", { staticClass: "header" }, [_vm._v("Set New Questions")]),
             _vm._v(" "),
             _c("div", { staticClass: "card-content" }, [
               _c("p", [_vm._v("Setup Questions in advance")]),
               _vm._v(" "),
-              _c("input", {
-                directives: [
+              _c("div", { staticClass: "input-field" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.tempQuestion,
+                      expression: "tempQuestion",
+                    },
+                  ],
+                  attrs: {
+                    type: "text",
+                    id: "new-questions-input",
+                    form: "questions-form",
+                    placeholder: "How much wood would a woodchuck chuck...?",
+                  },
+                  domProps: { value: _vm.tempQuestion },
+                  on: {
+                    keydown: function ($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      $event.preventDefault()
+                      return _vm.addNewQuestion(_vm.tempQuestion)
+                    },
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.tempQuestion = $event.target.value
+                    },
+                  },
+                }),
+                _vm._v(" "),
+                _c(
+                  "i",
                   {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.tempQuestion,
-                    expression: "tempQuestion",
+                    staticClass: "material-icons prefix add-item-button",
+                    on: {
+                      click: function ($event) {
+                        $event.preventDefault()
+                        return _vm.addNewQuestion(_vm.tempQuestion)
+                      },
+                    },
                   },
-                ],
-                attrs: {
-                  type: "text",
-                  id: "new-questions-input",
-                  form: "questions-form",
-                  placeholder: "How much wood would a woodchuck chuck...?",
-                },
-                domProps: { value: _vm.tempQuestion },
-                on: {
-                  input: function ($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.tempQuestion = $event.target.value
-                  },
-                },
-              }),
+                  [_vm._v("add_circle")]
+                ),
+              ]),
               _vm._v(" "),
               _c(
                 "ul",
-                _vm._l(_vm.tempQuestions, function (question) {
+                { staticClass: "items-list" },
+                _vm._l(_vm.tempQuestions, function (question, index) {
                   return _c(
                     "li",
-                    { key: question, staticClass: "question-text" },
+                    {
+                      key: question,
+                      staticClass: "question-text list-item",
+                      attrs: { value: index },
+                    },
                     [
+                      _c(
+                        "i",
+                        {
+                          staticClass: "material-icons remove-item-button",
+                          on: {
+                            click: function ($event) {
+                              $event.preventDefault()
+                              return _vm.removeQuestion(index, question)
+                            },
+                          },
+                        },
+                        [_vm._v("remove_circle_outline")]
+                      ),
                       _vm._v(
-                        "\n            " + _vm._s(question) + "\n          "
+                        "\n            " +
+                          _vm._s(index) +
+                          "\n            " +
+                          _vm._s(question) +
+                          "\n          "
                       ),
                     ]
                   )
@@ -31789,7 +31920,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "6334" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "10552" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
