@@ -45,12 +45,10 @@ export class Config {
   }
 
   addQuestion(newQuestion: string) {
-    const processedQuestion = preProcessQuestion(newQuestion);
-    if (!processedQuestion) {
-      return;
-    }
-    this.eventInfo.questions.unshift(newQuestion);
-    const uniqueQuestions = [...new Set(this.eventInfo.questions)];
+    const uniqueQuestions = addUniqueQuestion(
+      newQuestion,
+      this.eventInfo.questions
+    );
     this.eventInfo.questions = uniqueQuestions;
     saveConfig();
   }
@@ -95,6 +93,17 @@ export function saveConfig() {
 export function actuallyResetConfig() {
   localStorage.removeItem(CONFIG_KEY);
   restoreConfig();
+}
+
+export function addUniqueQuestion(
+  newQuestion: string,
+  questions: readonly string[]
+): string[] {
+  const processedQuestion = preProcessQuestion(newQuestion);
+  if (!processedQuestion) {
+    return [...questions];
+  }
+  return [...new Set([newQuestion, ...questions])];
 }
 
 function preProcessQuestion(question: string): string {

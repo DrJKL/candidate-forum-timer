@@ -82,14 +82,27 @@
           class="waves-effect waves-teal btn-flat"
           @click.prevent="dumpQuestions"
           title="See Current Questions">
-          ?
+          <i class="material-icons">question_mark</i>
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
           @click.prevent="showQuestionsDialog"
           title="Edit Questions">
-          <i class="material-icons left">quiz</i>
+          <i class="material-icons">quiz</i>
         </a>
+        <a
+          class="waves-effect waves-teal btn-flat"
+          @click.prevent="incrementQuestion(-1)"
+          title="Decrement Question">
+          <i class="material-icons">navigate_before</i>
+        </a>
+        <a
+          class="waves-effect waves-teal btn-flat"
+          @click.prevent="incrementQuestion(1)"
+          title="Increment Question">
+          <i class="material-icons">navigate_next</i>
+        </a>
+
         <a
           class="waves-effect waves-teal btn-flat red-text"
           @click.prevent="resetConfig">
@@ -164,11 +177,11 @@
             form="candidates-form"
             placeholder="e.g. Joe, Jan, Jill, Jazz"
             v-model="tempCandidates" />
-          <ul>
+          <ul class="items-list">
             <li
               v-for="candidate in toCandidates(tempCandidates)"
               :key="candidate"
-              class="candidate-name">
+              class="candidate-name list-item">
               {{ candidate }}
             </li>
           </ul>
@@ -189,20 +202,36 @@
       ref="questions-config-dialog"
       @close="questionsDialogClosed">
       <div class="card content-wrapper">
-        <h1 class="header">Set new Questions</h1>
+        <h1 class="header">Set New Questions</h1>
         <div class="card-content">
           <p>Setup Questions in advance</p>
-          <input
-            type="text"
-            id="new-questions-input"
-            form="questions-form"
-            placeholder="How much wood would a woodchuck chuck...?"
-            v-model="tempQuestion" />
-          <ul>
+          <div class="input-field">
+            <input
+              type="text"
+              id="new-questions-input"
+              form="questions-form"
+              placeholder="How much wood would a woodchuck chuck...?"
+              v-model="tempQuestion"
+              @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
+            <i
+              class="material-icons prefix add-item-button"
+              @click.prevent="addNewQuestion(tempQuestion)"
+              >add_circle</i
+            >
+          </div>
+
+          <ul class="items-list">
             <li
-              v-for="question in tempQuestions"
+              v-for="(question, index) in tempQuestions"
               :key="question"
-              class="question-text">
+              :value="index"
+              class="question-text list-item">
+              <i
+                class="material-icons remove-item-button"
+                @click.prevent="removeQuestion(index, question)"
+                >remove_circle_outline</i
+              >
+              {{ index }}
               {{ question }}
             </li>
           </ul>
@@ -229,6 +258,7 @@ import CandidateCard from './candidate-card.vue';
 import AppHeader from './header.vue';
 import FocusManager from './focus_manager';
 import {
+  addUniqueQuestion,
   globalConfig,
   restoreConfig,
   actuallyResetConfig,
@@ -243,6 +273,7 @@ export default class App extends Vue {
   allCandidates: Candidate[] = [];
   galleryMode = true;
   isShuffling = false;
+  questionIdx = 0;
 
   tempImg = '';
   tempCandidates = '';
@@ -321,7 +352,7 @@ export default class App extends Vue {
     return this.minimizedCandidates.length > 0;
   }
   get currentQuestion() {
-    return this.config.eventInfo.questions[0];
+    return this.config.eventInfo.questions[this.questionIdx];
   }
 
   minimizeCandidate(candidate: Candidate) {
@@ -329,12 +360,15 @@ export default class App extends Vue {
     this.focusManager.checkFocus(this.numberOfCandidates - 1);
   }
 
+  incrementQuestion(dir = 1) {
+    const numQuestions = this.config.eventInfo.questions.length;
+    this.questionIdx += dir + numQuestions;
+    this.questionIdx = this.questionIdx % numQuestions;
+    console.log(numQuestions, this.questionIdx);
+  }
+
   dumpQuestions() {
-    const questionsString = JSON.stringify(
-      globalConfig.eventInfo.questions,
-      undefined,
-      2
-    );
+    const questionsString = globalConfig.eventInfo.questions.join('\n');
     console.log(questionsString);
     M.toast({ html: questionsString });
   }
@@ -362,12 +396,20 @@ export default class App extends Vue {
     }
   }
   showQuestionsDialog() {
-    // this.tempImg = this.config.eventInfo.logoUrl;
-    this.tempQuestions = this.config.eventInfo.questions;
-    this.tempQuestion = this.tempQuestion[0];
+    this.tempQuestion = '';
+    this.tempQuestions = [...this.config.eventInfo.questions];
     if (this.questionsDialog) {
       this.questionsDialog.showModal();
     }
+  }
+
+  addNewQuestion(newQuestion: string) {
+    this.tempQuestions = addUniqueQuestion(newQuestion, this.tempQuestions);
+    this.tempQuestion = '';
+  }
+
+  removeQuestion(index: number, question: string) {
+    this.tempQuestions.splice(index, 1);
   }
 
   setQuestionEditable(event: MouseEvent) {
@@ -445,7 +487,8 @@ export default class App extends Vue {
     ) {
       return;
     }
-    // this.setCandidates(this.t(this.questionsDialog.returnValue));
+    this.questionIdx = 0;
+    this.config.eventInfo.questions = [...this.tempQuestions];
   }
 
   setCandidates(candidateNames: string[]) {
@@ -531,6 +574,9 @@ function selectElementContents(el: HTMLElement) {
     grid-area: forum-app-time-out;
     &.has-minimized {
       transform: scaleY(1);
+    }
+    .minimized-candidate {
+      cursor: pointer;
     }
   }
 
@@ -664,6 +710,26 @@ dialog.config-dialog {
     }
     .please-button {
       font-weight: 700;
+    }
+    .remove-item-button,
+    .add-item-button {
+      cursor: pointer;
+      &:hover {
+        text-shadow: 1px 1px 5px red;
+      }
+    }
+    .remove-item-button:hover {
+      text-shadow: 1px 1px 5px red;
+    }
+    .add-item-button:hover {
+      text-shadow: 0 0 5px green;
+    }
+
+    .items-list {
+      .list-item {
+        display: flex;
+        gap: 8px;
+      }
     }
   }
 
