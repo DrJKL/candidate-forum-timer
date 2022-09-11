@@ -16725,21 +16725,21 @@ var global = arguments[3];
 module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
-},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
-module.exports = "/lwv-logo_color_open (1).437ccd50.png";
 },{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
 module.exports = "/lwv-logo.87fe3171.png";
+},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
+module.exports = "/lwv-logo_color_open (1).437ccd50.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
   "just_homes_logo": require("./just_homes_logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
-  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
   "lwv-logo": require("./lwv-logo.png"),
+  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
   "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/list_management.ts":[function(require,module,exports) {
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/list_management.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17542,7 +17542,7 @@ var CandidateCard = /*#__PURE__*/function (_Vue) {
     value: function minimizeCandidate() {}
   }, {
     key: "clickCandidateName",
-    value: function clickCandidateName() {}
+    value: function clickCandidateName(double) {}
   }, {
     key: "progressPercent",
     get: function get() {
@@ -17577,7 +17577,7 @@ __decorate([(0, _vuePropertyDecorator.Prop)({
 
 __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], CandidateCard.prototype, "minimizeCandidate", null);
 
-__decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], CandidateCard.prototype, "clickCandidateName", null);
+__decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", [Boolean]), __metadata("design:returntype", void 0)], CandidateCard.prototype, "clickCandidateName", null);
 
 CandidateCard = __decorate([(0, _vuePropertyDecorator.Component)({
   components: {
@@ -17611,9 +17611,13 @@ exports.default = _default;
               "span",
               {
                 on: {
+                  dblclick: function ($event) {
+                    $event.preventDefault()
+                    return _vm.clickCandidateName(true)
+                  },
                   click: function ($event) {
                     $event.preventDefault()
-                    return _vm.clickCandidateName()
+                    return _vm.clickCandidateName(false)
                   },
                 },
               },
@@ -18306,6 +18310,12 @@ var FocusManager = /*#__PURE__*/function () {
     key: "changeFocus",
     value: function changeFocus(num, limit) {
       this.focusedCandidate += num;
+      this.checkFocus(limit);
+    }
+  }, {
+    key: "changeFocusAbsolute",
+    value: function changeFocusAbsolute(num, limit) {
+      this.focusedCandidate = num;
       this.checkFocus(limit);
     }
   }, {
@@ -30773,6 +30783,14 @@ var _materializeCss = _interopRequireDefault(require("materialize-css"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -31073,8 +31091,12 @@ var App = /*#__PURE__*/function (_Vue) {
     }
   }, {
     key: "clickedCandidate",
-    value: function clickedCandidate(candidate) {
-      console.log("".concat(candidate));
+    value: function clickedCandidate(candidate, index, $event) {
+      console.log("".concat(candidate), index, $event);
+
+      if ($event) {
+        this.focusManager.changeFocusAbsolute(index, this.numberOfCandidates - 1);
+      }
     }
   }, {
     key: "minimizeCandidate",
@@ -31153,6 +31175,15 @@ var App = /*#__PURE__*/function (_Vue) {
     key: "removeQuestion",
     value: function removeQuestion(index, question) {
       this.tempQuestions.splice(index, 1);
+    }
+  }, {
+    key: "moveQuestion",
+    value: function moveQuestion(index, dir) {
+      var _this$tempQuestions$s = this.tempQuestions.splice(index, 1),
+          _this$tempQuestions$s2 = _slicedToArray(_this$tempQuestions$s, 1),
+          question = _this$tempQuestions$s2[0];
+
+      this.tempQuestions.splice(index + dir, 0, question);
     }
   }, {
     key: "setQuestionEditable",
@@ -31324,7 +31355,7 @@ exports.default = _default;
 
 function autosizeText(el, direction) {
   return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-    var currentFontValue, startingSize, resizeText, iterations;
+    var computed, currentFontValue, gridTemplateRows, height, startingSize, resizeText, iterations;
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
       while (1) {
         switch (_context6.prev = _context6.next) {
@@ -31332,24 +31363,32 @@ function autosizeText(el, direction) {
             resizeText = function _resizeText() {
               startingSize += direction;
               var newFont = "".concat(startingSize, "px");
-              el.style.setProperty('font-size', newFont);
+              el.style.setProperty('--question-size-test', newFont);
             };
 
             console.log(direction, 'start', el.scrollHeight, el.offsetHeight);
-            currentFontValue = getComputedStyle(el).getPropertyValue('font-size');
+            computed = getComputedStyle(el);
+            currentFontValue = computed.getPropertyValue('--question-size-test');
+            gridTemplateRows = computed.getPropertyValue('grid-template-rows');
+            height = computed.getPropertyValue('height');
             startingSize = parseInt(currentFontValue, 10);
+            console.log({
+              currentFontValue: currentFontValue,
+              gridTemplateRows: gridTemplateRows,
+              height: height
+            });
 
             if (!isNaN(startingSize)) {
-              _context6.next = 7;
+              _context6.next = 11;
               break;
             }
 
             console.log('el has no font size?', el, startingSize);
             return _context6.abrupt("return");
 
-          case 7:
+          case 11:
             iterations = 0;
-            _context6.next = 10;
+            _context6.next = 14;
             return new Promise(function (resolve) {
               requestAnimationFrame(function doTheThing() {
                 return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
@@ -31358,25 +31397,33 @@ function autosizeText(el, direction) {
                       switch (_context5.prev = _context5.next) {
                         case 0:
                           if (!(el.scrollHeight <= el.offsetHeight === direction < 0)) {
-                            _context5.next = 4;
+                            _context5.next = 3;
                             break;
                           }
 
-                          console.log(direction, 'nope 1', el.scrollHeight, el.offsetHeight, iterations);
                           resolve();
                           return _context5.abrupt("return");
 
-                        case 4:
-                          resizeText(); // await new Promise<void>((resolve) => setTimeout(resolve, 0));
-
-                          if (++iterations < 1000 && el.scrollHeight > el.offsetHeight === direction < 0 && !(direction > 0 && Math.abs(el.scrollHeight - el.offsetHeight) > 3)) {
-                            doTheThing();
-                          } else {
-                            console.log(direction, 'nope 2', el.scrollHeight, el.offsetHeight, iterations);
-                            resolve();
-                          }
+                        case 3:
+                          resizeText();
+                          _context5.next = 6;
+                          return new Promise(function (resolve) {
+                            return setTimeout(resolve, 0);
+                          });
 
                         case 6:
+                          if (!(++iterations > 1000)) {
+                            _context5.next = 9;
+                            break;
+                          }
+
+                          resolve();
+                          return _context5.abrupt("return");
+
+                        case 9:
+                          doTheThing();
+
+                        case 10:
                         case "end":
                           return _context5.stop();
                       }
@@ -31386,7 +31433,7 @@ function autosizeText(el, direction) {
               });
             });
 
-          case 10:
+          case 14:
           case "end":
             return _context6.stop();
         }
@@ -31451,46 +31498,55 @@ function autosizeText(el, direction) {
         _c(
           "div",
           {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.currentQuestion,
-                expression: "currentQuestion",
-              },
-            ],
             ref: "current-question",
-            staticClass: "current-question forum-app-question",
-            on: {
-              dblclick: _vm.setQuestionEditable,
-              keydown: [
-                function ($event) {
-                  if (
-                    !$event.type.indexOf("key") &&
-                    _vm._k($event.keyCode, "esc", 27, $event.key, [
-                      "Esc",
-                      "Escape",
-                    ])
-                  ) {
-                    return null
-                  }
-                  $event.preventDefault()
-                  return _vm.blurElement.apply(null, arguments)
-                },
-                function ($event) {
-                  if (
-                    !$event.type.indexOf("key") &&
-                    _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                  ) {
-                    return null
-                  }
-                  $event.preventDefault()
-                  return _vm.blurElement.apply(null, arguments)
-                },
-              ],
-            },
+            staticClass: "question-wrap",
+            attrs: { "data-replicated-value": _vm.currentQuestion },
           },
-          [_vm._v("\n      " + _vm._s(_vm.currentQuestion) + "\n    ")]
+          [
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.currentQuestion,
+                    expression: "currentQuestion",
+                  },
+                ],
+                staticClass: "current-question forum-app-question",
+                on: {
+                  dblclick: _vm.setQuestionEditable,
+                  keydown: [
+                    function ($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "esc", 27, $event.key, [
+                          "Esc",
+                          "Escape",
+                        ])
+                      ) {
+                        return null
+                      }
+                      $event.preventDefault()
+                      return _vm.blurElement.apply(null, arguments)
+                    },
+                    function ($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      $event.preventDefault()
+                      return _vm.blurElement.apply(null, arguments)
+                    },
+                  ],
+                },
+              },
+              [_vm._v("\n        " + _vm._s(_vm.currentQuestion) + "\n      ")]
+            ),
+          ]
         ),
       ]),
       _vm._v(" "),
@@ -31526,7 +31582,11 @@ function autosizeText(el, direction) {
                         attrs: { candidate: candidate },
                         on: {
                           "click-candidate-name": function ($event) {
-                            return _vm.clickedCandidate(candidate)
+                            return _vm.clickedCandidate(
+                              candidate,
+                              index,
+                              $event
+                            )
                           },
                           "minimize-candidate": function ($event) {
                             return _vm.minimizeCandidate(candidate)
@@ -31990,39 +32050,84 @@ function autosizeText(el, direction) {
               _c(
                 "ul",
                 { staticClass: "items-list" },
-                _vm._l(_vm.tempQuestions, function (question, index) {
-                  return _c(
-                    "li",
+                [
+                  _c(
+                    "transition-group",
                     {
-                      key: question,
-                      staticClass: "question-text list-item",
-                      attrs: { value: index },
+                      staticClass: "transition-container",
+                      attrs: { name: "squish", tag: "li" },
                     },
-                    [
-                      _c(
-                        "i",
+                    _vm._l(_vm.tempQuestions, function (question, index) {
+                      return _c(
+                        "li",
                         {
-                          staticClass: "material-icons remove-item-button",
-                          on: {
-                            click: function ($event) {
-                              $event.preventDefault()
-                              return _vm.removeQuestion(index, question)
-                            },
-                          },
+                          key: question,
+                          staticClass: "question-text list-item",
+                          attrs: { value: index },
                         },
-                        [_vm._v("remove_circle_outline")]
-                      ),
-                      _vm._v(
-                        "\n            " +
-                          _vm._s(index) +
-                          "\n            " +
-                          _vm._s(question) +
-                          "\n          "
-                      ),
-                    ]
-                  )
-                }),
-                0
+                        [
+                          _c("div", { staticClass: "move-arrows" }, [
+                            _c(
+                              "i",
+                              {
+                                staticClass: "material-icons move-item-button",
+                                on: {
+                                  click: function ($event) {
+                                    $event.preventDefault()
+                                    return _vm.moveQuestion(index, -1)
+                                  },
+                                },
+                              },
+                              [_vm._v("arrow_drop_up\n                ")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "i",
+                              {
+                                staticClass: "material-icons move-item-button",
+                                on: {
+                                  click: function ($event) {
+                                    $event.preventDefault()
+                                    return _vm.moveQuestion(index, 1)
+                                  },
+                                },
+                              },
+                              [
+                                _vm._v(
+                                  "\n                  arrow_drop_down\n                "
+                                ),
+                              ]
+                            ),
+                          ]),
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(question) +
+                              "\n              "
+                          ),
+                          _c(
+                            "i",
+                            {
+                              staticClass: "material-icons remove-item-button",
+                              on: {
+                                click: function ($event) {
+                                  $event.preventDefault()
+                                  return _vm.removeQuestion(index, question)
+                                },
+                              },
+                            },
+                            [
+                              _vm._v(
+                                "\n                remove_circle_outline\n              "
+                              ),
+                            ]
+                          ),
+                        ]
+                      )
+                    }),
+                    0
+                  ),
+                ],
+                1
               ),
             ]),
             _vm._v(" "),
@@ -32191,7 +32296,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2868" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8900" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
