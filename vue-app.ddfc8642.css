@@ -137,20 +137,25 @@ header[data-v-09fc64] {
     flex: 1;
 }
 .our-header .buttons[data-v-09fc64] {
+    display: grid;
+    gap: 4px;
     align-items: center;
     border-radius: 6px;
     box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.15), 0 0px 0 1px rgba(10, 10, 10, 0.02);
-    display: grid;
-    gap: 4px;
-    grid-template: 1fr / 1fr 2fr;
+    grid-template: 1fr / 1fr 2fr 2fr;
     grid-auto-flow: row;
-    grid-template-areas: 'time-setters-global global-controls' 'time-setters-global candidate-navigation';
+    grid-template-areas: 'global-actions time-setters-global global-controls' 'global-actions time-setters-global candidate-navigation';
     padding: 1.25rem 1.25rem 0.5rem;
-    transition: all 1s linear;
+    transition: all 1s ease-in-out;
     user-select: none;
 }
 .our-header .buttons > div[data-v-09fc64] {
       width: 100%;
+}
+.our-header .buttons .btn[data-v-09fc64] {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
 }
 .our-header .buttons .time-setters-global[data-v-09fc64] {
       display: grid;
@@ -158,20 +163,22 @@ header[data-v-09fc64] {
       grid-area: time-setters-global;
       grid-template: 1fr 1fr / 1fr 1fr;
 }
-.our-header .buttons .global-controls[data-v-09fc64] {
-      display: grid;
-      grid-template: 1fr / 4fr 1fr 4fr;
+.our-header .buttons .gallery-mode-switch[data-v-09fc64] {
       grid-area: global-controls;
+      min-width: min-content;
 }
-.our-header .buttons .global-controls .gallery-mode-switch[data-v-09fc64] {
-        min-width: 12rem;
+.our-header .buttons .global-actions[data-v-09fc64] {
+      display: grid;
+      gap: 4px;
+      grid-area: global-actions;
+      width: 100%;
+      height: 100%;
 }
 .our-header .buttons .candidate-navigation[data-v-09fc64] {
-      align-items: center;
-      align-self: baseline;
       display: grid;
+      gap: 4px;
       grid-area: candidate-navigation;
-      grid-template: 1fr / 4fr 1fr 4fr;
+      grid-template: 1fr / 1fr 1fr;
       text-align: center;
 }
 .our-header .buttons .candidate-navigation .current-focus-number[data-v-09fc64] {
@@ -192,12 +199,14 @@ header[data-v-09fc64] {
   gap: 8px;
   grid-auto-flow: row;
   grid-template-columns: 1fr;
-  grid-template-rows: fit-content(5vh) minmax(min-content, 2fr) minmax(min-content, 0fr) minmax(min-content, 5fr) fit-content(5vh);
-  padding: 0 1em;
+  grid-template-rows: fit-content(5vh) minmax(min-content, 2fr) minmax(min-content, 5fr) fit-content(5vh);
+  padding: 0 16px;
   transition: all 0.5s linear;
-  grid-template-areas: 'forum-app-header' 'forum-app-question' 'forum-app-time-out' 'forum-app-candidates' 'forum-app-footer';
+  grid-template-areas: 'forum-app-header' 'forum-app-question' 'forum-app-candidates' 'forum-app-footer';
 }
 .app-container .forum-app-header[data-v-cd5f52] {
+    max-height: min-content;
+    padding: 4px;
     grid-area: forum-app-header;
 }
 .app-container .forum-app-question[data-v-cd5f52] {
@@ -206,12 +215,13 @@ header[data-v-09fc64] {
     align-self: center;
     display: flex;
     flex-direction: column;
-    font-size: 6vw;
+    font-size: 200px;
     font-weight: bold;
     grid-area: forum-app-question;
     height: 100%;
     justify-content: center;
     line-height: 1;
+    overflow: hidden;
     text-align: center;
 }
 .app-container .time-out-container-container[data-v-cd5f52] {
@@ -301,10 +311,10 @@ footer > div > button[data-v-cd5f52] {
 footer > div > button.red-text[data-v-cd5f52] {
         color: #f44336;
 }
-[contenteditable='true'][data-v-cd5f52] {
+[data-v-cd5f52] [contenteditable='true'] {
   position: relative;
 }
-[contenteditable='true'][data-v-cd5f52]:active, [contenteditable='true'][data-v-cd5f52]:focus {
+[data-v-cd5f52] [contenteditable='true']:active,[data-v-cd5f52] [contenteditable='true']:focus {
     border: none;
     outline: none;
 }

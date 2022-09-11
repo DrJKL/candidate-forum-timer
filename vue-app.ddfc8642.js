@@ -16725,21 +16725,21 @@ var global = arguments[3];
 module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
-},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
-module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open (1).437ccd50.png";
+},{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
+module.exports = "/lwv-logo.87fe3171.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
   "just_homes_logo": require("./just_homes_logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
-  "lwv-logo": require("./lwv-logo.png"),
   "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
+  "lwv-logo": require("./lwv-logo.png"),
   "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/list_management.ts":[function(require,module,exports) {
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/list_management.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16983,6 +16983,13 @@ var Timer = /*#__PURE__*/function () {
       return !!this.countingDown;
     }
   }, {
+    key: "pause",
+    value: function pause() {
+      if (!!this.countingDown) {
+        this.toggleTimer();
+      }
+    }
+  }, {
     key: "getTimeLeft",
     value: function getTimeLeft() {
       var timeToUse = this.isTimeUp ? _moment.default.duration().subtract(this.timeLeft) : this.timeLeft;
@@ -17041,6 +17048,11 @@ var Candidate = /*#__PURE__*/function () {
     key: "toggleMinimized",
     value: function toggleMinimized() {
       this.isMinimized = !this.isMinimized;
+    }
+  }, {
+    key: "toString",
+    value: function toString() {
+      return "Candidate: ".concat(this.name);
     }
   }]);
 
@@ -17529,6 +17541,9 @@ var CandidateCard = /*#__PURE__*/function (_Vue) {
     key: "minimizeCandidate",
     value: function minimizeCandidate() {}
   }, {
+    key: "clickCandidateName",
+    value: function clickCandidateName() {}
+  }, {
     key: "progressPercent",
     get: function get() {
       return this.candidate.timer.progressPercent;
@@ -17562,6 +17577,8 @@ __decorate([(0, _vuePropertyDecorator.Prop)({
 
 __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], CandidateCard.prototype, "minimizeCandidate", null);
 
+__decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], CandidateCard.prototype, "clickCandidateName", null);
+
 CandidateCard = __decorate([(0, _vuePropertyDecorator.Component)({
   components: {
     CollapseTransition: _vueCollapseTransition.CollapseTransition
@@ -17590,7 +17607,18 @@ exports.default = _default;
         { staticClass: "card-content" },
         [
           _c("div", { staticClass: "card-title" }, [
-            _c("span", [_vm._v(_vm._s(_vm.candidate.name))]),
+            _c(
+              "span",
+              {
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.clickCandidateName()
+                  },
+                },
+              },
+              [_vm._v(_vm._s(_vm.candidate.name))]
+            ),
             _vm._v(" "),
             _c(
               "a",
@@ -17879,6 +17907,9 @@ var Header = /*#__PURE__*/function (_Vue) {
     key: "shuffleCandidates",
     value: function shuffleCandidates() {}
   }, {
+    key: "resetTimers",
+    value: function resetTimers() {}
+  }, {
     key: "focusChange",
     value: function focusChange(num) {
       return num;
@@ -17956,6 +17987,8 @@ __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)
 __decorate([(0, _vuePropertyDecorator.Prop)(), __metadata("design:type", Number)], Header.prototype, "numberCandidates", void 0);
 
 __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "shuffleCandidates", null);
+
+__decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], Header.prototype, "resetTimers", null);
 
 __decorate([(0, _vuePropertyDecorator.Emit)(), __metadata("design:type", Function), __metadata("design:paramtypes", [Number]), __metadata("design:returntype", void 0)], Header.prototype, "focusChange", null);
 
@@ -18065,7 +18098,27 @@ exports.default = _default;
         _c("div", { staticClass: "spacer" }),
         _vm._v(" "),
         _c("div", { staticClass: "buttons box" }, [
-          _c("div", { staticClass: "global-controls" }, [
+          _c("div", { staticClass: "global-actions" }, [
+            _c(
+              "a",
+              {
+                staticClass: "btn reset-button",
+                attrs: { disabled: _vm.isShuffling },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.resetTimers()
+                  },
+                },
+              },
+              [
+                _vm._v("\n            Reset\n            "),
+                _c("i", { staticClass: "material-icons left" }, [
+                  _vm._v("restart_alt"),
+                ]),
+              ]
+            ),
+            _vm._v(" "),
             _c(
               "a",
               {
@@ -18085,32 +18138,28 @@ exports.default = _default;
                 ]),
               ]
             ),
-            _vm._v(" "),
-            _c("div", { staticClass: "controls-spacer" }),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn gallery-mode-switch flow-text",
-                attrs: { disabled: _vm.isShuffling },
-                on: {
-                  click: function ($event) {
-                    return _vm.updateGalleryMode()
-                  },
+          ]),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn gallery-mode-switch flow-text global-controls",
+              attrs: { disabled: _vm.isShuffling },
+              on: {
+                click: function ($event) {
+                  return _vm.updateGalleryMode()
                 },
               },
-              [
-                _c("i", { staticClass: "material-icons right" }, [
-                  _vm._v(_vm._s(_vm.currentModeIcon) + " "),
-                ]),
-                _vm._v(
-                  "\n            " +
-                    _vm._s(_vm.currentModeName) +
-                    "\n          "
-                ),
-              ]
-            ),
-          ]),
+            },
+            [
+              _vm._v(
+                "\n          " + _vm._s(_vm.currentModeName) + "\n          "
+              ),
+              _c("i", { staticClass: "material-icons right" }, [
+                _vm._v(_vm._s(_vm.currentModeIcon) + " "),
+              ]),
+            ]
+          ),
           _vm._v(" "),
           _c(
             "div",
@@ -18160,10 +18209,6 @@ exports.default = _default;
                 ]),
               ]
             ),
-            _vm._v(" "),
-            _c("span", { staticClass: "current-focus-number" }, [
-              _vm._v(_vm._s(_vm.focusedCandidate + 1)),
-            ]),
             _vm._v(" "),
             _c(
               "a",
@@ -18284,6 +18329,40 @@ var FocusManager = /*#__PURE__*/function () {
 }();
 
 exports.default = FocusManager;
+},{}],"src/js/common/editable.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.selectElementContents = selectElementContents;
+exports.setEditableElement = setEditableElement;
+
+function setEditableElement(el, valueCallback) {
+  el.setAttribute('contenteditable', 'true');
+
+  function onBlur(event) {
+    if (!(event.target instanceof HTMLElement)) {
+      return;
+    }
+
+    var newValue = event.target.innerText;
+    valueCallback(newValue);
+    event.target.removeAttribute('contenteditable');
+    event.target.removeEventListener('blur', onBlur);
+  }
+
+  el.addEventListener('blur', onBlur);
+  el.focus(); // selectElementContents(el);
+}
+
+function selectElementContents(el) {
+  var range = document.createRange();
+  range.selectNodeContents(el);
+  var sel = window.getSelection();
+  sel === null || sel === void 0 ? void 0 : sel.removeAllRanges();
+  sel === null || sel === void 0 ? void 0 : sel.addRange(range);
+}
 },{}],"node_modules/materialize-css/dist/js/materialize.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
@@ -30684,6 +30763,8 @@ var _header = _interopRequireDefault(require("./header.vue"));
 
 var _focus_manager = _interopRequireDefault(require("./focus_manager"));
 
+var _editable = require("./common/editable");
+
 var _global_config = require("./global_config");
 
 var _list_management = require("./list_management");
@@ -30696,11 +30777,13 @@ function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableTo
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
 function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
@@ -30774,7 +30857,7 @@ var __awaiter = void 0 && (void 0).__awaiter || function (thisArg, _arguments, P
   });
 };
 
-var _a, _b, _c, _d, _e;
+var _a, _b, _c, _d, _e, _f;
 
 var App = /*#__PURE__*/function (_Vue) {
   _inherits(App, _Vue);
@@ -30813,10 +30896,54 @@ var App = /*#__PURE__*/function (_Vue) {
       this.candidateColumns = this.howManyColumns(this.visibleCandidates.length);
     }
   }, {
+    key: "questionChanged",
+    value: function questionChanged() {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                console.log('currentQuestionChanged', this.currentQuestion);
+
+                if (!this.currentQuestionElement) {
+                  _context.next = 6;
+                  break;
+                }
+
+                _context.next = 4;
+                return autosizeText(this.currentQuestionElement, 1);
+
+              case 4:
+                _context.next = 6;
+                return autosizeText(this.currentQuestionElement, -1);
+
+              case 6:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+    }
+  }, {
     key: "mounted",
     value: function mounted() {
-      (0, _global_config.restoreConfig)();
-      this.resetCandidates();
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                (0, _global_config.restoreConfig)();
+                this.resetCandidates();
+                this.questionChanged();
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
     }
   }, {
     key: "getCardClasses",
@@ -30837,36 +30964,36 @@ var App = /*#__PURE__*/function (_Vue) {
   }, {
     key: "shuffleCandidates",
     value: function shuffleCandidates() {
-      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
         var wasGallery;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 wasGallery = this.galleryMode;
                 this.isShuffling = true;
 
                 if (wasGallery) {
-                  _context.next = 6;
+                  _context3.next = 6;
                   break;
                 }
 
                 this.galleryMode = true;
-                _context.next = 6;
+                _context3.next = 6;
                 return new Promise(function (resolve) {
                   return setTimeout(resolve, 700);
                 });
 
               case 6:
                 this.allCandidates = (0, _common.shuffle)(this.allCandidates);
-                _context.next = 9;
+                _context3.next = 9;
                 return new Promise(function (resolve) {
                   return setTimeout(resolve, 100);
                 });
 
               case 9:
                 this.focusManager.focusedCandidate = 0;
-                _context.next = 12;
+                _context3.next = 12;
                 return new Promise(function (resolve) {
                   return setTimeout(resolve, 1000);
                 });
@@ -30877,10 +31004,42 @@ var App = /*#__PURE__*/function (_Vue) {
 
               case 14:
               case "end":
-                return _context.stop();
+                return _context3.stop();
             }
           }
-        }, _callee, this);
+        }, _callee3, this);
+      }));
+    }
+  }, {
+    key: "resetTimers",
+    value: function resetTimers() {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+        var _iterator, _step, candidate;
+
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _iterator = _createForOfIteratorHelper(this.allCandidates);
+
+                try {
+                  for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                    candidate = _step.value;
+                    candidate.timer.pause();
+                    candidate.timer.resetTime();
+                  }
+                } catch (err) {
+                  _iterator.e(err);
+                } finally {
+                  _iterator.f();
+                }
+
+              case 2:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
       }));
     }
   }, {
@@ -30913,6 +31072,11 @@ var App = /*#__PURE__*/function (_Vue) {
       return this.config.eventInfo.questions[this.questionIdx];
     }
   }, {
+    key: "clickedCandidate",
+    value: function clickedCandidate(candidate) {
+      console.log("".concat(candidate));
+    }
+  }, {
     key: "minimizeCandidate",
     value: function minimizeCandidate(candidate) {
       candidate.toggleMinimized();
@@ -30925,7 +31089,7 @@ var App = /*#__PURE__*/function (_Vue) {
       var numQuestions = this.config.eventInfo.questions.length;
       this.questionIdx += dir + numQuestions;
       this.questionIdx = this.questionIdx % numQuestions;
-      console.log(numQuestions, this.questionIdx);
+      console.log('increment', dir, numQuestions, this.questionIdx);
     }
   }, {
     key: "dumpQuestions",
@@ -30997,7 +31161,7 @@ var App = /*#__PURE__*/function (_Vue) {
         return;
       }
 
-      setEditableElement(event.target, function (newValue) {
+      (0, _editable.setEditableElement)(event.target, function (newValue) {
         _global_config.globalConfig.addQuestion(newValue);
       });
     }
@@ -31010,7 +31174,7 @@ var App = /*#__PURE__*/function (_Vue) {
         return;
       }
 
-      setEditableElement(element, function (newValue) {
+      (0, _editable.setEditableElement)(element, function (newValue) {
         _global_config.globalConfig.updateEvent(newValue);
       });
     }
@@ -31023,7 +31187,7 @@ var App = /*#__PURE__*/function (_Vue) {
         return;
       }
 
-      setEditableElement(element, function (newValue) {
+      (0, _editable.setEditableElement)(element, function (newValue) {
         _global_config.globalConfig.updateOrg(newValue);
       });
     }
@@ -31134,6 +31298,10 @@ __decorate([(0, _vuePropertyDecorator.Watch)('allCandidates', {
   immediate: true
 }), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", void 0)], App.prototype, "candidatesChanged", null);
 
+__decorate([(0, _vuePropertyDecorator.Watch)('currentQuestion', {
+  immediate: true
+}), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", Promise)], App.prototype, "questionChanged", null);
+
 __decorate([(0, _vuePropertyDecorator.Ref)('reset-config-dialog'), __metadata("design:type", typeof (_b = typeof HTMLDialogElement !== "undefined" && HTMLDialogElement) === "function" ? _b : Object)], App.prototype, "resetDialog", void 0);
 
 __decorate([(0, _vuePropertyDecorator.Ref)('logo-config-dialog'), __metadata("design:type", typeof (_c = typeof HTMLDialogElement !== "undefined" && HTMLDialogElement) === "function" ? _c : Object)], App.prototype, "logoDialog", void 0);
@@ -31141,6 +31309,8 @@ __decorate([(0, _vuePropertyDecorator.Ref)('logo-config-dialog'), __metadata("de
 __decorate([(0, _vuePropertyDecorator.Ref)('candidates-config-dialog'), __metadata("design:type", typeof (_d = typeof HTMLDialogElement !== "undefined" && HTMLDialogElement) === "function" ? _d : Object)], App.prototype, "candidatesDialog", void 0);
 
 __decorate([(0, _vuePropertyDecorator.Ref)('questions-config-dialog'), __metadata("design:type", typeof (_e = typeof HTMLDialogElement !== "undefined" && HTMLDialogElement) === "function" ? _e : Object)], App.prototype, "questionsDialog", void 0);
+
+__decorate([(0, _vuePropertyDecorator.Ref)('current-question'), __metadata("design:type", typeof (_f = typeof HTMLElement !== "undefined" && HTMLElement) === "function" ? _f : Object)], App.prototype, "currentQuestionElement", void 0);
 
 App = __decorate([(0, _vuePropertyDecorator.Component)({
   components: {
@@ -31152,31 +31322,77 @@ App = __decorate([(0, _vuePropertyDecorator.Component)({
 var _default = App;
 exports.default = _default;
 
-function setEditableElement(el, valueCallback) {
-  el.setAttribute('contenteditable', 'true');
+function autosizeText(el, direction) {
+  return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+    var currentFontValue, startingSize, resizeText, iterations;
+    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            resizeText = function _resizeText() {
+              startingSize += direction;
+              var newFont = "".concat(startingSize, "px");
+              el.style.setProperty('font-size', newFont);
+            };
 
-  function onBlur(event) {
-    if (!(event.target instanceof HTMLElement)) {
-      return;
-    }
+            console.log(direction, 'start', el.scrollHeight, el.offsetHeight);
+            currentFontValue = getComputedStyle(el).getPropertyValue('font-size');
+            startingSize = parseInt(currentFontValue, 10);
 
-    var newValue = event.target.innerText;
-    valueCallback(newValue);
-    event.target.removeAttribute('contenteditable');
-    event.target.removeEventListener('blur', onBlur);
-  }
+            if (!isNaN(startingSize)) {
+              _context6.next = 7;
+              break;
+            }
 
-  el.addEventListener('blur', onBlur);
-  el.focus();
-  selectElementContents(el);
-}
+            console.log('el has no font size?', el, startingSize);
+            return _context6.abrupt("return");
 
-function selectElementContents(el) {
-  var range = document.createRange();
-  range.selectNodeContents(el);
-  var sel = window.getSelection();
-  sel === null || sel === void 0 ? void 0 : sel.removeAllRanges();
-  sel === null || sel === void 0 ? void 0 : sel.addRange(range);
+          case 7:
+            iterations = 0;
+            _context6.next = 10;
+            return new Promise(function (resolve) {
+              requestAnimationFrame(function doTheThing() {
+                return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+                  return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+                    while (1) {
+                      switch (_context5.prev = _context5.next) {
+                        case 0:
+                          if (!(el.scrollHeight <= el.offsetHeight === direction < 0)) {
+                            _context5.next = 4;
+                            break;
+                          }
+
+                          console.log(direction, 'nope 1', el.scrollHeight, el.offsetHeight, iterations);
+                          resolve();
+                          return _context5.abrupt("return");
+
+                        case 4:
+                          resizeText(); // await new Promise<void>((resolve) => setTimeout(resolve, 0));
+
+                          if (++iterations < 1000 && el.scrollHeight > el.offsetHeight === direction < 0 && !(direction > 0 && Math.abs(el.scrollHeight - el.offsetHeight) > 3)) {
+                            doTheThing();
+                          } else {
+                            console.log(direction, 'nope 2', el.scrollHeight, el.offsetHeight, iterations);
+                            resolve();
+                          }
+
+                        case 6:
+                        case "end":
+                          return _context5.stop();
+                      }
+                    }
+                  }, _callee5);
+                }));
+              });
+            });
+
+          case 10:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6);
+  }));
 }
         var $cd5f52 = exports.default || module.exports;
       
@@ -31219,6 +31435,9 @@ function selectElementContents(el) {
           "shuffle-candidates": function ($event) {
             return _vm.shuffleCandidates()
           },
+          "reset-timers": function ($event) {
+            return _vm.resetTimers()
+          },
           "focus-change": function ($event) {
             return _vm.focusManager.changeFocus(
               $event,
@@ -31240,7 +31459,8 @@ function selectElementContents(el) {
                 expression: "currentQuestion",
               },
             ],
-            staticClass: "current-question forum-app-question flow-text",
+            ref: "current-question",
+            staticClass: "current-question forum-app-question",
             on: {
               dblclick: _vm.setQuestionEditable,
               keydown: [
@@ -31271,43 +31491,6 @@ function selectElementContents(el) {
             },
           },
           [_vm._v("\n      " + _vm._s(_vm.currentQuestion) + "\n    ")]
-        ),
-      ]),
-      _vm._v(" "),
-      _c("collapse-transition", [
-        _c(
-          "div",
-          {
-            staticClass: "time-out-container-container",
-            class: { "has-minimized": _vm.hasMinimizedCandidates },
-          },
-          [
-            _c(
-              "div",
-              { staticClass: "time-out-container" },
-              _vm._l(_vm.minimizedCandidates, function (candidate) {
-                return _c(
-                  "a",
-                  {
-                    key: candidate.name,
-                    staticClass: "chip is-primary minimized-candidate",
-                    on: {
-                      click: function ($event) {
-                        $event.preventDefault()
-                        return _vm.minimizeCandidate(candidate)
-                      },
-                    },
-                  },
-                  [
-                    _vm._v(
-                      "\n          " + _vm._s(candidate.name) + "\n        "
-                    ),
-                  ]
-                )
-              }),
-              0
-            ),
-          ]
         ),
       ]),
       _vm._v(" "),
@@ -31342,6 +31525,9 @@ function selectElementContents(el) {
                         class: _vm.getCardClasses(index),
                         attrs: { candidate: candidate },
                         on: {
+                          "click-candidate-name": function ($event) {
+                            return _vm.clickedCandidate(candidate)
+                          },
                           "minimize-candidate": function ($event) {
                             return _vm.minimizeCandidate(candidate)
                           },
@@ -31359,155 +31545,199 @@ function selectElementContents(el) {
         ]
       ),
       _vm._v(" "),
-      _c("footer", { staticClass: "forum-app-footer" }, [
-        _c("div", [
-          _c("span", [_vm._v("Set New...")]),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "waves-effect waves-teal btn-flat",
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.showCandidateDialog.apply(null, arguments)
+      _c(
+        "footer",
+        { staticClass: "forum-app-footer" },
+        [
+          _c("div", [
+            _c("span", [_vm._v("Set New...")]),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "waves-effect waves-teal btn-flat",
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.showCandidateDialog.apply(null, arguments)
+                  },
                 },
               },
-            },
-            [_vm._v("\n        Candidates\n      ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "waves-effect waves-teal btn-flat",
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.showLogoDialog.apply(null, arguments)
+              [_vm._v("\n        Candidates\n      ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "waves-effect waves-teal btn-flat",
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.showLogoDialog.apply(null, arguments)
+                  },
                 },
               },
-            },
-            [_vm._v("\n        Logo\n      ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "waves-effect waves-teal btn-flat",
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.setTitleEditable.apply(null, arguments)
+              [_vm._v("\n        Logo\n      ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "waves-effect waves-teal btn-flat",
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.setTitleEditable.apply(null, arguments)
+                  },
                 },
               },
-            },
-            [_vm._v("\n        Title\n      ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "waves-effect waves-teal btn-flat",
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.setOrgEditable.apply(null, arguments)
+              [_vm._v("\n        Title\n      ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "waves-effect waves-teal btn-flat",
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.setOrgEditable.apply(null, arguments)
+                  },
                 },
               },
-            },
-            [_vm._v("\n        Org\n      ")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "waves-effect waves-teal btn-flat",
-              attrs: { title: "See Current Questions" },
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.dumpQuestions.apply(null, arguments)
+              [_vm._v("\n        Org\n      ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "waves-effect waves-teal btn-flat",
+                attrs: { title: "See Current Questions" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.dumpQuestions.apply(null, arguments)
+                  },
                 },
               },
-            },
-            [
-              _c("i", { staticClass: "material-icons" }, [
-                _vm._v("question_mark"),
-              ]),
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "waves-effect waves-teal btn-flat",
-              attrs: { title: "Edit Questions" },
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.showQuestionsDialog.apply(null, arguments)
+              [
+                _c("i", { staticClass: "material-icons" }, [
+                  _vm._v("question_mark"),
+                ]),
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "waves-effect waves-teal btn-flat",
+                attrs: { title: "Edit Questions" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.showQuestionsDialog.apply(null, arguments)
+                  },
                 },
               },
-            },
-            [_c("i", { staticClass: "material-icons" }, [_vm._v("quiz")])]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "waves-effect waves-teal btn-flat",
-              attrs: { title: "Decrement Question" },
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.incrementQuestion(-1)
+              [_c("i", { staticClass: "material-icons" }, [_vm._v("quiz")])]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "waves-effect waves-teal btn-flat",
+                attrs: { title: "Previous Question" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.incrementQuestion(-1)
+                  },
                 },
               },
-            },
-            [
-              _c("i", { staticClass: "material-icons" }, [
-                _vm._v("navigate_before"),
-              ]),
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "waves-effect waves-teal btn-flat",
-              attrs: { title: "Increment Question" },
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.incrementQuestion(1)
+              [
+                _c("i", { staticClass: "material-icons" }, [
+                  _vm._v("navigate_before"),
+                ]),
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "waves-effect waves-teal btn-flat",
+                attrs: { title: "Next Question" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.incrementQuestion(1)
+                  },
                 },
               },
-            },
-            [
-              _c("i", { staticClass: "material-icons" }, [
-                _vm._v("navigate_next"),
-              ]),
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "waves-effect waves-teal btn-flat red-text",
-              on: {
-                click: function ($event) {
-                  $event.preventDefault()
-                  return _vm.resetConfig.apply(null, arguments)
+              [
+                _c("i", { staticClass: "material-icons" }, [
+                  _vm._v("navigate_next"),
+                ]),
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "waves-effect waves-teal btn-flat red-text",
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    return _vm.resetConfig.apply(null, arguments)
+                  },
                 },
               },
-            },
-            [_vm._v("\n        Reset All\n      ")]
-          ),
-        ]),
-        _vm._v(" "),
-        _vm._m(0),
-      ]),
+              [_vm._v("\n        Reset All\n      ")]
+            ),
+          ]),
+          _vm._v(" "),
+          _c("collapse-transition", [
+            _c(
+              "div",
+              {
+                staticClass: "time-out-container-container",
+                class: { "has-minimized": _vm.hasMinimizedCandidates },
+              },
+              [
+                _c(
+                  "div",
+                  { staticClass: "time-out-container" },
+                  _vm._l(_vm.minimizedCandidates, function (candidate) {
+                    return _c(
+                      "a",
+                      {
+                        key: candidate.name,
+                        staticClass: "chip is-primary minimized-candidate",
+                        on: {
+                          click: function ($event) {
+                            $event.preventDefault()
+                            return _vm.minimizeCandidate(candidate)
+                          },
+                        },
+                      },
+                      [
+                        _vm._v(
+                          "\n            " +
+                            _vm._s(candidate.name) +
+                            "\n          "
+                        ),
+                      ]
+                    )
+                  }),
+                  0
+                ),
+              ]
+            ),
+          ]),
+          _vm._v(" "),
+          _vm._m(0),
+        ],
+        1
+      ),
       _vm._v(" "),
       _c(
         "dialog",
@@ -31910,7 +32140,7 @@ render._withStripped = true
       
       }
     })();
-},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/index.js","@ivanv/vue-collapse-transition":"node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js","./candidates":"src/js/candidates.ts","./common":"src/js/common/index.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","./focus_manager":"src/js/focus_manager.ts","./global_config":"src/js/global_config.ts","./list_management":"src/js/list_management.ts","materialize-css":"node_modules/materialize-css/dist/js/materialize.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/@mdi/font/css/materialdesignicons.css":[function(require,module,exports) {
+},{"vue-property-decorator":"node_modules/vue-property-decorator/lib/index.js","@ivanv/vue-collapse-transition":"node_modules/@ivanv/vue-collapse-transition/dist/collapse-transition.js","./candidates":"src/js/candidates.ts","./common":"src/js/common/index.ts","./candidate-card.vue":"src/js/candidate-card.vue","./header.vue":"src/js/header.vue","./focus_manager":"src/js/focus_manager.ts","./common/editable":"src/js/common/editable.ts","./global_config":"src/js/global_config.ts","./list_management":"src/js/list_management.ts","materialize-css":"node_modules/materialize-css/dist/js/materialize.js","_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"node_modules/@mdi/font/css/materialdesignicons.css":[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
@@ -31961,7 +32191,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8793" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "2868" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
