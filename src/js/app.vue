@@ -236,19 +236,35 @@
           </div>
 
           <ul class="items-list">
-            <li
-              v-for="(question, index) in tempQuestions"
-              :key="question"
-              :value="index"
-              class="question-text list-item">
-              <i
-                class="material-icons remove-item-button"
-                @click.prevent="removeQuestion(index, question)"
-                >remove_circle_outline</i
-              >
-              {{ index }}
-              {{ question }}
-            </li>
+            <transition-group
+              name="squish"
+              tag="li"
+              class="transition-container">
+              <li
+                v-for="(question, index) in tempQuestions"
+                :key="question"
+                :value="index"
+                class="question-text list-item">
+                <div class="move-arrows">
+                  <i
+                    class="material-icons move-item-button"
+                    @click.prevent="moveQuestion(index, -1)"
+                    >arrow_drop_up
+                  </i>
+                  <i
+                    class="material-icons move-item-button"
+                    @click.prevent="moveQuestion(index, 1)">
+                    arrow_drop_down
+                  </i>
+                </div>
+                {{ question }}
+                <i
+                  class="material-icons remove-item-button"
+                  @click.prevent="removeQuestion(index, question)">
+                  remove_circle_outline
+                </i>
+              </li>
+            </transition-group>
           </ul>
         </div>
         <form id="questions-form" method="dialog" class="card-action">
@@ -281,7 +297,7 @@ import {
 } from './global_config';
 import { addUniqueItem } from './list_management';
 import M from 'materialize-css';
-import { debug } from 'console';
+import { debug, dir } from 'console';
 
 @Component({
   components: { AppHeader, CandidateCard, CollapseTransition },
@@ -458,6 +474,10 @@ export default class App extends Vue {
 
   removeQuestion(index: number, question: string) {
     this.tempQuestions.splice(index, 1);
+  }
+  moveQuestion(index: number, dir: -1 | 1) {
+    const [question] = this.tempQuestions.splice(index, 1);
+    this.tempQuestions.splice(index + dir, 0, question);
   }
 
   setQuestionEditable(event: MouseEvent) {
@@ -795,12 +815,14 @@ dialog.config-dialog {
     .please-button {
       font-weight: 700;
     }
+    .question-text {
+      user-select: none;
+    }
     .remove-item-button,
-    .add-item-button {
+    .add-item-button,
+    .move-item-button {
       cursor: pointer;
-      &:hover {
-        text-shadow: 1px 1px 5px red;
-      }
+      user-select: none;
     }
     .remove-item-button:hover {
       text-shadow: 1px 1px 5px red;
@@ -808,11 +830,21 @@ dialog.config-dialog {
     .add-item-button:hover {
       text-shadow: 0 0 5px green;
     }
+    .move-item-button:hover {
+      text-shadow: 0 0 5px blue;
+    }
+    .move-arrows {
+      display: grid;
+      user-select: none;
+    }
 
     .items-list {
       .list-item {
-        display: flex;
+        align-items: center;
+        display: grid;
+        grid-auto-flow: column;
         gap: 8px;
+        justify-content: space-between;
       }
     }
   }
