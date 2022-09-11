@@ -1,6 +1,7 @@
 import { Candidate } from './candidates';
 import moment from 'moment';
 import images from '../assets/*.png';
+import { addUniqueItem } from './list_management';
 
 export declare interface EventInfo {
   logoUrl: string;
@@ -33,7 +34,11 @@ export class Config {
       'Li Zhang',
       'Justin Cohen',
     ],
-    questions: ['What is your favorite color?'],
+    questions: [
+      'What is your favorite color?',
+      'What is your favorite animal?',
+      'What steps can the City do in the next 4 years to alleviate the harms of our Housing Crisis?',
+    ],
   };
   get candidates() {
     return this.eventInfo.candidatesList.map((name) => new Candidate(name));
@@ -45,7 +50,7 @@ export class Config {
   }
 
   addQuestion(newQuestion: string) {
-    const uniqueQuestions = addUniqueQuestion(
+    const uniqueQuestions = addUniqueItem(
       newQuestion,
       this.eventInfo.questions
     );
@@ -93,22 +98,4 @@ export function saveConfig() {
 export function actuallyResetConfig() {
   localStorage.removeItem(CONFIG_KEY);
   restoreConfig();
-}
-
-export function addUniqueQuestion(
-  newQuestion: string,
-  questions: readonly string[]
-): string[] {
-  const processedQuestion = preProcessQuestion(newQuestion);
-  if (!processedQuestion) {
-    return [...questions];
-  }
-  return [...new Set([newQuestion, ...questions])];
-}
-
-function preProcessQuestion(question: string): string {
-  if (!question || question === '.') {
-    return '';
-  }
-  return question.replaceAll(/\\n/g, '\n').trim();
 }

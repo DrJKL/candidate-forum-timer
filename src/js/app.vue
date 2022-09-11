@@ -10,35 +10,29 @@
       :is-shuffling="isShuffling"
       :candidates-list="allCandidates"
       @shuffle-candidates="shuffleCandidates()"
+      @reset-timers="resetTimers()"
       @focus-change="
         focusManager.changeFocus($event, numberOfCandidates - 1)
       "></app-header>
     <collapse-transition>
       <div
+        ref="current-question"
         v-show="currentQuestion"
-        class="current-question forum-app-question flow-text"
+        class="current-question forum-app-question"
         @dblclick="setQuestionEditable"
         @keydown.esc.prevent="blurElement"
         @keydown.enter.prevent="blurElement">
         {{ currentQuestion }}
       </div>
     </collapse-transition>
-    <collapse-transition>
-      <div
-        class="time-out-container-container"
-        :class="{ 'has-minimized': hasMinimizedCandidates }">
-        <div class="time-out-container">
-          <a
-            class="chip is-primary minimized-candidate"
-            v-for="candidate of minimizedCandidates"
-            :key="candidate.name"
-            @click.prevent="minimizeCandidate(candidate)">
-            {{ candidate.name }}
-          </a>
-        </div>
-      </div>
-    </collapse-transition>
-    <main class="forum-app-candidates" :class="{ 'gallery-mode': galleryMode }">
+    <main
+      class="forum-app-candidates"
+      :class="{
+        'gallery-mode': galleryMode,
+      }"
+      :style="{
+        '--candidate-columns': candidateColumns,
+      }">
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
           <div
@@ -48,6 +42,7 @@
             <candidate-card
               :candidate="candidate"
               :class="getCardClasses(index)"
+              @click-candidate-name="clickedCandidate(candidate)"
               @minimize-candidate="
                 minimizeCandidate(candidate)
               "></candidate-card>
@@ -93,13 +88,13 @@
         <a
           class="waves-effect waves-teal btn-flat"
           @click.prevent="incrementQuestion(-1)"
-          title="Decrement Question">
+          title="Previous Question">
           <i class="material-icons">navigate_before</i>
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
           @click.prevent="incrementQuestion(1)"
-          title="Increment Question">
+          title="Next Question">
           <i class="material-icons">navigate_next</i>
         </a>
 
@@ -109,6 +104,22 @@
           Reset All
         </a>
       </div>
+      <collapse-transition>
+        <div
+          class="time-out-container-container"
+          :class="{ 'has-minimized': hasMinimizedCandidates }">
+          <div class="time-out-container">
+            <a
+              class="chip is-primary minimized-candidate"
+              v-for="candidate of minimizedCandidates"
+              :key="candidate.name"
+              @click.prevent="minimizeCandidate(candidate)">
+              {{ candidate.name }}
+            </a>
+          </div>
+        </div>
+      </collapse-transition>
+
       <span class="attribution-label">
         Built by Alex Brown for the
         <a href="https://mvmha.com">MVMHA</a> (updated 2022)
@@ -257,20 +268,23 @@ import { shuffle, blurElement } from './common';
 import CandidateCard from './candidate-card.vue';
 import AppHeader from './header.vue';
 import FocusManager from './focus_manager';
+import { setEditableElement } from './common/editable';
 import {
-  addUniqueQuestion,
   globalConfig,
   restoreConfig,
   actuallyResetConfig,
   Config,
 } from './global_config';
+import { addUniqueItem } from './list_management';
 import M from 'materialize-css';
+import { resolve } from 'path';
 
 @Component({
   components: { AppHeader, CandidateCard, CollapseTransition },
 })
 export default class App extends Vue {
   allCandidates: Candidate[] = [];
+  candidateColumns = 3;
   galleryMode = true;
   isShuffling = false;
   questionIdx = 0;
@@ -288,6 +302,18 @@ export default class App extends Vue {
   configChanged(newConfig: Config) {
     this.$forceUpdate();
   }
+  @Watch('allCandidates', { deep: true, immediate: true })
+  candidatesChanged() {
+    this.candidateColumns = this.howManyColumns(this.visibleCandidates.length);
+  }
+  @Watch('currentQuestion', { immediate: true })
+  async questionChanged() {
+    console.log('currentQuestionChanged', this.currentQuestion);
+    if (this.currentQuestionElement) {
+      await autosizeText(this.currentQuestionElement, 1);
+      await autosizeText(this.currentQuestionElement, -1);
+    }
+  }
 
   @Ref('reset-config-dialog')
   resetDialog?: HTMLDialogElement;
@@ -301,9 +327,13 @@ export default class App extends Vue {
   @Ref('questions-config-dialog')
   questionsDialog?: HTMLDialogElement;
 
-  mounted() {
+  @Ref('current-question')
+  currentQuestionElement?: HTMLElement;
+
+  async mounted() {
     restoreConfig();
     this.resetCandidates();
+    this.questionChanged();
   }
 
   getCardClasses(index: number) {
@@ -339,6 +369,13 @@ export default class App extends Vue {
     this.galleryMode = wasGallery;
   }
 
+  async resetTimers() {
+    for (const candidate of this.allCandidates) {
+      candidate.timer.pause();
+      candidate.timer.resetTime();
+    }
+  }
+
   get visibleCandidates() {
     return this.allCandidates.filter((candidate) => !candidate.isMinimized);
   }
@@ -355,6 +392,10 @@ export default class App extends Vue {
     return this.config.eventInfo.questions[this.questionIdx];
   }
 
+  clickedCandidate(candidate: Candidate) {
+    console.log(`${candidate}`);
+  }
+
   minimizeCandidate(candidate: Candidate) {
     candidate.toggleMinimized();
     this.focusManager.checkFocus(this.numberOfCandidates - 1);
@@ -364,7 +405,7 @@ export default class App extends Vue {
     const numQuestions = this.config.eventInfo.questions.length;
     this.questionIdx += dir + numQuestions;
     this.questionIdx = this.questionIdx % numQuestions;
-    console.log(numQuestions, this.questionIdx);
+    console.log('increment', dir, numQuestions, this.questionIdx);
   }
 
   dumpQuestions() {
@@ -404,7 +445,7 @@ export default class App extends Vue {
   }
 
   addNewQuestion(newQuestion: string) {
-    this.tempQuestions = addUniqueQuestion(newQuestion, this.tempQuestions);
+    this.tempQuestions = addUniqueItem(newQuestion, this.tempQuestions);
     this.tempQuestion = '';
   }
 
@@ -494,6 +535,18 @@ export default class App extends Vue {
   setCandidates(candidateNames: string[]) {
     globalConfig.eventInfo.candidatesList = candidateNames;
     this.allCandidates = candidateNames.map((name) => new Candidate(name));
+    this.candidateColumns = this.howManyColumns(this.visibleCandidates.length);
+  }
+
+  private howManyColumns(howManyCandidates: number) {
+    switch (true) {
+      case howManyCandidates === 1:
+        return 1;
+      case howManyCandidates % 2 === 0 && howManyCandidates < 5:
+        return 2;
+      default:
+        return 3;
+    }
   }
 
   private resetCandidates() {
@@ -502,32 +555,55 @@ export default class App extends Vue {
     );
   }
 }
-function setEditableElement(
-  el: HTMLElement,
-  valueCallback: (value: string) => void
-) {
-  el.setAttribute('contenteditable', 'true');
-  function onBlur(event: FocusEvent) {
-    if (!(event.target instanceof HTMLElement)) {
-      return;
-    }
-    const newValue = event.target.innerText;
+async function autosizeText(el: HTMLElement, direction: number) {
+  console.log(direction, 'start', el.scrollHeight, el.offsetHeight);
 
-    valueCallback(newValue);
-    event.target.removeAttribute('contenteditable');
-    event.target.removeEventListener('blur', onBlur);
+  const currentFontValue = getComputedStyle(el).getPropertyValue('font-size');
+  let startingSize = parseInt(currentFontValue, 10);
+  if (isNaN(startingSize)) {
+    console.log('el has no font size?', el, startingSize);
+    return;
   }
-  el.addEventListener('blur', onBlur);
+  function resizeText() {
+    startingSize += direction;
+    const newFont = `${startingSize}px`;
+    el.style.setProperty('font-size', newFont);
+  }
 
-  el.focus();
-  selectElementContents(el);
-}
-function selectElementContents(el: HTMLElement) {
-  var range = document.createRange();
-  range.selectNodeContents(el);
-  var sel = window.getSelection();
-  sel?.removeAllRanges();
-  sel?.addRange(range);
+  let iterations = 0;
+  await new Promise<void>((resolve) => {
+    requestAnimationFrame(async function doTheThing() {
+      if (el.scrollHeight <= el.offsetHeight === direction < 0) {
+        console.log(
+          direction,
+          'nope 1',
+          el.scrollHeight,
+          el.offsetHeight,
+          iterations
+        );
+        resolve();
+        return;
+      }
+      resizeText();
+      // await new Promise<void>((resolve) => setTimeout(resolve, 0));
+      if (
+        ++iterations < 1000 &&
+        el.scrollHeight > el.offsetHeight === direction < 0 &&
+        !(direction > 0 && Math.abs(el.scrollHeight - el.offsetHeight) > 3)
+      ) {
+        doTheThing();
+      } else {
+        console.log(
+          direction,
+          'nope 2',
+          el.scrollHeight,
+          el.offsetHeight,
+          iterations
+        );
+        resolve();
+      }
+    });
+  });
 }
 </script>
 <style lang="scss" scoped>
@@ -538,19 +614,20 @@ function selectElementContents(el: HTMLElement) {
   grid-auto-flow: row;
   grid-template-columns: 1fr;
   grid-template-rows:
-    fit-content(5vh) minmax(min-content, 2fr) minmax(min-content, 0fr)
+    fit-content(5vh) minmax(min-content, 2fr)
     minmax(min-content, 5fr) fit-content(5vh);
-  padding: 0 1em;
+  padding: 0 16px;
   transition: all 0.5s linear;
 
   grid-template-areas:
     'forum-app-header'
     'forum-app-question'
-    'forum-app-time-out'
     'forum-app-candidates'
     'forum-app-footer';
 
   .forum-app-header {
+    max-height: min-content;
+    padding: 4px;
     grid-area: forum-app-header;
   }
 
@@ -560,12 +637,15 @@ function selectElementContents(el: HTMLElement) {
     align-self: center;
     display: flex;
     flex-direction: column;
-    font-size: 6vw;
+    font-size: 200px;
     font-weight: bold;
     grid-area: forum-app-question;
     height: 100%;
     justify-content: center;
     line-height: 1;
+    overflow: hidden;
+    text-align: center;
+    // transition: font 0.01s ease-in;
   }
 
   .time-out-container-container {
@@ -590,10 +670,11 @@ function selectElementContents(el: HTMLElement) {
 }
 
 .forum-app-candidates {
+  --candidate-columns: 3;
   &.gallery-mode {
     .candidates-container .transition-container {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat((var(--candidate-columns)), minmax(0, 1fr));
       justify-content: space-evenly;
       > div,
       > candidate-card {
@@ -677,13 +758,12 @@ footer {
   }
 }
 
-[contenteditable='true'] {
+/deep/ [contenteditable='true'] {
   position: relative;
   &:active,
   &:focus {
     border: none;
     outline: none;
-    // background-color: green;
     // text-shadow: 1px 1px 4px #aa0000aa;
   }
 }

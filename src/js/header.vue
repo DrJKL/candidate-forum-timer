@@ -14,7 +14,7 @@
             @keydown.esc.prevent="blurElement">
             <!-- Unknown Event -->
           </h1>
-          <h2 class="subtitle">
+          <h2 class="subtitle flow-text">
             Hosted by
             <span
               id="org-title"
@@ -27,23 +27,29 @@
         </div>
         <div class="spacer"></div>
         <div class="buttons box">
-          <div class="global-controls">
+          <div class="global-actions">
             <a
-              class="btn shuffle-button"
+              class="btn reset-button"
+              :disabled="isShuffling"
+              @click.prevent="resetTimers()">
+              Reset
+              <i class="material-icons left">restart_alt</i>
+            </a>
+            <a
+              class="btn shuffle-button flow-text"
               :disabled="isShuffling"
               @click.prevent="shuffleCandidates()">
               Shuffle
               <i class="material-icons left">shuffle</i>
             </a>
-            <div class="controls-spacer"></div>
-            <a
-              class="btn gallery-mode-switch"
-              :disabled="isShuffling"
-              @click="updateGalleryMode()">
-              <i class="material-icons right">{{ currentModeIcon }} </i>
-              {{ currentModeName }}
-            </a>
           </div>
+          <a
+            class="btn gallery-mode-switch flow-text global-controls"
+            :disabled="isShuffling"
+            @click="updateGalleryMode()">
+            {{ currentModeName }}
+            <i class="material-icons right">{{ currentModeIcon }} </i>
+          </a>
 
           <div class="time-setters-global">
             <a
@@ -59,16 +65,15 @@
           <div class="candidate-navigation">
             <a
               href="#"
-              class="btn prev-button"
+              class="btn prev-button flow-text"
               @click.prevent="focusChange(-1)"
               :disabled="!prevEnabled">
               Prev
               <i class="material-icons left">navigate_before</i>
             </a>
-            <span class="current-focus-number">{{ focusedCandidate + 1 }}</span>
             <a
               href="#"
-              class="btn next-button"
+              class="btn next-button flow-text"
               @click.prevent="focusChange(1)"
               :disabled="!nextEnabled">
               Next
@@ -108,6 +113,9 @@ export default class Header extends Vue {
 
   @Emit()
   shuffleCandidates() {}
+
+  @Emit()
+  resetTimers() {}
 
   @Emit()
   focusChange(num: -1 | 1) {
@@ -211,49 +219,58 @@ header {
   .spacer {
     flex: 1;
   }
+
+  @mixin header-button-grid {
+    display: grid;
+    gap: 4px;
+  }
+
   .buttons {
+    @include header-button-grid;
     align-items: center;
     border-radius: 6px;
     box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.15),
       0 0px 0 1px rgba(10, 10, 10, 0.02);
-    display: grid;
-    gap: 4px;
-    grid-template: 1fr / 1fr 2fr;
+    grid-template: 1fr / 1fr 2fr 2fr;
     grid-auto-flow: row;
     grid-template-areas:
-      'time-setters-global global-controls'
-      'time-setters-global candidate-navigation';
+      'global-actions time-setters-global global-controls'
+      'global-actions time-setters-global candidate-navigation';
     padding: 1.25rem 1.25rem 0.5rem;
-    transition: all 1s linear;
+    transition: all 1s ease-in-out;
     user-select: none;
 
     > div {
       width: 100%;
     }
+    .btn {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+    }
 
     .time-setters-global {
-      display: grid;
-      gap: 4px;
+      @include header-button-grid;
       grid-area: time-setters-global;
       grid-template: 1fr 1fr / 1fr 1fr;
     }
 
-    .global-controls {
-      display: grid;
-      grid-template: 1fr / 4fr 1fr 4fr;
+    .gallery-mode-switch {
       grid-area: global-controls;
+      min-width: min-content;
+    }
 
-      .gallery-mode-switch {
-        min-width: 12rem;
-      }
+    .global-actions {
+      @include header-button-grid;
+      grid-area: global-actions;
+      width: 100%;
+      height: 100%;
     }
 
     .candidate-navigation {
-      align-items: center;
-      align-self: baseline;
-      display: grid;
+      @include header-button-grid;
       grid-area: candidate-navigation;
-      grid-template: 1fr / 4fr 1fr 4fr;
+      grid-template: 1fr / 1fr 1fr;
       text-align: center;
 
       .current-focus-number {
