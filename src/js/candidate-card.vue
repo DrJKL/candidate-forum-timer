@@ -2,7 +2,11 @@
   <div class="candidate-card card z-depth-2" :class="timeClass">
     <div class="card-content">
       <div class="card-title">
-        <span @click.prevent="clickCandidateName()">{{ candidate.name }}</span>
+        <span
+          @dblclick.prevent="clickCandidateName(true)"
+          @click.prevent="clickCandidateName(false)"
+          >{{ candidate.name }}</span
+        >
         <a
           href="#"
           class="btn-floating btn-flat"
@@ -96,7 +100,7 @@ export default class CandidateCard extends Vue {
   minimizeCandidate() {}
 
   @Emit()
-  clickCandidateName() {}
+  clickCandidateName(double: boolean) {}
 
   get progressPercent() {
     return this.candidate.timer.progressPercent;

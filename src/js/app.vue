@@ -17,12 +17,16 @@
     <collapse-transition>
       <div
         ref="current-question"
-        v-show="currentQuestion"
-        class="current-question forum-app-question"
-        @dblclick="setQuestionEditable"
-        @keydown.esc.prevent="blurElement"
-        @keydown.enter.prevent="blurElement">
-        {{ currentQuestion }}
+        class="question-wrap"
+        :data-replicated-value="currentQuestion">
+        <div
+          v-show="currentQuestion"
+          class="current-question forum-app-question"
+          @dblclick="setQuestionEditable"
+          @keydown.esc.prevent="blurElement"
+          @keydown.enter.prevent="blurElement">
+          {{ currentQuestion }}
+        </div>
       </div>
     </collapse-transition>
     <main
@@ -42,7 +46,7 @@
             <candidate-card
               :candidate="candidate"
               :class="getCardClasses(index)"
-              @click-candidate-name="clickedCandidate(candidate)"
+              @click-candidate-name="clickedCandidate(candidate, index, $event)"
               @minimize-candidate="
                 minimizeCandidate(candidate)
               "></candidate-card>
@@ -277,7 +281,7 @@ import {
 } from './global_config';
 import { addUniqueItem } from './list_management';
 import M from 'materialize-css';
-import { resolve } from 'path';
+import { debug } from 'console';
 
 @Component({
   components: { AppHeader, CandidateCard, CollapseTransition },
@@ -392,8 +396,11 @@ export default class App extends Vue {
     return this.config.eventInfo.questions[this.questionIdx];
   }
 
-  clickedCandidate(candidate: Candidate) {
-    console.log(`${candidate}`);
+  clickedCandidate(candidate: Candidate, index: number, $event: boolean) {
+    console.log(`${candidate}`, index, $event);
+    if ($event) {
+      this.focusManager.changeFocusAbsolute(index, this.numberOfCandidates - 1);
+    }
   }
 
   minimizeCandidate(candidate: Candidate) {
@@ -558,8 +565,13 @@ export default class App extends Vue {
 async function autosizeText(el: HTMLElement, direction: number) {
   console.log(direction, 'start', el.scrollHeight, el.offsetHeight);
 
-  const currentFontValue = getComputedStyle(el).getPropertyValue('font-size');
+  const computed = getComputedStyle(el);
+  const currentFontValue = computed.getPropertyValue('--question-size-test');
+  const gridTemplateRows = computed.getPropertyValue('grid-template-rows');
+  const height = computed.getPropertyValue('height');
   let startingSize = parseInt(currentFontValue, 10);
+  console.log({ currentFontValue, gridTemplateRows, height });
+
   if (isNaN(startingSize)) {
     console.log('el has no font size?', el, startingSize);
     return;
@@ -567,41 +579,23 @@ async function autosizeText(el: HTMLElement, direction: number) {
   function resizeText() {
     startingSize += direction;
     const newFont = `${startingSize}px`;
-    el.style.setProperty('font-size', newFont);
+    el.style.setProperty('--question-size-test', newFont);
   }
 
   let iterations = 0;
   await new Promise<void>((resolve) => {
     requestAnimationFrame(async function doTheThing() {
       if (el.scrollHeight <= el.offsetHeight === direction < 0) {
-        console.log(
-          direction,
-          'nope 1',
-          el.scrollHeight,
-          el.offsetHeight,
-          iterations
-        );
         resolve();
         return;
       }
       resizeText();
-      // await new Promise<void>((resolve) => setTimeout(resolve, 0));
-      if (
-        ++iterations < 1000 &&
-        el.scrollHeight > el.offsetHeight === direction < 0 &&
-        !(direction > 0 && Math.abs(el.scrollHeight - el.offsetHeight) > 3)
-      ) {
-        doTheThing();
-      } else {
-        console.log(
-          direction,
-          'nope 2',
-          el.scrollHeight,
-          el.offsetHeight,
-          iterations
-        );
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
+      if (++iterations > 1000) {
         resolve();
+        return;
       }
+      doTheThing();
     });
   });
 }
@@ -616,6 +610,7 @@ async function autosizeText(el: HTMLElement, direction: number) {
   grid-template-rows:
     fit-content(5vh) minmax(min-content, 2fr)
     minmax(min-content, 5fr) fit-content(5vh);
+  overflow: hidden;
   padding: 0 16px;
   transition: all 0.5s linear;
 
@@ -631,21 +626,30 @@ async function autosizeText(el: HTMLElement, direction: number) {
     grid-area: forum-app-header;
   }
 
-  .forum-app-question {
-    -webkit-text-stroke: 1px black;
-    align-items: center;
-    align-self: center;
-    display: flex;
-    flex-direction: column;
-    font-size: 200px;
-    font-weight: bold;
+  .question-wrap {
+    --question-size: 200px;
+    --question-size-test: 200px;
+
+    display: grid;
     grid-area: forum-app-question;
-    height: 100%;
-    justify-content: center;
-    line-height: 1;
-    overflow: hidden;
-    text-align: center;
-    // transition: font 0.01s ease-in;
+
+    &::after {
+      display: none !important;
+      content: attr(data-replicated-value) ' ';
+      color: rgba(40, 200, 40, 0.5);
+      font-size: var(--question-size-test);
+    }
+    .forum-app-question,
+    &::after {
+      -webkit-text-stroke: 1px black;
+      align-items: center;
+      display: grid;
+      font-size: var(--question-size-test);
+      font-weight: bold;
+      grid-area: 1 / 1 / 2 / 2;
+      line-height: 1;
+      text-align: center;
+    }
   }
 
   .time-out-container-container {
