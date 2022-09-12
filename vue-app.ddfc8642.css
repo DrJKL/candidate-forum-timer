@@ -1,11 +1,27 @@
 .candidate-card[data-v-03db96] {
+  --progress-color-hue: 120;
+  --progress-color-sat: 80;
+  --progress-color-lit: 50;
   background-color: #607d8b;
   color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  outline: 0 solid;
   transition: all 0.25s linear;
   width: 100%;
+}
+.candidate-card.plenty-time[data-v-03db96] {
+    border-color: green;
+    outline-color: green;
+}
+.candidate-card.running-out[data-v-03db96] {
+    border-color: yellow;
+    outline-color: yellow;
+}
+.candidate-card.almost-done[data-v-03db96] {
+    border-color: red;
+    outline-color: red;
 }
 .candidate-card .card-title[data-v-03db96] {
     display: flex;
@@ -28,28 +44,19 @@
     user-select: none;
     font-size: 30pt;
 }
-.candidate-card .time-section .time-up.progress[data-v-03db96] {
-    background-color: pink;
-}
-.candidate-card .time-section .time-up.progress .indeterminate[data-v-03db96] {
-      background-color: #ff3344;
-}
 .candidate-card .time-section .progress[data-v-03db96] {
     border-radius: 5px;
     height: 2rem;
     margin-bottom: 0.5rem;
 }
-.candidate-card.plenty-time[data-v-03db96] {
-    border-color: green;
-    outline-color: green;
+.candidate-card .time-section .progress .determinate[data-v-03db96] {
+      background-color: hsl(var(--progress-color, 120), calc(var(--progress-color-sat, 100) * 1%), calc(var(--progress-color-lit, 50) * 1%));
 }
-.candidate-card.running-out[data-v-03db96] {
-    border-color: yellow;
-    outline-color: yellow;
+.candidate-card .time-section .progress.time-up[data-v-03db96] {
+      background-color: pink;
 }
-.candidate-card.almost-done[data-v-03db96] {
-    border-color: red;
-    outline-color: red;
+.candidate-card .time-section .progress.time-up .indeterminate[data-v-03db96] {
+        background-color: #ff3344;
 }
 .candidate-card .card-action[data-v-03db96] {
     display: flex;
@@ -123,7 +130,7 @@ header[data-v-09fc64] {
 }
 .our-header .header-text .title[data-v-09fc64] {
       color: #363636;
-      font-size: 2rem;
+      font-size: clamp(32px, 10vw, 2rem);
       font-weight: 600;
       margin: 0 0 1.5rem;
 }
@@ -194,35 +201,29 @@ header[data-v-09fc64] {
 }
 
 .app-container[data-v-cd5f52] {
+  --candidate-columns: 3;
   display: grid;
   flex: 1;
   gap: 8px;
   grid-auto-flow: row;
-  grid-template-columns: 1fr;
+  grid-template-columns: 2fr 1fr;
   grid-template-rows: fit-content(5vh) minmax(min-content, 2fr) minmax(min-content, 5fr) fit-content(5vh);
+  max-height: 100%;
   overflow: hidden;
   padding: 0 16px;
-  transition: all 0.5s linear;
-  grid-template-areas: 'forum-app-header' 'forum-app-question' 'forum-app-candidates' 'forum-app-footer';
+  grid-template-areas: 'forum-app-header forum-app-header' 'forum-app-question forum-app-question' 'forum-app-candidates forum-app-gallery' 'forum-app-footer forum-app-footer';
 }
 .app-container .forum-app-header[data-v-cd5f52] {
     max-height: min-content;
-    padding: 4px;
     grid-area: forum-app-header;
 }
 .app-container .question-wrap[data-v-cd5f52] {
-    --question-size: 200px;
     --question-size-test: 200px;
     display: grid;
     grid-area: forum-app-question;
+    position: relative;
 }
-.app-container .question-wrap[data-v-cd5f52]::after {
-      display: none !important;
-      content: attr(data-replicated-value) " ";
-      color: rgba(40, 200, 40, 0.5);
-      font-size: var(--question-size-test);
-}
-.app-container .question-wrap .forum-app-question[data-v-cd5f52], .app-container .question-wrap[data-v-cd5f52]::after {
+.app-container .question-wrap .forum-app-question[data-v-cd5f52] {
       -webkit-text-stroke: 1px black;
       align-items: center;
       display: grid;
@@ -230,7 +231,15 @@ header[data-v-09fc64] {
       font-weight: bold;
       grid-area: 1 / 1 / 2 / 2;
       line-height: 1;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      transform-origin: center;
       text-align: center;
+      width: calc(100% - 8px);
+      height: calc(100% - 8px);
+      user-select: none;
 }
 .app-container .time-out-container-container[data-v-cd5f52] {
     transition: transform 0.5s ease-in;
@@ -243,14 +252,58 @@ header[data-v-09fc64] {
 .app-container .time-out-container-container .minimized-candidate[data-v-cd5f52] {
       cursor: pointer;
 }
-.app-container .candidates-container[data-v-cd5f52] {
+.app-container .forum-app-candidates[data-v-cd5f52] {
     grid-area: forum-app-candidates;
+    transition: width 1s linear;
+}
+.app-container.immersive-mode .forum-app-candidates[data-v-cd5f52] {
+    grid-area: forum-app-candidates / forum-app-candidates / forum-app-candidates / forum-app-gallery;
+}
+.app-container.immersive-mode .forum-app-gallery[data-v-cd5f52] {
+    display: none !important;
+}
+.app-container .forum-app-gallery[data-v-cd5f52] {
+    grid-area: forum-app-gallery;
+    display: grid;
+    grid-template: fit-content(4rem) 1fr/1fr;
+}
+.app-container .forum-app-gallery .face-area-header[data-v-cd5f52] {
+      padding: 0;
+      margin-top: 0;
+      text-align: center;
+      font-weight: bold;
+}
+.app-container .forum-app-gallery .face-area-header i[data-v-cd5f52] {
+        color: gold;
+        text-shadow: 0px 1px 4px gold;
+        -webkit-text-stroke: 1px black;
+}
+.app-container .forum-app-gallery .all-faces[data-v-cd5f52] {
+      display: grid;
+      gap: 4px;
+      grid-auto-flow: row;
+      grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+}
+.app-container .forum-app-gallery .all-faces .face-box[data-v-cd5f52] {
+        aspect-ratio: 1 / 1;
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        display: grid;
+        align-items: flex-end;
+}
+.app-container .forum-app-gallery .all-faces .face-box .face-box-label[data-v-cd5f52] {
+          transition: font 0.25s ease-in;
+          background-color: #26a69a;
+          color: white;
+          font-size: clamp(14px, 2vw, 22px);
+          font-weight: bold;
+          text-align: center;
 }
 .app-container .forum-app-footer[data-v-cd5f52] {
+    max-height: min-content;
     grid-area: forum-app-footer;
 }
 .forum-app-candidates[data-v-cd5f52] {
-  --candidate-columns: 3;
+  padding-right: 16px;
 }
 .forum-app-candidates.gallery-mode .candidates-container .transition-container[data-v-cd5f52] {
     display: grid;
@@ -325,6 +378,8 @@ footer > div > button.red-text[data-v-cd5f52] {
 [data-v-cd5f52] [contenteditable='true']:active,[data-v-cd5f52] [contenteditable='true']:focus {
     border: none;
     outline: none;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.8);
 }
 dialog.config-dialog[data-v-cd5f52] {
   border: 0;

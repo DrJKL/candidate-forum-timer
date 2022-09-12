@@ -17566,6 +17566,11 @@ var CandidateCard = /*#__PURE__*/function (_Vue) {
         'almost-done': this.progressPercent < 25
       };
     }
+  }, {
+    key: "timeColorHue",
+    get: function get() {
+      return Math.round(lerp(0, 120, this.progressPercent / 100));
+    }
   }]);
 
   return CandidateCard;
@@ -17586,6 +17591,10 @@ CandidateCard = __decorate([(0, _vuePropertyDecorator.Component)({
 })], CandidateCard);
 var _default = CandidateCard;
 exports.default = _default;
+
+function lerp(min, max, progress) {
+  return (1 - progress) * min + progress * max;
+}
         var $03db96 = exports.default || module.exports;
       
       if (typeof $03db96 === 'function') {
@@ -17604,7 +17613,10 @@ exports.default = _default;
     [
       _c(
         "div",
-        { staticClass: "card-content" },
+        {
+          staticClass: "card-content",
+          style: { "--progress-color": _vm.timeColorHue },
+        },
         [
           _c("div", { staticClass: "card-title" }, [
             _c(
@@ -18025,7 +18037,7 @@ exports.default = _default;
           _c("img", { attrs: { src: _vm.logoUrl, alt: "Organization logo" } }),
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "header-text flow-text" }, [
+        _c("div", { staticClass: "header-text" }, [
           _c("h1", {
             staticClass: "title event-title",
             attrs: { id: "event-title" },
@@ -18059,7 +18071,7 @@ exports.default = _default;
             },
           }),
           _vm._v(" "),
-          _c("h2", { staticClass: "subtitle flow-text" }, [
+          _c("h2", { staticClass: "subtitle" }, [
             _vm._v("\n          Hosted by\n          "),
             _c(
               "span",
@@ -18126,7 +18138,7 @@ exports.default = _default;
             _c(
               "a",
               {
-                staticClass: "btn shuffle-button flow-text",
+                staticClass: "btn shuffle-button",
                 attrs: { disabled: _vm.isShuffling },
                 on: {
                   click: function ($event) {
@@ -18147,7 +18159,7 @@ exports.default = _default;
           _c(
             "a",
             {
-              staticClass: "btn gallery-mode-switch flow-text global-controls",
+              staticClass: "btn gallery-mode-switch global-controls",
               attrs: { disabled: _vm.isShuffling },
               on: {
                 click: function ($event) {
@@ -18197,7 +18209,7 @@ exports.default = _default;
             _c(
               "a",
               {
-                staticClass: "btn prev-button flow-text",
+                staticClass: "btn prev-button",
                 attrs: { href: "#", disabled: !_vm.prevEnabled },
                 on: {
                   click: function ($event) {
@@ -18217,7 +18229,7 @@ exports.default = _default;
             _c(
               "a",
               {
-                staticClass: "btn next-button flow-text",
+                staticClass: "btn next-button",
                 attrs: { href: "#", disabled: !_vm.nextEnabled },
                 on: {
                   click: function ($event) {
@@ -30889,8 +30901,10 @@ var App = /*#__PURE__*/function (_Vue) {
 
     _this = _super.apply(this, arguments);
     _this.allCandidates = [];
+    _this.allCandidatesUnshuffled = [];
     _this.candidateColumns = 3;
     _this.galleryMode = true;
+    _this.immersiveMode = false;
     _this.isShuffling = false;
     _this.questionIdx = 0;
     _this.tempImg = '';
@@ -30929,7 +30943,7 @@ var App = /*#__PURE__*/function (_Vue) {
                 }
 
                 _context.next = 4;
-                return autosizeText(this.currentQuestionElement, 1);
+                return autosizeText(this.currentQuestionElement, 10);
 
               case 4:
                 _context.next = 6;
@@ -30944,23 +30958,47 @@ var App = /*#__PURE__*/function (_Vue) {
       }));
     }
   }, {
-    key: "mounted",
-    value: function mounted() {
+    key: "immersiveChanged",
+    value: function immersiveChanged() {
       return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                (0, _global_config.restoreConfig)();
-                this.resetCandidates();
-                this.questionChanged();
+                _context2.next = 2;
+                return this.questionChanged();
 
-              case 3:
+              case 2:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2, this);
+      }));
+    }
+  }, {
+    key: "mounted",
+    value: function mounted() {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+        var _this2 = this;
+
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                (0, _global_config.restoreConfig)();
+                this.resetCandidates();
+                this.questionChanged();
+                window.addEventListener('resize', function () {
+                  _this2.questionChanged();
+                });
+
+              case 4:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
       }));
     }
   }, {
@@ -30982,36 +31020,36 @@ var App = /*#__PURE__*/function (_Vue) {
   }, {
     key: "shuffleCandidates",
     value: function shuffleCandidates() {
-      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
         var wasGallery;
-        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context4.prev = _context4.next) {
               case 0:
                 wasGallery = this.galleryMode;
                 this.isShuffling = true;
 
                 if (wasGallery) {
-                  _context3.next = 6;
+                  _context4.next = 6;
                   break;
                 }
 
                 this.galleryMode = true;
-                _context3.next = 6;
+                _context4.next = 6;
                 return new Promise(function (resolve) {
                   return setTimeout(resolve, 700);
                 });
 
               case 6:
                 this.allCandidates = (0, _common.shuffle)(this.allCandidates);
-                _context3.next = 9;
+                _context4.next = 9;
                 return new Promise(function (resolve) {
                   return setTimeout(resolve, 100);
                 });
 
               case 9:
                 this.focusManager.focusedCandidate = 0;
-                _context3.next = 12;
+                _context4.next = 12;
                 return new Promise(function (resolve) {
                   return setTimeout(resolve, 1000);
                 });
@@ -31022,21 +31060,21 @@ var App = /*#__PURE__*/function (_Vue) {
 
               case 14:
               case "end":
-                return _context3.stop();
+                return _context4.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee4, this);
       }));
     }
   }, {
     key: "resetTimers",
     value: function resetTimers() {
-      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+      return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
         var _iterator, _step, candidate;
 
-        return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 _iterator = _createForOfIteratorHelper(this.allCandidates);
 
@@ -31054,16 +31092,23 @@ var App = /*#__PURE__*/function (_Vue) {
 
               case 2:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee5, this);
       }));
     }
   }, {
     key: "visibleCandidates",
     get: function get() {
       return this.allCandidates.filter(function (candidate) {
+        return !candidate.isMinimized;
+      });
+    }
+  }, {
+    key: "visibleCandidatesUnshuffled",
+    get: function get() {
+      return this.allCandidatesUnshuffled.filter(function (candidate) {
         return !candidate.isMinimized;
       });
     }
@@ -31088,6 +31133,11 @@ var App = /*#__PURE__*/function (_Vue) {
     key: "currentQuestion",
     get: function get() {
       return this.config.eventInfo.questions[this.questionIdx];
+    }
+  }, {
+    key: "numberOfQuestions",
+    get: function get() {
+      return this.config.eventInfo.questions.length;
     }
   }, {
     key: "clickedCandidate",
@@ -31288,10 +31338,7 @@ var App = /*#__PURE__*/function (_Vue) {
     key: "setCandidates",
     value: function setCandidates(candidateNames) {
       _global_config.globalConfig.eventInfo.candidatesList = candidateNames;
-      this.allCandidates = candidateNames.map(function (name) {
-        return new _candidates.Candidate(name);
-      });
-      this.candidateColumns = this.howManyColumns(this.visibleCandidates.length);
+      this.resetCandidates();
     }
   }, {
     key: "howManyColumns",
@@ -31313,6 +31360,7 @@ var App = /*#__PURE__*/function (_Vue) {
       this.allCandidates = _global_config.globalConfig.eventInfo.candidatesList.map(function (name) {
         return new _candidates.Candidate(name);
       });
+      this.allCandidatesUnshuffled = _toConsumableArray(this.allCandidates);
     }
   }]);
 
@@ -31332,6 +31380,10 @@ __decorate([(0, _vuePropertyDecorator.Watch)('allCandidates', {
 __decorate([(0, _vuePropertyDecorator.Watch)('currentQuestion', {
   immediate: true
 }), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", Promise)], App.prototype, "questionChanged", null);
+
+__decorate([(0, _vuePropertyDecorator.Watch)('immersiveMode', {
+  immediate: true
+}), __metadata("design:type", Function), __metadata("design:paramtypes", []), __metadata("design:returntype", Promise)], App.prototype, "immersiveChanged", null);
 
 __decorate([(0, _vuePropertyDecorator.Ref)('reset-config-dialog'), __metadata("design:type", typeof (_b = typeof HTMLDialogElement !== "undefined" && HTMLDialogElement) === "function" ? _b : Object)], App.prototype, "resetDialog", void 0);
 
@@ -31354,11 +31406,11 @@ var _default = App;
 exports.default = _default;
 
 function autosizeText(el, direction) {
-  return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-    var computed, currentFontValue, gridTemplateRows, height, startingSize, resizeText, iterations;
-    return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+  return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+    var computed, currentFontValue, startingSize, resizeText, iterations;
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
             resizeText = function _resizeText() {
               startingSize += direction;
@@ -31366,79 +31418,71 @@ function autosizeText(el, direction) {
               el.style.setProperty('--question-size-test', newFont);
             };
 
-            console.log(direction, 'start', el.scrollHeight, el.offsetHeight);
             computed = getComputedStyle(el);
             currentFontValue = computed.getPropertyValue('--question-size-test');
-            gridTemplateRows = computed.getPropertyValue('grid-template-rows');
-            height = computed.getPropertyValue('height');
             startingSize = parseInt(currentFontValue, 10);
-            console.log({
-              currentFontValue: currentFontValue,
-              gridTemplateRows: gridTemplateRows,
-              height: height
-            });
 
             if (!isNaN(startingSize)) {
-              _context6.next = 11;
+              _context7.next = 7;
               break;
             }
 
             console.log('el has no font size?', el, startingSize);
-            return _context6.abrupt("return");
+            return _context7.abrupt("return");
 
-          case 11:
+          case 7:
             iterations = 0;
-            _context6.next = 14;
+            _context7.next = 10;
             return new Promise(function (resolve) {
               requestAnimationFrame(function doTheThing() {
-                return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
-                  return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+                return __awaiter(this, void 0, void 0, /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+                  return _regeneratorRuntime().wrap(function _callee6$(_context6) {
                     while (1) {
-                      switch (_context5.prev = _context5.next) {
+                      switch (_context6.prev = _context6.next) {
                         case 0:
                           if (!(el.scrollHeight <= el.offsetHeight === direction < 0)) {
-                            _context5.next = 3;
+                            _context6.next = 3;
                             break;
                           }
 
                           resolve();
-                          return _context5.abrupt("return");
+                          return _context6.abrupt("return");
 
                         case 3:
                           resizeText();
-                          _context5.next = 6;
+                          _context6.next = 6;
                           return new Promise(function (resolve) {
                             return setTimeout(resolve, 0);
                           });
 
                         case 6:
-                          if (!(++iterations > 1000)) {
-                            _context5.next = 9;
+                          if (!(++iterations > 500 || startingSize <= 12 || startingSize >= 300)) {
+                            _context6.next = 9;
                             break;
                           }
 
                           resolve();
-                          return _context5.abrupt("return");
+                          return _context6.abrupt("return");
 
                         case 9:
                           doTheThing();
 
                         case 10:
                         case "end":
-                          return _context5.stop();
+                          return _context6.stop();
                       }
                     }
-                  }, _callee5);
+                  }, _callee6);
                 }));
               });
             });
 
-          case 14:
+          case 10:
           case "end":
-            return _context6.stop();
+            return _context7.stop();
         }
       }
-    }, _callee6);
+    }, _callee7);
   }));
 }
         var $cd5f52 = exports.default || module.exports;
@@ -31460,6 +31504,10 @@ function autosizeText(el, direction) {
       class: {
         "gallery-mode": _vm.galleryMode,
         "presentation-mode": !_vm.galleryMode,
+        "immersive-mode": _vm.immersiveMode,
+      },
+      style: {
+        "--candidate-columns": _vm.candidateColumns,
       },
     },
     [
@@ -31557,9 +31605,6 @@ function autosizeText(el, direction) {
           class: {
             "gallery-mode": _vm.galleryMode,
           },
-          style: {
-            "--candidate-columns": _vm.candidateColumns,
-          },
         },
         [
           _c(
@@ -31604,6 +31649,32 @@ function autosizeText(el, direction) {
           ),
         ]
       ),
+      _vm._v(" "),
+      _c("div", { staticClass: "forum-app-gallery" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "all-faces" },
+          [
+            _vm._m(1),
+            _vm._v(" "),
+            _vm._l(
+              _vm.visibleCandidatesUnshuffled,
+              function (candidate, index) {
+                return _c("div", { staticClass: "face-box z-depth-1" }, [
+                  _c("div", { staticClass: "face-box-label" }, [
+                    _vm._v(
+                      "\n          " + _vm._s(candidate.name) + "\n        "
+                    ),
+                  ]),
+                ])
+              }
+            ),
+          ],
+          2
+        ),
+      ]),
       _vm._v(" "),
       _c(
         "footer",
@@ -31743,6 +31814,21 @@ function autosizeText(el, direction) {
             _c(
               "a",
               {
+                staticClass: "waves-effect waves-teal btn-flat",
+                attrs: { title: "Next Question" },
+                on: {
+                  click: function ($event) {
+                    $event.preventDefault()
+                    _vm.immersiveMode = !_vm.immersiveMode
+                  },
+                },
+              },
+              [_vm._v("\n        Immersive?\n      ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
                 staticClass: "waves-effect waves-teal btn-flat red-text",
                 on: {
                   click: function ($event) {
@@ -31794,7 +31880,7 @@ function autosizeText(el, direction) {
             ),
           ]),
           _vm._v(" "),
-          _vm._m(0),
+          _vm._m(2),
         ],
         1
       ),
@@ -31806,7 +31892,7 @@ function autosizeText(el, direction) {
           staticClass: "config-dialog",
           on: { close: _vm.resetDialogClosed },
         },
-        [_vm._m(1)]
+        [_vm._m(3)]
       ),
       _vm._v(" "),
       _c(
@@ -32071,6 +32157,7 @@ function autosizeText(el, direction) {
                               "i",
                               {
                                 staticClass: "material-icons move-item-button",
+                                attrs: { hidden: index === 0 },
                                 on: {
                                   click: function ($event) {
                                     $event.preventDefault()
@@ -32085,6 +32172,9 @@ function autosizeText(el, direction) {
                               "i",
                               {
                                 staticClass: "material-icons move-item-button",
+                                attrs: {
+                                  hidden: index >= _vm.numberOfQuestions - 1,
+                                },
                                 on: {
                                   click: function ($event) {
                                     $event.preventDefault()
@@ -32131,7 +32221,7 @@ function autosizeText(el, direction) {
               ),
             ]),
             _vm._v(" "),
-            _vm._m(2),
+            _vm._m(4),
           ]),
         ]
       ),
@@ -32140,6 +32230,24 @@ function autosizeText(el, direction) {
   )
 }
 var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h3", { staticClass: "face-area-header" }, [
+      _c("i", { staticClass: "material-icons" }, [_vm._v("star")]),
+      _vm._v(" The Stars Of The Show!\n      "),
+      _c("i", { staticClass: "material-icons" }, [_vm._v("star")]),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "face-box z-depth-1" }, [
+      _c("div", { staticClass: "face-box-label" }, [_vm._v("Moderator")]),
+    ])
+  },
   function () {
     var _vm = this
     var _h = _vm.$createElement
@@ -32296,7 +32404,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "8900" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "1854" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
