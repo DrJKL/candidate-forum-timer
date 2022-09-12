@@ -57,25 +57,26 @@
           </div>
         </transition-group>
       </div>
-    </main>
-    <div class="forum-app-gallery">
-      <h3 class="face-area-header">
-        <i class="material-icons">star</i> The Stars Of The Show!
-        <i class="material-icons">star</i>
-      </h3>
-      <div class="all-faces">
-        <div class="face-box z-depth-1">
-          <div class="face-box-label z-depth-1">Moderator</div>
-        </div>
-        <div
-          class="face-box z-depth-1"
-          v-for="(candidate, index) of visibleCandidatesUnshuffled">
-          <div class="face-box-label z-depth-1">
-            {{ candidate.name }}
+      <div class="forum-app-gallery">
+        <h3 class="face-area-header">
+          <i class="material-icons">star</i> The Stars Of The Show!
+          <i class="material-icons">star</i>
+        </h3>
+        <div class="all-faces">
+          <div class="face-box z-depth-1">
+            <div class="face-box-label z-depth-1">Moderator</div>
+          </div>
+          <div
+            class="face-box z-depth-1"
+            v-for="(candidate, index) of visibleCandidatesUnshuffled">
+            <div class="face-box-label z-depth-1">
+              {{ candidate.name }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </main>
+
     <footer class="forum-app-footer">
       <div>
         <span>Set New...</span>
@@ -314,11 +315,15 @@
 import { Component, Vue, Prop, Watch, Ref } from 'vue-property-decorator';
 import { CollapseTransition } from '@ivanv/vue-collapse-transition';
 import { Candidate } from './candidates';
-import { shuffle, blurElement } from './common';
+import {
+  shuffle,
+  blurElement,
+  autosizeText,
+  setEditableElement,
+} from './common';
 import CandidateCard from './candidate-card.vue';
 import AppHeader from './header.vue';
 import FocusManager from './focus_manager';
-import { setEditableElement } from './common/editable';
 import {
   globalConfig,
   restoreConfig,
@@ -628,38 +633,6 @@ export default class App extends Vue {
     this.allCandidatesUnshuffled = [...this.allCandidates];
   }
 }
-async function autosizeText(el: HTMLElement, direction: number) {
-  const computed = getComputedStyle(el);
-  const currentFontValue = computed.getPropertyValue('--question-size-test');
-  let startingSize = parseInt(currentFontValue, 10);
-
-  if (isNaN(startingSize)) {
-    console.log('el has no font size?', el, startingSize);
-    return;
-  }
-  function resizeText() {
-    startingSize += direction;
-    const newFont = `${startingSize}px`;
-    el.style.setProperty('--question-size-test', newFont);
-  }
-
-  let iterations = 0;
-  await new Promise<void>((resolve) => {
-    requestAnimationFrame(async function doTheThing() {
-      if (el.scrollHeight <= el.offsetHeight === direction < 0) {
-        resolve();
-        return;
-      }
-      resizeText();
-      await new Promise<void>((resolve) => setTimeout(resolve, 0));
-      if (++iterations > 500 || startingSize <= 12 || startingSize >= 300) {
-        resolve();
-        return;
-      }
-      doTheThing();
-    });
-  });
-}
 </script>
 <style lang="scss" scoped>
 .app-container {
@@ -668,7 +641,7 @@ async function autosizeText(el: HTMLElement, direction: number) {
   flex: 1;
   gap: 8px;
   grid-auto-flow: row;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr;
   grid-template-rows:
     fit-content(5vh) minmax(min-content, 2fr)
     minmax(min-content, 5fr) fit-content(5vh);
@@ -677,10 +650,10 @@ async function autosizeText(el: HTMLElement, direction: number) {
   padding: 0 16px;
 
   grid-template-areas:
-    'forum-app-header forum-app-header'
-    'forum-app-question forum-app-question'
-    'forum-app-candidates forum-app-gallery'
-    'forum-app-footer forum-app-footer';
+    'forum-app-header'
+    'forum-app-question'
+    'forum-app-candidates'
+    'forum-app-footer';
 
   .forum-app-header {
     max-height: min-content;
@@ -730,20 +703,85 @@ async function autosizeText(el: HTMLElement, direction: number) {
     grid-area: forum-app-candidates;
 
     transition: width 1s linear;
-  }
-
-  &.immersive-mode {
-    .forum-app-candidates {
-      grid-area: forum-app-candidates / forum-app-candidates /
-        forum-app-candidates / forum-app-gallery;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    @at-root .app-container.immersive-mode
+        .forum-app-candidates
+        .forum-app-gallery {
+      flex-grow: 0.000001;
+      width: 0;
+      overflow: hidden;
+    }
+    .candidates-container {
+      flex: 2;
     }
     .forum-app-gallery {
-      display: none !important;
+      flex: 1;
+      transition: all 0.5s ease-in;
+    }
+
+    &.gallery-mode {
+      .candidates-container .transition-container {
+        display: grid;
+        grid-template-columns: repeat(
+          (var(--candidate-columns)),
+          minmax(0, 1fr)
+        );
+        justify-content: space-evenly;
+        > div,
+        > candidate-card {
+          transition: all 0.2s ease-in-out;
+          margin: 0 0.5em;
+          visibility: visible;
+          flex-basis: 30vw;
+        }
+      }
+    }
+    &:not(.gallery-mode) {
+      .candidate-card {
+        display: none;
+        &.focused-item,
+        &.is-previous,
+        &.on-deck {
+          display: flex;
+        }
+        &.focused-item {
+          /deep/ .card-content .card-title {
+            font-size: 6vw;
+            font-weight: 500;
+            line-height: initial;
+            -webkit-text-stroke: 1px black;
+          }
+        }
+        &.is-previous,
+        &.on-deck {
+          /deep/ {
+            .card-content {
+              padding: 12px;
+              .card-title {
+                font-weight: 500;
+              }
+              .time-section {
+                display: none;
+                transform: scaleY(0);
+              }
+            }
+            .card-action {
+              display: none !important;
+            }
+          }
+        }
+      }
+    }
+    .candidate-card.focused-item {
+      /deep/ .card-content .card-title {
+        transition: font-size 0.2s ease-in-out;
+        font-size: 30pt;
+      }
     }
   }
-
   .forum-app-gallery {
-    grid-area: forum-app-gallery;
     display: grid;
     grid-template: fit-content(4rem) 1fr / 1fr;
 
@@ -752,6 +790,8 @@ async function autosizeText(el: HTMLElement, direction: number) {
       margin-top: 0;
       text-align: center;
       font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
 
       i {
         color: gold;
@@ -797,66 +837,6 @@ async function autosizeText(el: HTMLElement, direction: number) {
   .forum-app-footer {
     max-height: min-content;
     grid-area: forum-app-footer;
-  }
-}
-
-.forum-app-candidates {
-  padding-right: 16px;
-  &.gallery-mode {
-    .candidates-container .transition-container {
-      display: grid;
-      grid-template-columns: repeat((var(--candidate-columns)), minmax(0, 1fr));
-      justify-content: space-evenly;
-      > div,
-      > candidate-card {
-        transition: all 0.2s ease-in-out;
-        margin: 0 0.5em;
-        visibility: visible;
-        flex-basis: 30vw;
-      }
-    }
-  }
-  &:not(.gallery-mode) {
-    .candidate-card {
-      display: none;
-      &.focused-item,
-      &.is-previous,
-      &.on-deck {
-        display: flex;
-      }
-      &.focused-item {
-        /deep/ .card-content .card-title {
-          font-size: 6vw;
-          font-weight: 500;
-          line-height: initial;
-          -webkit-text-stroke: 1px black;
-        }
-      }
-      &.is-previous,
-      &.on-deck {
-        /deep/ {
-          .card-content {
-            padding: 12px;
-            .card-title {
-              font-weight: 500;
-            }
-            .time-section {
-              display: none;
-              transform: scaleY(0);
-            }
-          }
-          .card-action {
-            display: none !important;
-          }
-        }
-      }
-    }
-  }
-  .candidate-card.focused-item {
-    /deep/ .card-content .card-title {
-      transition: font-size 0.2s ease-in-out;
-      font-size: 30pt;
-    }
   }
 }
 
