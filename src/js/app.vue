@@ -1,7 +1,14 @@
 <template>
   <div
     class="app-container"
-    :class="{ 'gallery-mode': galleryMode, 'presentation-mode': !galleryMode }">
+    :class="{
+      'gallery-mode': galleryMode,
+      'presentation-mode': !galleryMode,
+      'immersive-mode': immersiveMode,
+    }"
+    :style="{
+      '--candidate-columns': candidateColumns,
+    }">
     <app-header
       class="forum-app-header"
       :focused-candidate="focusManager.focusedCandidate"
@@ -33,9 +40,6 @@
       class="forum-app-candidates"
       :class="{
         'gallery-mode': galleryMode,
-      }"
-      :style="{
-        '--candidate-columns': candidateColumns,
       }">
       <div class="candidates-container">
         <transition-group name="squish" tag="div" class="transition-container">
@@ -54,6 +58,24 @@
         </transition-group>
       </div>
     </main>
+    <div class="forum-app-gallery">
+      <h3 class="face-area-header">
+        <i class="material-icons">star</i> The Stars Of The Show!
+        <i class="material-icons">star</i>
+      </h3>
+      <div class="all-faces">
+        <div class="face-box z-depth-1">
+          <div class="face-box-label z-depth-1">Moderator</div>
+        </div>
+        <div
+          class="face-box z-depth-1"
+          v-for="(candidate, index) of visibleCandidatesUnshuffled">
+          <div class="face-box-label z-depth-1">
+            {{ candidate.name }}
+          </div>
+        </div>
+      </div>
+    </div>
     <footer class="forum-app-footer">
       <div>
         <span>Set New...</span>
@@ -100,6 +122,12 @@
           @click.prevent="incrementQuestion(1)"
           title="Next Question">
           <i class="material-icons">navigate_next</i>
+        </a>
+        <a
+          class="waves-effect waves-teal btn-flat"
+          @click.prevent="immersiveMode = !immersiveMode"
+          title="Next Question">
+          Immersive?
         </a>
 
         <a
@@ -248,11 +276,13 @@
                 <div class="move-arrows">
                   <i
                     class="material-icons move-item-button"
+                    :hidden="index === 0"
                     @click.prevent="moveQuestion(index, -1)"
                     >arrow_drop_up
                   </i>
                   <i
                     class="material-icons move-item-button"
+                    :hidden="index >= numberOfQuestions - 1"
                     @click.prevent="moveQuestion(index, 1)">
                     arrow_drop_down
                   </i>
@@ -297,15 +327,16 @@ import {
 } from './global_config';
 import { addUniqueItem } from './list_management';
 import M from 'materialize-css';
-import { debug, dir } from 'console';
 
 @Component({
   components: { AppHeader, CandidateCard, CollapseTransition },
 })
 export default class App extends Vue {
   allCandidates: Candidate[] = [];
+  allCandidatesUnshuffled: Candidate[] = [];
   candidateColumns = 3;
   galleryMode = true;
+  immersiveMode = false;
   isShuffling = false;
   questionIdx = 0;
 
@@ -330,9 +361,13 @@ export default class App extends Vue {
   async questionChanged() {
     console.log('currentQuestionChanged', this.currentQuestion);
     if (this.currentQuestionElement) {
-      await autosizeText(this.currentQuestionElement, 1);
+      await autosizeText(this.currentQuestionElement, 10);
       await autosizeText(this.currentQuestionElement, -1);
     }
+  }
+  @Watch('immersiveMode', { immediate: true })
+  async immersiveChanged() {
+    await this.questionChanged();
   }
 
   @Ref('reset-config-dialog')
@@ -354,6 +389,9 @@ export default class App extends Vue {
     restoreConfig();
     this.resetCandidates();
     this.questionChanged();
+    window.addEventListener('resize', () => {
+      this.questionChanged();
+    });
   }
 
   getCardClasses(index: number) {
@@ -399,6 +437,11 @@ export default class App extends Vue {
   get visibleCandidates() {
     return this.allCandidates.filter((candidate) => !candidate.isMinimized);
   }
+  get visibleCandidatesUnshuffled() {
+    return this.allCandidatesUnshuffled.filter(
+      (candidate) => !candidate.isMinimized
+    );
+  }
   get minimizedCandidates() {
     return this.allCandidates.filter((candidate) => candidate.isMinimized);
   }
@@ -410,6 +453,9 @@ export default class App extends Vue {
   }
   get currentQuestion() {
     return this.config.eventInfo.questions[this.questionIdx];
+  }
+  get numberOfQuestions() {
+    return this.config.eventInfo.questions.length;
   }
 
   clickedCandidate(candidate: Candidate, index: number, $event: boolean) {
@@ -561,8 +607,7 @@ export default class App extends Vue {
 
   setCandidates(candidateNames: string[]) {
     globalConfig.eventInfo.candidatesList = candidateNames;
-    this.allCandidates = candidateNames.map((name) => new Candidate(name));
-    this.candidateColumns = this.howManyColumns(this.visibleCandidates.length);
+    this.resetCandidates();
   }
 
   private howManyColumns(howManyCandidates: number) {
@@ -580,17 +625,13 @@ export default class App extends Vue {
     this.allCandidates = globalConfig.eventInfo.candidatesList.map(
       (name) => new Candidate(name)
     );
+    this.allCandidatesUnshuffled = [...this.allCandidates];
   }
 }
 async function autosizeText(el: HTMLElement, direction: number) {
-  console.log(direction, 'start', el.scrollHeight, el.offsetHeight);
-
   const computed = getComputedStyle(el);
   const currentFontValue = computed.getPropertyValue('--question-size-test');
-  const gridTemplateRows = computed.getPropertyValue('grid-template-rows');
-  const height = computed.getPropertyValue('height');
   let startingSize = parseInt(currentFontValue, 10);
-  console.log({ currentFontValue, gridTemplateRows, height });
 
   if (isNaN(startingSize)) {
     console.log('el has no font size?', el, startingSize);
@@ -611,7 +652,7 @@ async function autosizeText(el: HTMLElement, direction: number) {
       }
       resizeText();
       await new Promise<void>((resolve) => setTimeout(resolve, 0));
-      if (++iterations > 1000) {
+      if (++iterations > 500 || startingSize <= 12 || startingSize >= 300) {
         resolve();
         return;
       }
@@ -622,45 +663,38 @@ async function autosizeText(el: HTMLElement, direction: number) {
 </script>
 <style lang="scss" scoped>
 .app-container {
+  --candidate-columns: 3;
   display: grid;
   flex: 1;
   gap: 8px;
   grid-auto-flow: row;
-  grid-template-columns: 1fr;
+  grid-template-columns: 2fr 1fr;
   grid-template-rows:
     fit-content(5vh) minmax(min-content, 2fr)
     minmax(min-content, 5fr) fit-content(5vh);
+  max-height: 100%;
   overflow: hidden;
   padding: 0 16px;
-  transition: all 0.5s linear;
 
   grid-template-areas:
-    'forum-app-header'
-    'forum-app-question'
-    'forum-app-candidates'
-    'forum-app-footer';
+    'forum-app-header forum-app-header'
+    'forum-app-question forum-app-question'
+    'forum-app-candidates forum-app-gallery'
+    'forum-app-footer forum-app-footer';
 
   .forum-app-header {
     max-height: min-content;
-    padding: 4px;
     grid-area: forum-app-header;
   }
 
   .question-wrap {
-    --question-size: 200px;
     --question-size-test: 200px;
 
     display: grid;
     grid-area: forum-app-question;
+    position: relative;
 
-    &::after {
-      display: none !important;
-      content: attr(data-replicated-value) ' ';
-      color: rgba(40, 200, 40, 0.5);
-      font-size: var(--question-size-test);
-    }
-    .forum-app-question,
-    &::after {
+    .forum-app-question {
       -webkit-text-stroke: 1px black;
       align-items: center;
       display: grid;
@@ -668,7 +702,15 @@ async function autosizeText(el: HTMLElement, direction: number) {
       font-weight: bold;
       grid-area: 1 / 1 / 2 / 2;
       line-height: 1;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      transform-origin: center;
       text-align: center;
+      width: calc(100% - 8px);
+      height: calc(100% - 8px);
+      user-select: none;
     }
   }
 
@@ -684,17 +726,82 @@ async function autosizeText(el: HTMLElement, direction: number) {
     }
   }
 
-  .candidates-container {
+  .forum-app-candidates {
     grid-area: forum-app-candidates;
+
+    transition: width 1s linear;
+  }
+
+  &.immersive-mode {
+    .forum-app-candidates {
+      grid-area: forum-app-candidates / forum-app-candidates /
+        forum-app-candidates / forum-app-gallery;
+    }
+    .forum-app-gallery {
+      display: none !important;
+    }
+  }
+
+  .forum-app-gallery {
+    grid-area: forum-app-gallery;
+    display: grid;
+    grid-template: fit-content(4rem) 1fr / 1fr;
+
+    .face-area-header {
+      padding: 0;
+      margin-top: 0;
+      text-align: center;
+      font-weight: bold;
+
+      i {
+        color: gold;
+        text-shadow: 0px 1px 4px gold;
+
+        -webkit-text-stroke: 1px rgba(0, 0, 0, 1);
+      }
+    }
+
+    .all-faces {
+      display: grid;
+      gap: 4px;
+      grid-auto-flow: row;
+      grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+
+      .face-box {
+        aspect-ratio: 1 / 1;
+        border: 1px solid rgba(0, 0, 0, 0.8);
+        display: grid;
+
+        align-items: flex-end;
+
+        .face-box-label {
+          --label-surface: black;
+          --label-engraving: #ffdd43;
+          transition: font 0.1s linear;
+          background-color: var(--label-surface, black);
+          color: var(--label-engraving, white);
+          font-family: Garamond, 'Times New Roman', Times, serif;
+          font-size: clamp(10px, 1vw, 22px);
+          font-weight: bold;
+          text-align: center;
+          margin: 5px;
+          outline: 3px solid var(--label-surface, black);
+          border: 1px solid var(--label-engraving, white);
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+    }
   }
 
   .forum-app-footer {
+    max-height: min-content;
     grid-area: forum-app-footer;
   }
 }
 
 .forum-app-candidates {
-  --candidate-columns: 3;
+  padding-right: 16px;
   &.gallery-mode {
     .candidates-container .transition-container {
       display: grid;
@@ -789,6 +896,8 @@ footer {
     border: none;
     outline: none;
     // text-shadow: 1px 1px 4px #aa0000aa;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.8);
   }
 }
 

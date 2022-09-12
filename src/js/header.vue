@@ -5,7 +5,7 @@
         <div class="logo-img">
           <img :src="logoUrl" alt="Organization logo" />
         </div>
-        <div class="header-text flow-text">
+        <div class="header-text">
           <h1
             id="event-title"
             class="title event-title"
@@ -14,7 +14,7 @@
             @keydown.esc.prevent="blurElement">
             <!-- Unknown Event -->
           </h1>
-          <h2 class="subtitle flow-text">
+          <h2 class="subtitle">
             Hosted by
             <span
               id="org-title"
@@ -36,7 +36,7 @@
               <i class="material-icons left">restart_alt</i>
             </a>
             <a
-              class="btn shuffle-button flow-text"
+              class="btn shuffle-button"
               :disabled="isShuffling"
               @click.prevent="shuffleCandidates()">
               Shuffle
@@ -44,7 +44,7 @@
             </a>
           </div>
           <a
-            class="btn gallery-mode-switch flow-text global-controls"
+            class="btn gallery-mode-switch global-controls"
             :disabled="isShuffling"
             @click="updateGalleryMode()">
             {{ currentModeName }}
@@ -65,7 +65,7 @@
           <div class="candidate-navigation">
             <a
               href="#"
-              class="btn prev-button flow-text"
+              class="btn prev-button"
               @click.prevent="focusChange(-1)"
               :disabled="!prevEnabled">
               Prev
@@ -73,7 +73,7 @@
             </a>
             <a
               href="#"
-              class="btn next-button flow-text"
+              class="btn next-button"
               @click.prevent="focusChange(1)"
               :disabled="!nextEnabled">
               Next
@@ -205,7 +205,7 @@ header {
     }
     .title {
       color: #363636;
-      font-size: 2rem;
+      font-size: clamp(32px, 10vw, 2rem);
       font-weight: 600;
       margin: 0 0 1.5rem;
     }

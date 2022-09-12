@@ -1,6 +1,6 @@
 <template>
   <div class="candidate-card card z-depth-2" :class="timeClass">
-    <div class="card-content">
+    <div class="card-content" :style="{ '--progress-color': timeColorHue }">
       <div class="card-title">
         <span
           @dblclick.prevent="clickCandidateName(true)"
@@ -120,18 +120,43 @@ export default class CandidateCard extends Vue {
       'almost-done': this.progressPercent < 25,
     };
   }
+  get timeColorHue() {
+    return Math.round(lerp(0, 120, this.progressPercent / 100));
+  }
+}
+
+function lerp(min: number, max: number, progress: number) {
+  return (1 - progress) * min + progress * max;
 }
 </script>
 
 <style lang="scss" scoped>
 .candidate-card {
+  --progress-color-hue: 120;
+  --progress-color-sat: 80;
+  --progress-color-lit: 50;
   background-color: #607d8b;
   color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  outline: 0 solid;
   transition: all 0.25s linear;
   width: 100%;
+
+  &.plenty-time {
+    border-color: green;
+    outline-color: green;
+  }
+  &.running-out {
+    border-color: yellow;
+    outline-color: yellow;
+  }
+  &.almost-done {
+    border-color: red;
+    outline-color: red;
+  }
+
   .card-title {
     display: flex;
     font-size: 26pt;
@@ -154,29 +179,24 @@ export default class CandidateCard extends Vue {
       user-select: none;
       font-size: 30pt;
     }
-    .time-up.progress {
-      background-color: pink;
-      .indeterminate {
-        background-color: #ff3344;
-      }
-    }
     .progress {
       border-radius: 5px;
       height: 2rem;
       margin-bottom: 0.5rem;
+      .determinate {
+        background-color: hsl(
+          var(--progress-color, 120),
+          calc(var(--progress-color-sat, 100) * 1%),
+          calc(var(--progress-color-lit, 50) * 1%)
+        );
+      }
+      &.time-up {
+        background-color: pink;
+        .indeterminate {
+          background-color: #ff3344;
+        }
+      }
     }
-  }
-  &.plenty-time {
-    border-color: green;
-    outline-color: green;
-  }
-  &.running-out {
-    border-color: yellow;
-    outline-color: yellow;
-  }
-  &.almost-done {
-    border-color: red;
-    outline-color: red;
   }
 
   .card-action {
