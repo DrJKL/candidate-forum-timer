@@ -16727,19 +16727,19 @@ module.exports = "/just_homes_logo.5f11e9bb.png";
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
 },{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
 module.exports = "/lwv-logo.87fe3171.png";
-},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
-module.exports = "/lwv-logo_color_open (1).437ccd50.png";
 },{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
+},{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
+module.exports = "/lwv-logo_color_open (1).437ccd50.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
   "just_homes_logo": require("./just_homes_logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
   "lwv-logo": require("./lwv-logo.png"),
-  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
-  "lwv-logo_color_open": require("./lwv-logo_color_open.png")
+  "lwv-logo_color_open": require("./lwv-logo_color_open.png"),
+  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/list_management.ts":[function(require,module,exports) {
+},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png"}],"src/js/list_management.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -17139,7 +17139,7 @@ function autosizeText(el, direction) {
                     while (1) {
                       switch (_context.prev = _context.next) {
                         case 0:
-                          if (!(el.scrollHeight <= el.offsetHeight === direction < 0)) {
+                          if (!(el.scrollHeight <= el.offsetHeight === direction < 0 || ++iterations > 500 || startingSize <= 12 || startingSize >= 300)) {
                             _context.next = 3;
                             break;
                           }
@@ -17155,18 +17155,9 @@ function autosizeText(el, direction) {
                           });
 
                         case 6:
-                          if (!(++iterations > 500 || startingSize <= 12 || startingSize >= 300)) {
-                            _context.next = 9;
-                            break;
-                          }
-
-                          resolve();
-                          return _context.abrupt("return");
-
-                        case 9:
                           doTheThing();
 
-                        case 10:
+                        case 7:
                         case "end":
                           return _context.stop();
                       }
@@ -18364,7 +18355,7 @@ exports.default = _default;
           _c(
             "div",
             { staticClass: "time-setters-global" },
-            _vm._l([30, 60, 90, 120], function (time) {
+            _vm._l([90, 180], function (time) {
               return _c(
                 "a",
                 {
@@ -31052,7 +31043,7 @@ var App = /*#__PURE__*/function (_Vue) {
     _this.allCandidatesUnshuffled = [];
     _this.candidateColumns = 3;
     _this.galleryMode = true;
-    _this.immersiveMode = false;
+    _this.immersiveMode = true;
     _this.isShuffling = false;
     _this.questionIdx = 0;
     _this.tempImg = '';
@@ -32477,7 +32468,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "12988" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "9054" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

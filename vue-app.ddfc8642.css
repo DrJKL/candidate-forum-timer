@@ -9,6 +9,7 @@
   justify-content: space-between;
   outline: 0 solid;
   transition: all 0.25s linear;
+  transition: outline-color 0.5s linear;
   width: 100%;
 }
 .candidate-card.plenty-time[data-v-03db96] {
@@ -48,9 +49,6 @@
     border-radius: 5px;
     height: 2rem;
     margin-bottom: 0.5rem;
-}
-.candidate-card .time-section .progress .determinate[data-v-03db96] {
-      background-color: hsl(var(--progress-color, 120), calc(var(--progress-color-sat, 100) * 1%), calc(var(--progress-color-lit, 50) * 1%));
 }
 .candidate-card .time-section .progress.time-up[data-v-03db96] {
       background-color: pink;
@@ -149,7 +147,7 @@ header[data-v-09fc64] {
     align-items: center;
     border-radius: 6px;
     box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.15), 0 0px 0 1px rgba(10, 10, 10, 0.02);
-    grid-template: 1fr / 1fr 2fr 2fr;
+    grid-template: 1fr / 1fr 1fr 2fr;
     grid-auto-flow: row;
     grid-template-areas: 'global-actions time-setters-global global-controls' 'global-actions time-setters-global candidate-navigation';
     padding: 1.25rem 1.25rem 0.5rem;
@@ -168,7 +166,7 @@ header[data-v-09fc64] {
       display: grid;
       gap: 4px;
       grid-area: time-setters-global;
-      grid-template: 1fr 1fr / 1fr 1fr;
+      grid-template: 1fr 1fr / 1fr;
 }
 .our-header .buttons .gallery-mode-switch[data-v-09fc64] {
       grid-area: global-controls;
@@ -331,7 +329,7 @@ header[data-v-09fc64] {
       width: 100%;
       height: 100%;
       transform: translateX(0);
-      transition: transform 1s linear;
+      transition: transform 0.5s linear;
 }
 .app-container .forum-app-gallery .face-area-header[data-v-cd5f52] {
       padding: 0;
@@ -357,6 +355,12 @@ header[data-v-09fc64] {
         border: 1px solid rgba(0, 0, 0, 0.8);
         display: grid;
         align-items: flex-end;
+}
+.app-container .forum-app-gallery .all-faces .face-box[data-v-cd5f52]::before {
+          content: '';
+          padding-top: 100%;
+          display: block;
+          grid-area: 1 / 1 / 2 / 2;
 }
 .app-container .forum-app-gallery .all-faces .face-box .face-box-label[data-v-cd5f52] {
           --label-surface: black;
