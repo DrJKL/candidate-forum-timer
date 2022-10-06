@@ -16721,25 +16721,25 @@ var global = arguments[3];
 
 })));
 
-},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
-module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/Logo-large-e1513391363928.png":[function(require,module,exports) {
 module.exports = "/Logo-large-e1513391363928.b1e175fe.png";
+},{}],"src/assets/just_homes_logo.png":[function(require,module,exports) {
+module.exports = "/just_homes_logo.5f11e9bb.png";
 },{}],"src/assets/lwv-logo.png":[function(require,module,exports) {
 module.exports = "/lwv-logo.87fe3171.png";
-},{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
-module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/lwv-logo_color_open (1).png":[function(require,module,exports) {
 module.exports = "/lwv-logo_color_open (1).437ccd50.png";
+},{}],"src/assets/lwv-logo_color_open.png":[function(require,module,exports) {
+module.exports = "/lwv-logo_color_open.8bd4e8d3.png";
 },{}],"src/assets/*.png":[function(require,module,exports) {
 module.exports = {
-  "just_homes_logo": require("./just_homes_logo.png"),
   "Logo-large-e1513391363928": require("./Logo-large-e1513391363928.png"),
+  "just_homes_logo": require("./just_homes_logo.png"),
   "lwv-logo": require("./lwv-logo.png"),
-  "lwv-logo_color_open": require("./lwv-logo_color_open.png"),
-  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png")
+  "lwv-logo_color_open (1)": require("./lwv-logo_color_open (1).png"),
+  "lwv-logo_color_open": require("./lwv-logo_color_open.png")
 };
-},{"./just_homes_logo.png":"src/assets/just_homes_logo.png","./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png"}],"src/js/list_management.ts":[function(require,module,exports) {
+},{"./Logo-large-e1513391363928.png":"src/assets/Logo-large-e1513391363928.png","./just_homes_logo.png":"src/assets/just_homes_logo.png","./lwv-logo.png":"src/assets/lwv-logo.png","./lwv-logo_color_open (1).png":"src/assets/lwv-logo_color_open (1).png","./lwv-logo_color_open.png":"src/assets/lwv-logo_color_open.png"}],"src/js/list_management.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -18355,7 +18355,7 @@ exports.default = _default;
           _c(
             "div",
             { staticClass: "time-setters-global" },
-            _vm._l([90, 180], function (time) {
+            _vm._l([60, 90, 120, 180], function (time) {
               return _c(
                 "a",
                 {
@@ -32468,7 +32468,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "9054" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "9930" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
