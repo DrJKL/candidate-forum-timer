@@ -255,7 +255,7 @@ header[data-v-09fc64] {
     transition: width 1s linear;
     display: flex;
     flex-direction: row;
-    gap: 8px;
+    gap: 16px;
 }
 .app-container.immersive-mode
 .forum-app-candidates
