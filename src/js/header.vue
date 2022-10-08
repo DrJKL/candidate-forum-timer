@@ -55,7 +55,7 @@
             <a
               href="#"
               class="btn"
-              v-for="time in [30, 60, 90, 120]"
+              v-for="time in [60, 90, 120, 180]"
               :key="time"
               @click.prevent="setTime(time)">
               {{ time }}

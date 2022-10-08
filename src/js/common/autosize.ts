@@ -16,16 +16,17 @@ export async function autosizeText(el: HTMLElement, direction: number) {
   let iterations = 0;
   await new Promise<void>((resolve) => {
     requestAnimationFrame(async function doTheThing() {
-      if (el.scrollHeight <= el.offsetHeight === direction < 0) {
+      if (
+        el.scrollHeight <= el.offsetHeight === direction < 0 ||
+        ++iterations > 500 ||
+        startingSize <= 12 ||
+        startingSize >= 300
+      ) {
         resolve();
         return;
       }
       resizeText();
       await new Promise<void>((resolve) => setTimeout(resolve, 0));
-      if (++iterations > 500 || startingSize <= 12 || startingSize >= 300) {
-        resolve();
-        return;
-      }
       doTheThing();
     });
   });

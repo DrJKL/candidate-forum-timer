@@ -58,19 +58,21 @@
         </transition-group>
       </div>
       <div class="forum-app-gallery">
-        <h3 class="face-area-header">
-          <i class="material-icons">star</i> The Stars Of The Show!
-          <i class="material-icons">star</i>
-        </h3>
-        <div class="all-faces">
-          <div class="face-box z-depth-1">
-            <div class="face-box-label z-depth-1">Moderator</div>
-          </div>
-          <div
-            class="face-box z-depth-1"
-            v-for="(candidate, index) of visibleCandidatesUnshuffled">
-            <div class="face-box-label z-depth-1">
-              {{ candidate.name }}
+        <div class="forum-app-gallery-wrapper">
+          <h3 class="face-area-header">
+            <i class="material-icons">star</i> The Stars Of The Show!
+            <i class="material-icons">star</i>
+          </h3>
+          <div class="all-faces">
+            <div class="face-box z-depth-1">
+              <div class="face-box-label z-depth-1">Moderator</div>
+            </div>
+            <div
+              class="face-box z-depth-1"
+              v-for="(candidate, index) of visibleCandidatesUnshuffled">
+              <div class="face-box-label z-depth-1">
+                {{ candidate.name }}
+              </div>
             </div>
           </div>
         </div>
@@ -329,6 +331,7 @@ import {
   restoreConfig,
   actuallyResetConfig,
   Config,
+  saveConfig,
 } from './global_config';
 import { addUniqueItem } from './list_management';
 import M from 'materialize-css';
@@ -341,7 +344,7 @@ export default class App extends Vue {
   allCandidatesUnshuffled: Candidate[] = [];
   candidateColumns = 3;
   galleryMode = true;
-  immersiveMode = false;
+  immersiveMode = true;
   isShuffling = false;
   questionIdx = 0;
 
@@ -608,6 +611,7 @@ export default class App extends Vue {
     }
     this.questionIdx = 0;
     this.config.eventInfo.questions = [...this.tempQuestions];
+    saveConfig();
   }
 
   setCandidates(candidateNames: string[]) {
@@ -705,13 +709,16 @@ export default class App extends Vue {
     transition: width 1s linear;
     display: flex;
     flex-direction: row;
-    gap: 8px;
+    gap: 16px;
     @at-root .app-container.immersive-mode
         .forum-app-candidates
         .forum-app-gallery {
       flex-grow: 0.000001;
       width: 0;
       overflow: hidden;
+      .forum-app-gallery-wrapper {
+        transform: translateX(110%);
+      }
     }
     .candidates-container {
       flex: 2;
@@ -783,7 +790,18 @@ export default class App extends Vue {
   }
   .forum-app-gallery {
     display: grid;
-    grid-template: fit-content(4rem) 1fr / 1fr;
+    grid-template: 1fr / 1fr;
+    position: relative;
+
+    .forum-app-gallery-wrapper {
+      display: grid;
+      grid-template: fit-content(4rem) 1fr / 1fr;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform: translateX(0);
+      transition: transform 0.5s linear;
+    }
 
     .face-area-header {
       padding: 0;
@@ -796,7 +814,6 @@ export default class App extends Vue {
       i {
         color: gold;
         text-shadow: 0px 1px 4px gold;
-
         -webkit-text-stroke: 1px rgba(0, 0, 0, 1);
       }
     }
@@ -814,9 +831,16 @@ export default class App extends Vue {
 
         align-items: flex-end;
 
+        &::before {
+          content: '';
+          padding-top: 100%;
+          display: block;
+          grid-area: 1 / 1 / 2 / 2;
+        }
+
         .face-box-label {
           --label-surface: black;
-          --label-engraving: #ffdd43;
+          --label-engraving: white; //#ffdd43;
           transition: font 0.1s linear;
           background-color: var(--label-surface, black);
           color: var(--label-engraving, white);

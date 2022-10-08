@@ -142,6 +142,7 @@ function lerp(min: number, max: number, progress: number) {
   justify-content: space-between;
   outline: 0 solid;
   transition: all 0.25s linear;
+  transition: outline-color 0.5s linear;
   width: 100%;
 
   &.plenty-time {
@@ -184,11 +185,11 @@ function lerp(min: number, max: number, progress: number) {
       height: 2rem;
       margin-bottom: 0.5rem;
       .determinate {
-        background-color: hsl(
-          var(--progress-color, 120),
-          calc(var(--progress-color-sat, 100) * 1%),
-          calc(var(--progress-color-lit, 50) * 1%)
-        );
+        // background-color: hsl(
+        //   var(--progress-color, 120),
+        //   calc(var(--progress-color-sat, 100) * 1%),
+        //   calc(var(--progress-color-lit, 50) * 1%)
+        // );
       }
       &.time-up {
         background-color: pink;
