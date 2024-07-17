@@ -4,3 +4,4 @@ dist/*
 .yarn
 .pnp.js
 yarn.lock
+.parcel-cache

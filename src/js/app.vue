@@ -13,7 +13,8 @@
       class="forum-app-header"
       :focused-candidate="focusManager.focusedCandidate"
       :number-candidates="numberOfCandidates"
-      :gallery-mode.sync="galleryMode"
+      :gallery-mode="galleryMode"
+      @update:gallery-mode="galleryMode = $event"
       :is-shuffling="isShuffling"
       :candidates-list="allCandidates"
       @shuffle-candidates="shuffleCandidates()"
@@ -314,8 +315,8 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, Watch, Ref } from 'vue-property-decorator';
-import { CollapseTransition } from '@ivanv/vue-collapse-transition';
+import { Component, Vue, Prop, Watch, Ref, toNative } from 'vue-facing-decorator';
+import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import { Candidate } from './candidates';
 import {
   shuffle,
@@ -339,13 +340,13 @@ import M from 'materialize-css';
 @Component({
   components: { AppHeader, CandidateCard, CollapseTransition },
 })
-export default class App extends Vue {
+class App extends Vue {
   allCandidates: Candidate[] = [];
   allCandidatesUnshuffled: Candidate[] = [];
   candidateColumns = 3;
   galleryMode = true;
   immersiveMode = true;
-  isShuffling = false;
+  isShuffling: true|null = null;
   questionIdx = 0;
 
   tempImg = '';
@@ -359,7 +360,7 @@ export default class App extends Vue {
 
   @Watch('config', { deep: true, immediate: true })
   configChanged(newConfig: Config) {
-    this.$forceUpdate();
+    // this.$forceUpdate();
   }
   @Watch('allCandidates', { deep: true, immediate: true })
   candidatesChanged() {
@@ -431,7 +432,7 @@ export default class App extends Vue {
     this.focusManager.focusedCandidate = 0;
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    this.isShuffling = false;
+    this.isShuffling = null;
     this.galleryMode = wasGallery;
   }
 
@@ -637,6 +638,7 @@ export default class App extends Vue {
     this.allCandidatesUnshuffled = [...this.allCandidates];
   }
 }
+export default toNative(App);
 </script>
 <style lang="scss" scoped>
 .app-container {
@@ -754,7 +756,7 @@ export default class App extends Vue {
           display: flex;
         }
         &.focused-item {
-          /deep/ .card-content .card-title {
+          :deep( .card-content .card-title) {
             font-size: 6vw;
             font-weight: 500;
             line-height: initial;
@@ -763,7 +765,7 @@ export default class App extends Vue {
         }
         &.is-previous,
         &.on-deck {
-          /deep/ {
+          :deep() {
             .card-content {
               padding: 12px;
               .card-title {
@@ -782,7 +784,7 @@ export default class App extends Vue {
       }
     }
     .candidate-card.focused-item {
-      /deep/ .card-content .card-title {
+      :deep( .card-content .card-title) {
         transition: font-size 0.2s ease-in-out;
         font-size: 30pt;
       }
@@ -893,7 +895,7 @@ footer {
   }
 }
 
-/deep/ [contenteditable='true'] {
+:deep( [contenteditable='true'] ) {
   position: relative;
   &:active,
   &:focus {

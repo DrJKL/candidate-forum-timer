@@ -10,6 +10,7 @@
       "es2021",
       "dom"
     ],
+    "types": ["vite/client"],
     "declaration": true, /* Generates corresponding '.d.ts' file. */
     "sourceMap": true, /* Generates corresponding '.map' file. */
     "outDir": "./lib/", /* Redirect output structure to the directory. */
@@ -22,7 +23,7 @@
     "strictPropertyInitialization": true, /* Enable strict checking of property initialization in classes. */
     "noImplicitThis": true, /* Raise error on 'this' expressions with an implied 'any' type. */
     "alwaysStrict": true, /* Parse in strict mode and emit "use strict" for each source file. */
-    "moduleResolution": "node", /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
+    "moduleResolution": "bundler", /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
     "esModuleInterop": true, /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
     /* Experimental Options */
     "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */

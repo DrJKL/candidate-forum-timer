@@ -9,10 +9,9 @@
           <h1
             id="event-title"
             class="title event-title"
-            v-html="eventTitle"
             @keydown.enter.prevent="blurElement"
             @keydown.esc.prevent="blurElement">
-            <!-- Unknown Event -->
+            <span v-html="eventTitle"></span>
           </h1>
           <h2 class="subtitle">
             Hosted by
@@ -67,7 +66,7 @@
               href="#"
               class="btn prev-button"
               @click.prevent="focusChange(-1)"
-              :disabled="!prevEnabled">
+              :disabled="!prevEnabled || null">
               Prev
               <i class="material-icons left">navigate_before</i>
             </a>
@@ -75,7 +74,7 @@
               href="#"
               class="btn next-button"
               @click.prevent="focusChange(1)"
-              :disabled="!nextEnabled">
+              :disabled="!nextEnabled || null">
               Next
               <i class="material-icons right">navigate_next</i>
             </a>
@@ -86,13 +85,13 @@
   </header>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, Emit, Watch } from 'vue-property-decorator';
+import { Component, Vue, Prop, Emit, Watch, toNative } from 'vue-facing-decorator';
 import { Candidate } from './candidates';
 import { globalConfig, Config } from './global_config';
 import { blurElement } from './common';
 
 @Component({})
-export default class Header extends Vue {
+ class Header extends Vue {
   @Prop()
   candidatesList?: Candidate[];
 
@@ -100,7 +99,7 @@ export default class Header extends Vue {
   galleryMode?: boolean;
 
   @Prop()
-  isShuffling?: boolean;
+  isShuffling?: true|null;
 
   @Prop()
   focusedCandidate?: number;
@@ -129,7 +128,7 @@ export default class Header extends Vue {
 
   @Watch('config', { deep: true, immediate: true })
   configChanged(newConfig: Config) {
-    this.$forceUpdate();
+    // this.$forceUpdate();
   }
 
   get logoUrl() {
@@ -159,16 +158,17 @@ export default class Header extends Vue {
   }
 
   get prevEnabled() {
-    return this.focusedCandidate !== undefined && this.focusedCandidate > 0;
+    return this.focusedCandidate !== undefined && this.focusedCandidate > 0 || null;
   }
   get nextEnabled() {
     return (
       this.focusedCandidate !== undefined &&
       this.numberCandidates !== undefined &&
       this.focusedCandidate < this.numberCandidates - 1
-    );
+    ) || null;
   }
 }
+export default toNative(Header);
 </script>
 <style lang="scss" scoped>
 header {
@@ -193,8 +193,8 @@ header {
     padding-top: 0.5rem;
     transition: transform 0.5s ease-in-out;
 
-    .title /deep/ span,
-    .subtitle /deep/ span {
+    .title :deep( span),
+    .subtitle :deep( span) {
       display: inline-block;
     }
     .title,

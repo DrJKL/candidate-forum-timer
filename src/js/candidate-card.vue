@@ -86,13 +86,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Emit } from 'vue-property-decorator';
+import { Component, Vue, Prop, Emit, toNative } from 'vue-facing-decorator';
 import { Candidate } from './candidates';
 
-import { CollapseTransition } from '@ivanv/vue-collapse-transition';
+import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 
 @Component({ components: { CollapseTransition } })
-export default class CandidateCard extends Vue {
+class CandidateCard extends Vue {
   @Prop({ required: true })
   candidate!: Candidate;
 
@@ -128,6 +128,7 @@ export default class CandidateCard extends Vue {
 function lerp(min: number, max: number, progress: number) {
   return (1 - progress) * min + progress * max;
 }
+export default toNative(CandidateCard);
 </script>
 
 <style lang="scss" scoped>
