@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "playwright": "npx playwright test",
+    "playwright:ui": "pnpm playwright --ui",
     "start": "vite",
     "build": "cross-env NODE_ENV=production vite build --base /candidate-forum-timer/",
     "deploy": "npm run build & gh-pages -d dist",
@@ -37,9 +39,13 @@
     "vue-facing-decorator": "^3.0.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.45.3",
+    "@testing-library/vue": "^8.1.0",
+    "@types/node": "^20.14.11",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/compiler-sfc": "^3.4.31",
     "gh-pages": "^6.1.1",
+    "happy-dom": "^14.12.3",
     "node-sass": "^9.0.0",
     "sass": "^1.77.6",
     "vite": "^5.3.4",

@@ -5,3 +5,5 @@ dist/*
 .pnp.js
 yarn.lock
 tsconfig.tsbuildinfo
+playwright-report
+test-results

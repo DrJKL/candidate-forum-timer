@@ -7,16 +7,16 @@
       "ESNext",
       "dom"
     ],
-    "types": ["vite/client"],
+    "types": [
+      "vite/client",
+      "vitest/globals"
+    ],
     "noEmit": true,
-    
     "strict": true,
     "moduleResolution": "bundler",
     "esModuleInterop": true,
-
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
