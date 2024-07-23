@@ -27,7 +27,6 @@
     "@ivanv/vue-collapse-transition": "^1.0.2",
     "@mdi/font": "^7.4.47",
     "@types/materialize-css": "^1.0.14",
-    "@vue/compat": "^3.4.31",
     "@vue/runtime-dom": "^3.4.31",
     "cross-env": "^7.0.3",
     "materialize-css": "^1.0.0",

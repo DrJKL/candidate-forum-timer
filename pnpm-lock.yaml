@@ -17,9 +17,6 @@ importers:
       '@types/materialize-css':
         specifier: ^1.0.14
         version: 1.0.14
-      '@vue/compat':
-        specifier: ^3.4.31
-        version: 3.4.31(vue@3.4.31(typescript@5.5.3))
       '@vue/runtime-dom':
         specifier: ^3.4.31
         version: 3.4.31
@@ -413,11 +410,6 @@ packages:
 
   '@vitest/utils@2.0.3':
     resolution: {integrity: sha512-c/UdELMuHitQbbc/EVctlBaxoYAwQPQdSNwv7z/vHyBKy2edYZaFgptE27BRueZB7eW8po+cllotMNTDpL3HWg==}
-
-  '@vue/compat@3.4.31':
-    resolution: {integrity: sha512-ZmtZNZD881gtwLphxfaRo4y1+Ym4gHmxJlEpsnUHwlsZzKRXdlSE/7qkAxFe+pc5bC6rZU14GUDqqXueljZ9Qg==}
-    peerDependencies:
-      vue: 3.4.31
 
   '@vue/compiler-core@3.4.31':
     resolution: {integrity: sha512-skOiodXWTV3DxfDhB4rOf3OGalpITLlgCeOwb+Y9GJpfQ8ErigdBUHomBzvG78JoVE8MJoQsb+qhZiHfKeNeEg==}
@@ -1943,13 +1935,6 @@ snapshots:
       estree-walker: 3.0.3
       loupe: 3.1.1
       tinyrainbow: 1.2.0
-
-  '@vue/compat@3.4.31(vue@3.4.31(typescript@5.5.3))':
-    dependencies:
-      '@babel/parser': 7.24.7
-      estree-walker: 2.0.2
-      source-map-js: 1.2.0
-      vue: 3.4.31(typescript@5.5.3)
 
   '@vue/compiler-core@3.4.31':
     dependencies:

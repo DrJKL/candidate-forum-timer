@@ -33,7 +33,10 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "./vue.shims.d.ts",
+    "./vite.config.ts",
+    "./vue.config.js"
   ],
   "exclude": [
     ".git",
