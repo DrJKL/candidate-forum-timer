@@ -28,16 +28,20 @@ export class Config {
     orgTitle: 'Mountain View Mobile Home Alliance',
     // "the League of Women Voters",
     //
-    eventTitle: `<span>2022</span>
+    eventTitle: `<span>2024</span>
             <span>Mountain View</span>
             <span>City Council</span>
             <span>Candidate Forum</span>`,
     candidatesList: [
-      'Lucas Ramirez',
-      'Alison Hicks',
-      'Ellen Kamei',
-      'Li Zhang',
-      'Justin Cohen',
+      'Chris Clark',
+      'Devon Conley',
+      'Emily Ann Ramos',
+      'Erik Poicon',
+      'IdaRose Sylvester',
+      'Jose Guttierez',
+      'John McAlister',
+      'Nicholas Hargis',
+      'Pat Showalter',
     ],
     questions: [
       'What is your favorite color?',
