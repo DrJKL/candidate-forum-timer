@@ -315,7 +315,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, Watch, Ref, toNative } from 'vue-facing-decorator';
+import { Component, Vue, Watch, Ref, toNative } from 'vue-facing-decorator';
 import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import { Candidate } from './candidates';
 import {
