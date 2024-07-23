@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "vite",
     "build": "cross-env NODE_ENV=production vite build --base /candidate-forum-timer/",
-    "deploy": "npm run build & gh-pages -d dist"
+    "deploy": "npm run build & gh-pages -d dist",
+    "typecheck": "npx vue-tsc"
   },
   "repository": {
     "type": "git",
