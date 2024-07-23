@@ -158,7 +158,7 @@
 
       <span class="attribution-label">
         Built by Alex Brown for the
-        <a href="https://mvmha.com">MVMHA</a> (updated 2022)
+        <a href="https://mvmha.com">MVMHA</a> (updated 2024)
       </span>
     </footer>
     <dialog
