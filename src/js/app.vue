@@ -649,8 +649,11 @@ export default toNative(App);
   grid-auto-flow: row;
   grid-template-columns: 1fr;
   grid-template-rows:
-    fit-content(5vh) minmax(min-content, 2fr)
-    minmax(min-content, 5fr) fit-content(5vh);
+   fit-content(5vh)
+   minmax(10em, 1fr)
+   4fr
+   fit-content(5vh);
+  height: 100%;
   max-height: 100%;
   overflow: hidden;
   padding: 0 16px;
@@ -712,6 +715,7 @@ export default toNative(App);
     display: flex;
     flex-direction: row;
     gap: 16px;
+    overflow-y: auto;
     @at-root .app-container.immersive-mode
         .forum-app-candidates
         .forum-app-gallery {
