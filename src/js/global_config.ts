@@ -38,7 +38,7 @@ export class Config {
       'Emily Ann Ramos',
       'Erik Poicon',
       'IdaRose Sylvester',
-      'Jose Guttierez',
+      'José Gutiérrez',
       'John McAlister',
       'Nicholas Hargis',
       'Pat Showalter',
