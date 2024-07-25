@@ -29,6 +29,7 @@
           <div class="global-actions">
             <a
               class="btn reset-button"
+              role="button"
               :disabled="isShuffling"
               @click.prevent="resetTimers()">
               Reset
@@ -36,6 +37,7 @@
             </a>
             <a
               class="btn shuffle-button"
+              role="button"
               :disabled="isShuffling"
               @click.prevent="shuffleCandidates()">
               Shuffle
@@ -44,6 +46,7 @@
           </div>
           <a
             class="btn gallery-mode-switch global-controls"
+            role="button"
             :disabled="isShuffling"
             @click="updateGalleryMode()">
             {{ currentModeName }}
@@ -54,6 +57,7 @@
             <a
               href="#"
               class="btn"
+              role="button"
               v-for="time in [60, 90, 120, 180]"
               :key="time"
               @click.prevent="setTime(time)">
@@ -65,6 +69,7 @@
             <a
               href="#"
               class="btn prev-button"
+              role="button"
               @click.prevent="focusChange(-1)"
               :disabled="!prevEnabled || null">
               Prev
@@ -73,6 +78,7 @@
             <a
               href="#"
               class="btn next-button"
+              role="button"
               @click.prevent="focusChange(1)"
               :disabled="!nextEnabled || null">
               Next
