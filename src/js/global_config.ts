@@ -1,7 +1,12 @@
 import { Candidate } from './candidates';
 import moment from 'moment';
-import images from '../assets/*.png';
 import { addUniqueItem } from './list_management';
+
+const images = import.meta.glob('../assets/*.png', {
+  import: 'default',
+  query: '?url',
+  eager: true,
+});
 
 export declare interface EventInfo {
   logoUrl: string;
@@ -17,22 +22,26 @@ export class Config {
   timeDelta = moment.duration(1, 's');
   eventInfo: EventInfo = {
     //
-    logoUrl: images['just_homes_logo'],
+    logoUrl: `${images['../assets/just_homes_logo.png']}`,
     // images['lwv-logo'],
     //
     orgTitle: 'Mountain View Mobile Home Alliance',
     // "the League of Women Voters",
     //
-    eventTitle: `<span>2022</span>
+    eventTitle: `<span>2024</span>
             <span>Mountain View</span>
             <span>City Council</span>
             <span>Candidate Forum</span>`,
     candidatesList: [
-      'Lucas Ramirez',
-      'Alison Hicks',
-      'Ellen Kamei',
-      'Li Zhang',
-      'Justin Cohen',
+      'Chris Clark',
+      'Devon Conley',
+      'Emily Ann Ramos',
+      'Erik Poicon',
+      'IdaRose Sylvester',
+      'José Gutiérrez',
+      'John McAlister',
+      'Nicholas Hargis',
+      'Pat Showalter',
     ],
     questions: [
       'What is your favorite color?',

@@ -1,0 +1,107 @@
+# This workflow's goal is forcing an update of the reference snapshots used
+# by Playwright tests. It runs whenever you post a new pull request comment
+# that strictly matches the "/update-snapshots".
+# From a high-level perspective, it works like this:
+# 1. Because of a GitHub Action limitation, this workflow is triggered on every
+#    comment posted on a issue or pull request. We manually interrupt it unless
+#    the comment content strictly matches "/update-snapshots" and we're in a
+#    pull request.
+# 2. Use the GitHub API to grab the information about the branch name and SHA of
+#    the latest commit of the current pull request.
+# 3. Update the Playwright reference snapshots based on the UI of this branch.
+# 4. Commit the newly generated Playwright reference snapshots into this branch.
+name: Update Snapshots
+ 
+on:
+  # It looks like you can't target PRs-only comments:
+  # https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request_comment-use-issue_comment
+  # So we must run this workflow every time a new comment is added to issues
+  # and pull requests
+  issue_comment:
+    types: [created, edited]
+    
+permissions:
+    contents: read
+ 
+jobs:
+  updatesnapshots:
+    # Run this job only on comments of pull requests that strictly match
+    # the "/update-snapshots" string
+    if: >
+        (
+        github.event.issue.author_association == 'OWNER' ||
+        github.event.issue.author_association == 'COLLABORATOR' ||
+        github.event.issue.author_association == 'MEMBER'
+        ) && github.event.issue.pull_request && 
+         contains(github.event.comment.body, '/update-snapshots')
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    permissions:
+      # Required by actions/update-snapshots
+      contents: write
+      pull-requests: write
+    steps:
+      # Checkout and do a deep fetch to load all commit IDs
+      - uses: actions/checkout@v4
+
+      - name: React to the triggering comment
+        run: |
+          gh api repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions --raw-field 'content=+1'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get PR Info
+        id: pr
+        env:
+          PR_NUMBER: ${{ github.event.issue.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          COMMENT_AT: ${{ github.event.comment.created_at }}
+        run: |
+          pr="$(gh api /repos/${GH_REPO}/pulls/${PR_NUMBER})"
+          head_sha="$(echo "$pr" | jq -r .head.sha)"
+          pushed_at="$(echo "$pr" | jq -r .pushed_at)"
+  
+          if [[ $(date -d "$pushed_at" +%s) -gt $(date -d "$COMMENT_AT" +%s) ]]; then
+              echo "Updating is not allowed because the PR was pushed to (at $pushed_at) after the triggering comment was issued (at $COMMENT_AT)"
+              exit 1
+          fi
+  
+          echo "head_sha=$head_sha" >> $GITHUB_OUTPUT
+  
+      - name: Checkout the branch from the PR that triggered the job
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr checkout ${{ github.event.issue.number }}
+  
+      - name: Validate the fetched branch HEAD revision
+        env:
+          EXPECTED_SHA: ${{ steps.pr.outputs.head_sha }}
+        run: |
+          actual_sha="$(git rev-parse HEAD)"
+  
+          if [[ "$actual_sha" != "$EXPECTED_SHA" ]]; then
+              echo "The HEAD of the checked out branch ($actual_sha) differs from the HEAD commit available at the time when trigger comment was submitted ($EXPECTED_SHA)"
+              exit 1
+          fi
+
+      # Setup testing environment
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+            version: 9
+      - uses: actions/setup-node@v4
+        with:
+            node-version: 20
+            cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+      # Update the snapshots based on the current UI
+      - name: Update snapshots
+        run: npx playwright test --update-snapshots --reporter=list
+      # Commit the changes to the pull request branch
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "[CI] Update Snapshots"

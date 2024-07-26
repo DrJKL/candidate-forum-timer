@@ -13,7 +13,8 @@
       class="forum-app-header"
       :focused-candidate="focusManager.focusedCandidate"
       :number-candidates="numberOfCandidates"
-      :gallery-mode.sync="galleryMode"
+      :gallery-mode="galleryMode"
+      @update:gallery-mode="galleryMode = $event"
       :is-shuffling="isShuffling"
       :candidates-list="allCandidates"
       @shuffle-candidates="shuffleCandidates()"
@@ -84,50 +85,59 @@
         <span>Set New...</span>
         <a
           class="waves-effect waves-teal btn-flat"
+          role="button"
           @click.prevent="showCandidateDialog">
           Candidates
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
+          role="button"
           @click.prevent="showLogoDialog">
           Logo
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
+          role="button"
           @click.prevent="setTitleEditable">
           Title
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
+          role="button"
           @click.prevent="setOrgEditable">
           Org
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
+          role="button"
           @click.prevent="dumpQuestions"
           title="See Current Questions">
           <i class="material-icons">question_mark</i>
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
+          role="button"
           @click.prevent="showQuestionsDialog"
           title="Edit Questions">
           <i class="material-icons">quiz</i>
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
+          role="button"
           @click.prevent="incrementQuestion(-1)"
           title="Previous Question">
           <i class="material-icons">navigate_before</i>
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
+          role="button"
           @click.prevent="incrementQuestion(1)"
           title="Next Question">
           <i class="material-icons">navigate_next</i>
         </a>
         <a
           class="waves-effect waves-teal btn-flat"
+          role="button"
           @click.prevent="immersiveMode = !immersiveMode"
           title="Next Question">
           Immersive?
@@ -135,9 +145,13 @@
 
         <a
           class="waves-effect waves-teal btn-flat red-text"
+          role="button"
           @click.prevent="resetConfig">
           Reset All
         </a>
+        <Transition>
+          <span class="" v-if="isSizing">Resizing text...</span>
+        </Transition>
       </div>
       <collapse-transition>
         <div
@@ -157,7 +171,7 @@
 
       <span class="attribution-label">
         Built by Alex Brown for the
-        <a href="https://mvmha.com">MVMHA</a> (updated 2022)
+        <a href="https://mvmha.com">MVMHA</a> (updated 2024)
       </span>
     </footer>
     <dialog
@@ -314,8 +328,8 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue, Prop, Watch, Ref } from 'vue-property-decorator';
-import { CollapseTransition } from '@ivanv/vue-collapse-transition';
+import { Component, Vue, Watch, Ref, toNative } from 'vue-facing-decorator';
+import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 import { Candidate } from './candidates';
 import {
   shuffle,
@@ -339,13 +353,14 @@ import M from 'materialize-css';
 @Component({
   components: { AppHeader, CandidateCard, CollapseTransition },
 })
-export default class App extends Vue {
+class App extends Vue {
   allCandidates: Candidate[] = [];
   allCandidatesUnshuffled: Candidate[] = [];
   candidateColumns = 3;
   galleryMode = true;
   immersiveMode = true;
-  isShuffling = false;
+  isShuffling: true|null = null;
+  isSizing: true|null = null;
   questionIdx = 0;
 
   tempImg = '';
@@ -359,7 +374,7 @@ export default class App extends Vue {
 
   @Watch('config', { deep: true, immediate: true })
   configChanged(newConfig: Config) {
-    this.$forceUpdate();
+    // this.$forceUpdate();
   }
   @Watch('allCandidates', { deep: true, immediate: true })
   candidatesChanged() {
@@ -368,10 +383,12 @@ export default class App extends Vue {
   @Watch('currentQuestion', { immediate: true })
   async questionChanged() {
     console.log('currentQuestionChanged', this.currentQuestion);
+    this.isSizing = true;
     if (this.currentQuestionElement) {
       await autosizeText(this.currentQuestionElement, 10);
       await autosizeText(this.currentQuestionElement, -1);
     }
+    this.isSizing = null;
   }
   @Watch('immersiveMode', { immediate: true })
   async immersiveChanged() {
@@ -431,7 +448,7 @@ export default class App extends Vue {
     this.focusManager.focusedCandidate = 0;
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    this.isShuffling = false;
+    this.isShuffling = null;
     this.galleryMode = wasGallery;
   }
 
@@ -637,6 +654,7 @@ export default class App extends Vue {
     this.allCandidatesUnshuffled = [...this.allCandidates];
   }
 }
+export default toNative(App);
 </script>
 <style lang="scss" scoped>
 .app-container {
@@ -647,8 +665,11 @@ export default class App extends Vue {
   grid-auto-flow: row;
   grid-template-columns: 1fr;
   grid-template-rows:
-    fit-content(5vh) minmax(min-content, 2fr)
-    minmax(min-content, 5fr) fit-content(5vh);
+   fit-content(5vh)
+   minmax(10em, 1fr)
+   4fr
+   fit-content(5vh);
+  height: 100%;
   max-height: 100%;
   overflow: hidden;
   padding: 0 16px;
@@ -710,6 +731,7 @@ export default class App extends Vue {
     display: flex;
     flex-direction: row;
     gap: 16px;
+    overflow-y: auto;
     @at-root .app-container.immersive-mode
         .forum-app-candidates
         .forum-app-gallery {
@@ -754,7 +776,7 @@ export default class App extends Vue {
           display: flex;
         }
         &.focused-item {
-          /deep/ .card-content .card-title {
+          :deep( .card-content .card-title) {
             font-size: 6vw;
             font-weight: 500;
             line-height: initial;
@@ -763,7 +785,7 @@ export default class App extends Vue {
         }
         &.is-previous,
         &.on-deck {
-          /deep/ {
+          :deep() {
             .card-content {
               padding: 12px;
               .card-title {
@@ -782,7 +804,7 @@ export default class App extends Vue {
       }
     }
     .candidate-card.focused-item {
-      /deep/ .card-content .card-title {
+      :deep( .card-content .card-title) {
         transition: font-size 0.2s ease-in-out;
         font-size: 30pt;
       }
@@ -893,7 +915,7 @@ footer {
   }
 }
 
-/deep/ [contenteditable='true'] {
+:deep( [contenteditable='true'] ) {
   position: relative;
   &:active,
   &:focus {
@@ -965,6 +987,16 @@ dialog.config-dialog {
   &::backdrop {
     background-color: rgba(5, 0, 0, 0.8);
   }
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }
 
 .squish-enter-to,
