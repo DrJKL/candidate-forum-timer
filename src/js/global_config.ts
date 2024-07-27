@@ -1,6 +1,7 @@
 import { Candidate } from './candidates';
 import moment from 'moment';
 import { addUniqueItem } from './list_management';
+import { reactive } from 'vue';
 
 const images = import.meta.glob('../assets/*.png', {
   import: 'default',
@@ -81,7 +82,7 @@ export class Config {
     saveConfig();
   }
 }
-export const globalConfig = new Config();
+export const globalConfig = reactive(new Config());
 
 const CONFIG_KEY = 'saved_candidate_config';
 

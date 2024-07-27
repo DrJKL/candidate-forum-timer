@@ -657,6 +657,11 @@ class App extends Vue {
 export default toNative(App);
 </script>
 <style lang="scss" scoped>
+
+:global(#app) {
+  width: 100%;
+  height:100%;
+}
 .app-container {
   --candidate-columns: 3;
   display: grid;
