@@ -4,7 +4,7 @@
   "description": "A Simple Timer for our Candidate Forum.",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "playwright": "npx playwright test",
     "playwright:ui": "pnpm playwright --ui",
     "start": "vite",
