@@ -14,30 +14,18 @@ importers:
       '@mdi/font':
         specifier: ^7.4.47
         version: 7.4.47
-      '@types/materialize-css':
-        specifier: ^1.0.14
-        version: 1.0.14
       '@vue/runtime-dom':
         specifier: ^3.4.31
         version: 3.4.31
-      cross-env:
-        specifier: ^7.0.3
-        version: 7.0.3
       materialize-css:
         specifier: ^1.0.0
         version: 1.0.0
       moment:
         specifier: ^2.30.1
         version: 2.30.1
-      typescript:
-        specifier: ^5.5.3
-        version: 5.5.3
       vue:
         specifier: ^3.4.31
         version: 3.4.31(typescript@5.5.3)
-      vue-facing-decorator:
-        specifier: ^3.0.4
-        version: 3.0.4(vue@3.4.31(typescript@5.5.3))
     devDependencies:
       '@playwright/test':
         specifier: ^1.45.3
@@ -45,6 +33,9 @@ importers:
       '@testing-library/vue':
         specifier: ^8.1.0
         version: 8.1.0(@vue/compiler-sfc@3.4.31)(vue@3.4.31(typescript@5.5.3))
+      '@types/materialize-css':
+        specifier: ^1.0.14
+        version: 1.0.14
       '@types/node':
         specifier: ^20.14.11
         version: 20.14.11
@@ -54,6 +45,9 @@ importers:
       '@vue/compiler-sfc':
         specifier: ^3.4.31
         version: 3.4.31
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
       gh-pages:
         specifier: ^6.1.1
         version: 6.1.1
@@ -66,6 +60,9 @@ importers:
       sass:
         specifier: ^1.77.6
         version: 1.77.6
+      typescript:
+        specifier: ^5.5.3
+        version: 5.5.3
       vite:
         specifier: ^5.3.4
         version: 5.3.4(@types/node@20.14.11)(lightningcss@1.25.1)(sass@1.77.6)(terser@5.31.3)
@@ -1981,11 +1978,6 @@ packages:
 
   vue-component-type-helpers@2.0.28:
     resolution: {integrity: sha512-hoK0UsKXrXDY9zdpdk+drqOqYHpPhbmfQUJ2mFYK57+l73mQxcYyCteQsolllwGaxhWihT077+OA/FR5ZPTceg==}
-
-  vue-facing-decorator@3.0.4:
-    resolution: {integrity: sha512-Lk90PevJllB6qRRdLvLFjATZrv00nof1Ob6afavKL7Pc7V3eEin3vhdvEDRORdWKVvNoXhJbHejngWVuT0Pt0g==}
-    peerDependencies:
-      vue: ^3.0.0
 
   vue@3.4.31:
     resolution: {integrity: sha512-njqRrOy7W3YLAlVqSKpBebtZpDVg21FPoaq1I7f/+qqBThK9ChAIjkRWgeP6Eat+8C+iia4P3OYqpATP21BCoQ==}
@@ -4028,10 +4020,6 @@ snapshots:
       - terser
 
   vue-component-type-helpers@2.0.28: {}
-
-  vue-facing-decorator@3.0.4(vue@3.4.31(typescript@5.5.3)):
-    dependencies:
-      vue: 3.4.31(typescript@5.5.3)
 
   vue@3.4.31(typescript@5.5.3):
     dependencies:

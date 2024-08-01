@@ -8,12 +8,17 @@ class ForumTimerPage {
     private readonly prevCandidateButton: Locator;
     private readonly resizeIndicator: Locator;
 
+    private readonly nextQuestionButton: Locator;
+    private readonly prevQuestionButton: Locator;
+
     constructor(public readonly page: Page) {
         this.startStopButtons = page.getByRole('button', {name: /^(start|stop)$/i });
         this.macroModeToggle = page.getByText(/All Candidates|Question Time/i);
         this.nextCandidateButton = page.getByRole('button', {name: /^Next/});
         this.prevCandidateButton = page.getByRole('button', {name: /Prev$/i});
         this.resizeIndicator = page.getByText('Resizing text');
+        this.nextQuestionButton = page.getByRole('button', {name: 'navigate_before', exact: true});
+        this.prevQuestionButton = page.getByRole('button', {name: 'navigate_after', exact: true});
     }
     async goto() {
         await this.page.goto('');
@@ -43,6 +48,13 @@ class ForumTimerPage {
     }
     async prevCandidate() {
         await this.prevCandidateButton.click();
+    }
+
+    async nextQuestion() {
+        await this.nextQuestionButton.click();
+    }
+    async prevQuestion() {
+        await this.prevQuestionButton.click();
     }
 }
 type Fixtures = {
@@ -101,3 +113,13 @@ test('Changing Candidates', async ({page, forumTimerPage}) => {
     await forumTimerPage.nextCandidate();
     await expect(page).toHaveScreenshot('switching_4.png');
 })
+
+test('Changing questions', async ({page, forumTimerPage}) => {
+    await forumTimerPage.nextQuestion();
+    await expect(page).toHaveScreenshot('switching_question_1.png');
+    await forumTimerPage.nextQuestion();
+    await expect(page).toHaveScreenshot('switching_question_2.png');
+    await forumTimerPage.nextQuestion();
+    await expect(page).toHaveScreenshot('switching_question_3.png');
+
+});

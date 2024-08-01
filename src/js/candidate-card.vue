@@ -49,50 +49,58 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop, Emit, toNative } from 'vue-facing-decorator';
-import { Candidate } from './candidates';
+<script setup
+        lang="ts">
 
-import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
+        import { computed } from 'vue';
+        import { Candidate } from './candidates';
 
-@Component({ components: { CollapseTransition } })
-class CandidateCard extends Vue {
-  @Prop({ required: true })
-  candidate!: Candidate;
+        import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 
-  @Emit()
-  minimizeCandidate() { }
+        const props = defineProps({
+          candidate: {
+            type: Candidate,
+            required: true,
+          }
+        });
+        const emit = defineEmits(['minimizeCandidate', 'clickCandidateName']);
 
-  @Emit()
-  clickCandidateName(double: boolean) { }
+        function minimizeCandidate() {
+          emit('minimizeCandidate');
+        }
 
-  get progressPercent() {
-    return this.candidate.timer.progressPercent;
-  }
+        function clickCandidateName(double: boolean) {
+          emit('clickCandidateName', double);
+        }
 
-  get progressValue() {
-    if (this.candidate.timer.isTimeUp) {
-      return this.candidate.timer.isRunning() ? undefined : 100;
-    }
-    return this.progressPercent;
-  }
+        const progressPercent = computed(() => {
+          return props.candidate.timer.progressPercent;
+        });
 
-  get timeClass() {
-    return {
-      'plenty-time': this.progressPercent >= 50,
-      'running-out': this.progressPercent < 50 && this.progressPercent >= 25,
-      'almost-done': this.progressPercent < 25,
-    };
-  }
-  get timeColorHue() {
-    return Math.round(lerp(0, 120, this.progressPercent / 100));
-  }
-}
+        const progressValue = computed(() => {
+          if (props.candidate.timer.isTimeUp) {
+            return props.candidate.timer.isRunning() ? undefined : 100;
+          }
+          return progressPercent.value;
+        });
 
-function lerp(min: number, max: number, progress: number) {
-  return (1 - progress) * min + progress * max;
-}
-export default toNative(CandidateCard);
+        const timeClass = computed(() => {
+          const percent = progressPercent.value;
+          return {
+            'plenty-time': percent >= 50,
+            'running-out': percent < 50 && percent >= 25,
+            'almost-done': percent < 25,
+          };
+        });
+
+        const timeColorHue = computed(() => {
+          return Math.round(lerp(0, 120, progressPercent.value / 100));
+        });
+
+        function lerp(min: number, max: number, progress: number) {
+          return (1 - progress) * min + progress * max;
+        }
+
 </script>
 
 <style lang="scss"
