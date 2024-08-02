@@ -2,10 +2,19 @@
   <div class="candidate-card card z-depth-2" :class="timeClass">
     <div class="card-content" :style="{ '--progress-color': timeColorHue }">
       <div class="card-title">
-        <span @dblclick.prevent="clickCandidateName(true)" @click.prevent="clickCandidateName(false)">{{ candidate.name }}</span>
-        <a href="#" class="btn-floating btn-flat" @click.prevent="minimizeCandidate()">
+        <span @dblclick.prevent="clickCandidateName(true)" @click.prevent="clickCandidateName(false)" @click.shift="candidate.restoreRebuttal()" @click.ctrl="minimizeCandidate()">
+          {{ candidate.name }}
+        </span>
+        <span class="rebuttals-badge" :title="`${candidate.rebuttalsLeft()} Rebuttal${candidate.rebuttalsLeft() == 1 ? '' : 's'} Left`">
+          <TransitionGroup name="list">
+            <button class="btn-floating btn-small token-button" v-for="n in candidate.rebuttalsLeft()" :key="n" @click="candidate.useRebuttal()">
+              <i class="material-icons">forum</i>
+            </button>
+          </TransitionGroup>
+        </span>
+        <!--{{/* <a href="#" class="btn-floating btn-flat" @click.prevent="minimizeCandidate()">
           <i class="material-icons">minimize</i>
-        </a>
+        </a>  */}}-->
       </div>
       <collapse-transition>
         <div class="time-section">
@@ -138,7 +147,9 @@
           display: flex;
           font-size: 26pt;
           font-weight: 500;
+          height: 3rem;
           justify-content: space-between;
+          overflow: auto;
           user-select: none;
           white-space: nowrap;
           word-wrap: normal;
@@ -229,5 +240,23 @@
             }
           }
         }
+      }
+
+      .rebuttals-badge {
+        align-items: end;
+        display: inline-flex;
+        gap: 4px;
+        height: 1em;
+      }
+
+      .list-enter-active,
+      .list-leave-active {
+        transition: all 0.5s ease;
+      }
+
+      .list-enter-from,
+      .list-leave-to {
+        opacity: 0;
+        width: 0;
       }
     </style>
