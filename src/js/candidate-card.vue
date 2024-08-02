@@ -147,7 +147,7 @@
           display: flex;
           font-size: 26pt;
           font-weight: 500;
-          height: 3rem;
+          min-height: 3rem;
           justify-content: space-between;
           overflow: auto;
           user-select: none;
