@@ -9,12 +9,21 @@ const images = import.meta.glob('../assets/*.png', {
   eager: true,
 });
 
+/**
+ * DEFAULT: Set the time for everyone at once
+ * BUDGET: Set a total time and keep a running clock per person.
+ */
+const TIMER_MODES = ['DEFAULT', 'BUDGET'] as const;
+
+export type TimerMode = typeof TIMER_MODES[number];
+
 export declare interface EventInfo {
   logoUrl: string;
   orgTitle: string;
   eventTitle: string;
   candidatesList: readonly string[];
   questions: string[];
+  mode: TimerMode;
 }
 
 export class Config {
@@ -49,6 +58,7 @@ export class Config {
       'What is your favorite animal?',
       'What steps can the City do in the next 4 years to alleviate the harms of our Housing Crisis?',
     ],
+    mode: 'DEFAULT',
   };
   get candidates() {
     return this.eventInfo.candidatesList.map((name) => new Candidate(name));
@@ -57,6 +67,12 @@ export class Config {
     this.eventInfo.candidatesList = newCandidates.map(
       (candidate) => candidate.name
     );
+  }
+  get mode() { return this.eventInfo.mode; }
+
+  changeMode(mode: TimerMode) {
+    this.eventInfo.mode = mode;
+    saveConfig();
   }
 
   addQuestion(newQuestion: string) {
@@ -81,6 +97,7 @@ export class Config {
     this.eventInfo = { ...this.eventInfo, ...newInfo };
     saveConfig();
   }
+
 }
 export const globalConfig = reactive(new Config());
 

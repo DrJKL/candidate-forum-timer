@@ -35,7 +35,7 @@
       <div class="action-row">
         <a href="#" class="btn startstop" role="button" @click.prevent="candidate.timer.toggleTimer()">{{ candidate.timer.isRunning() ? 'Stop' : 'Start' }}</a>
 
-        <a href="#" class="btn resetTime" role="button" @click.prevent="candidate.timer.resetTime()">
+        <a href="#" class="btn resetTime reset-time-button" role="button" @click.prevent="candidate.timer.resetTime()">
           <i class="material-icons">restore</i>
         </a>
 
@@ -216,10 +216,19 @@
               flex: 1 1 100%;
             }
 
+            .reset-time-button {
+              .budget-mode & {
+                display: none;
+              }
+            }
+
             .inc-dec-buttons {
-              display: flex;
-              justify-content: space-between;
               display: none;
+              justify-content: space-between;
+
+              .budget-mode & {
+                display: flex;
+              }
 
               a {
                 flex: 0 1 1em;

@@ -3,6 +3,7 @@
     'gallery-mode': galleryMode,
     'presentation-mode': !galleryMode,
     'immersive-mode': immersiveMode,
+    'budget-mode': mode === 'BUDGET',
   }" :style="{
     '--candidate-columns': candidateColumns,
   }">
@@ -51,37 +52,40 @@
     <footer class="forum-app-footer">
       <div>
         <span>Set New...</span>
-        <a class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showCandidateDialog">
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showCandidateDialog">
           Candidates
-        </a>
-        <a class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showLogoDialog">
+        </button>
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showLogoDialog">
           Logo
-        </a>
-        <a class="waves-effect waves-teal btn-flat" role="button" @click.prevent="setTitleEditable">
+        </button>
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="setTitleEditable">
           Title
-        </a>
-        <a class="waves-effect waves-teal btn-flat" role="button" @click.prevent="setOrgEditable">
+        </button>
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="setOrgEditable">
           Org
-        </a>
-        <a class="waves-effect waves-teal btn-flat" role="button" @click.prevent="dumpQuestions" title="See Current Questions">
+        </button>
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="dumpQuestions" title="See Current Questions">
           <i class="material-icons">question_mark</i>
-        </a>
-        <a class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showQuestionsDialog" title="Edit Questions">
+        </button>
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showQuestionsDialog" title="Edit Questions">
           <i class="material-icons">quiz</i>
-        </a>
-        <a class="waves-effect waves-teal btn-flat" role="button" @click.prevent="incrementQuestion(-1)" title="Previous Question">
+        </button>
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="incrementQuestion(-1)" title="Previous Question">
           <i class="material-icons">navigate_before</i>
-        </a>
-        <a class="waves-effect waves-teal btn-flat" role="button" @click.prevent="incrementQuestion(1)" title="Next Question">
+        </button>
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="incrementQuestion(1)" title="Next Question">
           <i class="material-icons">navigate_next</i>
-        </a>
-        <a class="waves-effect waves-teal btn-flat" role="button" @click.prevent="immersiveMode = !immersiveMode" title="Next Question">
+        </button>
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="immersiveMode = !immersiveMode" title="Next Question">
           Immersive?
-        </a>
+        </button>
 
-        <a class="waves-effect waves-teal btn-flat red-text" role="button" @click.prevent="resetConfig">
+        <button class="waves-effect waves-teal btn-flat red-text" role="button" @click.prevent="resetConfig">
           Reset All
-        </a>
+        </button>
+
+        <button class="btn-flat" @click.prevent="changeMode">Change Mode</button>
+
         <Transition>
           <span class="" v-if="isSizing">Resizing text...</span>
         </Transition>
@@ -192,307 +196,315 @@
     </dialog>
   </div>
 </template>
-<script setup lang="ts">
-import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
-import { Candidate } from './candidates';
-import {
-  shuffle,
-  blurElement,
-  autosizeText,
-  setEditableElement,
-} from './common';
-import CandidateCard from './candidate-card.vue';
-import AppHeader from './header.vue';
-import FocusManager from './focus_manager';
-import {
-  globalConfig,
-  restoreConfig,
-  actuallyResetConfig,
-  saveConfig,
-} from './global_config';
-import { addUniqueItem } from './list_management';
-import M from 'materialize-css';
-import { ref, watch, computed, onMounted, reactive } from 'vue';
+<script setup
+        lang="ts">
+        import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
+        import { Candidate } from './candidates';
+        import {
+          shuffle,
+          blurElement,
+          autosizeText,
+          setEditableElement,
+        } from './common';
+        import CandidateCard from './candidate-card.vue';
+        import AppHeader from './header.vue';
+        import FocusManager from './focus_manager';
+        import {
+          globalConfig,
+          restoreConfig,
+          actuallyResetConfig,
+          saveConfig,
+        } from './global_config';
+        import { addUniqueItem } from './list_management';
+        import M from 'materialize-css';
+        import { ref, watch, computed, onMounted, reactive } from 'vue';
 
-const allCandidates = ref<Candidate[]>([]);
-const allCandidatesUnshuffled = ref<Candidate[]>([]);
-const candidateColumns = ref(3);
-const galleryMode = ref(true);
-const immersiveMode = ref(true);
-const isShuffling = ref<true | null>(null);
-const isSizing = ref<true | null>(null);
-const questionIdx = ref(0);
-const tempImg = ref('');
-const tempCandidates = ref('');
-const tempQuestions = ref<string[]>([]);
-const tempQuestion = ref('');
-const focusManager = reactive(new FocusManager());
+        const allCandidates = ref<Candidate[]>([]);
+        const allCandidatesUnshuffled = ref<Candidate[]>([]);
+        const candidateColumns = ref(3);
+        const galleryMode = ref(true);
+        const immersiveMode = ref(true);
+        const isShuffling = ref<true | null>(null);
+        const isSizing = ref<true | null>(null);
+        const questionIdx = ref(0);
+        const tempImg = ref('');
+        const tempCandidates = ref('');
+        const tempQuestions = ref<string[]>([]);
+        const tempQuestion = ref('');
+        const focusManager = reactive(new FocusManager());
 
-const resetConfigDialog = ref<HTMLDialogElement>();
-const logoConfigDialog = ref<HTMLDialogElement>();
-const candidatesConfigDialog = ref<HTMLDialogElement>();
-const questionsConfigDialog = ref<HTMLDialogElement>();
-const currentQuestionElement = ref<HTMLElement>();
+        const resetConfigDialog = ref<HTMLDialogElement>();
+        const logoConfigDialog = ref<HTMLDialogElement>();
+        const candidatesConfigDialog = ref<HTMLDialogElement>();
+        const questionsConfigDialog = ref<HTMLDialogElement>();
+        const currentQuestionElement = ref<HTMLElement>();
 
-const currentQuestion = computed(() => globalConfig.eventInfo.questions[questionIdx.value]);
-const visibleCandidates = computed(() => allCandidates.value.filter((candidate) => !candidate.isMinimized));
-const visibleCandidatesUnshuffled = computed(() => allCandidatesUnshuffled.value.filter(
-  (candidate) => !candidate.isMinimized
-));
-const minimizedCandidates = computed(() => allCandidates.value.filter((candidate) => candidate.isMinimized));
-const numberOfCandidates = computed(() => visibleCandidates.value.length);
-const hasMinimizedCandidates = computed(() => minimizedCandidates.value.length > 0);
-const numberOfQuestions = computed(() => globalConfig.eventInfo.questions.length);
+        const currentQuestion = computed(() => globalConfig.eventInfo.questions[questionIdx.value]);
+        const visibleCandidates = computed(() => allCandidates.value.filter((candidate) => !candidate.isMinimized));
+        const visibleCandidatesUnshuffled = computed(() => allCandidatesUnshuffled.value.filter(
+          (candidate) => !candidate.isMinimized
+        ));
+        const minimizedCandidates = computed(() => allCandidates.value.filter((candidate) => candidate.isMinimized));
+        const numberOfCandidates = computed(() => visibleCandidates.value.length);
+        const hasMinimizedCandidates = computed(() => minimizedCandidates.value.length > 0);
+        const numberOfQuestions = computed(() => globalConfig.eventInfo.questions.length);
+        const mode = computed(() => globalConfig.eventInfo.mode);
 
-async function questionChanged() {
-  console.log('currentQuestionChanged', currentQuestion);
-  isSizing.value = true;
-  if (currentQuestionElement.value) {
-    await autosizeText(currentQuestionElement.value, 10);
-    await autosizeText(currentQuestionElement.value, -1);
-  }
-  isSizing.value = null;
-}
+        async function questionChanged() {
+          console.log('currentQuestionChanged', currentQuestion);
+          isSizing.value = true;
+          if (currentQuestionElement.value) {
+            await autosizeText(currentQuestionElement.value, 10);
+            await autosizeText(currentQuestionElement.value, -1);
+          }
+          isSizing.value = null;
+        }
 
-function getCardClasses(index: number) {
-  return {
-    'focused-item': focusManager.isFocused(index),
-    'is-previous': focusManager.isPrev(index),
-    'on-deck': focusManager.isNext(index),
-  };
-}
+        function getCardClasses(index: number) {
+          return {
+            'focused-item': focusManager.isFocused(index),
+            'is-previous': focusManager.isPrev(index),
+            'on-deck': focusManager.isNext(index),
+          };
+        }
 
-function toCandidates(commaSeparated: string) {
-  return commaSeparated
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
+        function toCandidates(commaSeparated: string) {
+          return commaSeparated
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
+        }
 
-async function shuffleCandidates() {
-  const wasGallery = galleryMode.value;
+        async function shuffleCandidates() {
+          const wasGallery = galleryMode.value;
 
-  isShuffling.value = true;
-  if (!wasGallery) {
-    galleryMode.value = true;
-    await new Promise((resolve) => setTimeout(resolve, 700));
-  }
-  allCandidates.value = shuffle(allCandidates.value);
+          isShuffling.value = true;
+          if (!wasGallery) {
+            galleryMode.value = true;
+            await new Promise((resolve) => setTimeout(resolve, 700));
+          }
+          allCandidates.value = shuffle(allCandidates.value);
 
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  focusManager.focusedCandidate = 0;
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          focusManager.focusedCandidate = 0;
 
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  isShuffling.value = null;
-  galleryMode.value = wasGallery;
-}
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          isShuffling.value = null;
+          galleryMode.value = wasGallery;
+        }
 
-async function resetTimers() {
-    for (const candidate of allCandidates.value) {
-      candidate.timer.pause();
-      candidate.timer.resetTime();
-    }
-  }
-
-
-function clickedCandidate(candidate: Candidate, index: number, $event: boolean) {
-  console.log(`${candidate}`, index, $event);
-  if ($event) {
-    focusManager.changeFocusAbsolute(index, numberOfCandidates.value - 1);
-  }
-}
-
-function minimizeCandidate(candidate: Candidate) {
-  candidate.toggleMinimized();
-  focusManager.checkFocus(numberOfCandidates.value - 1);
-}
-
-function incrementQuestion(dir = 1) {
-  const numQuestions = globalConfig.eventInfo.questions.length;
-  questionIdx.value += dir + numQuestions;
-  questionIdx.value = questionIdx.value % numQuestions;
-  console.log('increment', dir, numQuestions, questionIdx);
-}
-
-function dumpQuestions() {
-  const questionsString = globalConfig.eventInfo.questions.join('\n');
-  console.log(questionsString);
-  M.toast({ html: questionsString });
-}
-
-function questionEditDone(event: Event) {
-  if (!(event.target instanceof HTMLElement)) {
-    return;
-  }
-  const newQuestion = event.target.innerText;
-  globalConfig.addQuestion(newQuestion);
-}
-
-function showCandidateDialog() {
-  tempCandidates.value = allCandidates.value
-    .map((candidate) => candidate.name)
-    .join(', ');
-  if (candidatesConfigDialog.value) {
-    candidatesConfigDialog.value.showModal();
-  }
-}
-function showLogoDialog() {
-  tempImg.value = globalConfig.eventInfo.logoUrl;
-  if (logoConfigDialog.value) {
-    logoConfigDialog.value.showModal();
-  }
-}
-function showQuestionsDialog() {
-  tempQuestion.value = '';
-  tempQuestions.value = [...globalConfig.eventInfo.questions];
-  if (questionsConfigDialog.value) {
-    questionsConfigDialog.value.showModal();
-  }
-}
-
-function addNewQuestion(newQuestion: string) {
-  tempQuestions.value = addUniqueItem(newQuestion, tempQuestions.value);
-  tempQuestion.value = '';
-}
-
-function removeQuestion(index: number, question: string) {
-  tempQuestions.value.splice(index, 1);
-}
-function moveQuestion(index: number, dir: -1 | 1) {
-  const [question] = tempQuestions.value.splice(index, 1);
-  tempQuestions.value.splice(index + dir, 0, question);
-}
-
-function setQuestionEditable(event: MouseEvent) {
-  if (!(event.target instanceof HTMLElement)) {
-    return;
-  }
-  setEditableElement(event.target, (newValue) => {
-    globalConfig.addQuestion(newValue);
-  });
-}
-
-function setTitleEditable() {
-  const element = document.getElementById('event-title');
-  if (!(element instanceof HTMLElement)) {
-    return;
-  }
-  setEditableElement(element, (newValue) => {
-    globalConfig.updateEvent(newValue);
-  });
-}
-
-function setOrgEditable() {
-  const element = document.getElementById('org-title');
-  if (!(element instanceof HTMLElement)) {
-    return;
-  }
-  setEditableElement(element, (newValue) => {
-    globalConfig.updateOrg(newValue);
-  });
-}
-
-function resetDialogClosed(event: Event) {
-  if (!resetConfigDialog.value?.returnValue) {
-    return;
-  }
-  if (resetConfigDialog.value?.returnValue !== 'reset_please') {
-    console.log(
-      'Not actually resetting, dialog value:',
-      resetConfigDialog.value.returnValue,
-      '\nProbably need to be more polite about it.'
-    );
-    return;
-  }
-  actuallyResetConfig();
-  resetCandidates();
-  M.toast({ html: 'Options Reset!' });
-}
-function resetConfig() {
-  if (resetConfigDialog.value) {
-    resetConfigDialog.value.showModal();
-  }
-}
-function logoDialogClosed(event: Event) {
-  if (
-    !logoConfigDialog.value?.returnValue ||
-    logoConfigDialog.value.returnValue === 'cancel'
-  ) {
-    return;
-  }
-  globalConfig.updateLogo(logoConfigDialog.value.returnValue);
-}
-function candidatesDialogClosed(event: Event) {
-  if (
-    !candidatesConfigDialog.value?.returnValue ||
-    candidatesConfigDialog.value.returnValue === 'cancel'
-  ) {
-    return;
-  }
-  setCandidates(toCandidates(candidatesConfigDialog.value.returnValue));
-}
-function questionsDialogClosed(event: Event) {
-  if (
-    !questionsConfigDialog.value?.returnValue ||
-    questionsConfigDialog.value.returnValue === 'cancel'
-  ) {
-    return;
-  }
-  questionIdx.value = 0;
-  globalConfig.eventInfo.questions = [...tempQuestions.value];
-  saveConfig();
-}
-
-function setCandidates(candidateNames: string[]) {
-  globalConfig.eventInfo.candidatesList = candidateNames;
-  resetCandidates();
-}
+        async function resetTimers() {
+          for (const candidate of allCandidates.value) {
+            candidate.timer.pause();
+            candidate.timer.resetTime();
+          }
+        }
 
 
-function resetCandidates() {
-  allCandidates.value = globalConfig.eventInfo.candidatesList.map(
-    (name) => new Candidate(name)
-  );
-  allCandidatesUnshuffled.value = [...allCandidates.value];
-}
+        function clickedCandidate(candidate: Candidate, index: number, $event: boolean) {
+          console.log(`${candidate}`, index, $event);
+          if ($event) {
+            focusManager.changeFocusAbsolute(index, numberOfCandidates.value - 1);
+          }
+        }
 
-function howManyColumns(howManyCandidates: number) {
-  switch (true) {
-    case howManyCandidates === 1:
-      return 1;
-    case howManyCandidates % 2 === 0 && howManyCandidates < 5:
-      return 2;
-    default:
-      return 3;
-  }
-}
+        function minimizeCandidate(candidate: Candidate) {
+          candidate.toggleMinimized();
+          focusManager.checkFocus(numberOfCandidates.value - 1);
+        }
+
+        function incrementQuestion(dir = 1) {
+          const numQuestions = globalConfig.eventInfo.questions.length;
+          questionIdx.value += dir + numQuestions;
+          questionIdx.value = questionIdx.value % numQuestions;
+          console.log('increment', dir, numQuestions, questionIdx);
+        }
+
+        function dumpQuestions() {
+          const questionsString = globalConfig.eventInfo.questions.join('\n');
+          console.log(questionsString);
+          M.toast({ html: questionsString });
+        }
+
+        function questionEditDone(event: Event) {
+          if (!(event.target instanceof HTMLElement)) {
+            return;
+          }
+          const newQuestion = event.target.innerText;
+          globalConfig.addQuestion(newQuestion);
+        }
+
+        function showCandidateDialog() {
+          tempCandidates.value = allCandidates.value
+            .map((candidate) => candidate.name)
+            .join(', ');
+          if (candidatesConfigDialog.value) {
+            candidatesConfigDialog.value.showModal();
+          }
+        }
+        function showLogoDialog() {
+          tempImg.value = globalConfig.eventInfo.logoUrl;
+          if (logoConfigDialog.value) {
+            logoConfigDialog.value.showModal();
+          }
+        }
+        function showQuestionsDialog() {
+          tempQuestion.value = '';
+          tempQuestions.value = [...globalConfig.eventInfo.questions];
+          if (questionsConfigDialog.value) {
+            questionsConfigDialog.value.showModal();
+          }
+        }
+
+        function addNewQuestion(newQuestion: string) {
+          tempQuestions.value = addUniqueItem(newQuestion, tempQuestions.value);
+          tempQuestion.value = '';
+        }
+
+        function removeQuestion(index: number, question: string) {
+          tempQuestions.value.splice(index, 1);
+        }
+        function moveQuestion(index: number, dir: -1 | 1) {
+          const [question] = tempQuestions.value.splice(index, 1);
+          tempQuestions.value.splice(index + dir, 0, question);
+        }
+
+        function setQuestionEditable(event: MouseEvent) {
+          if (!(event.target instanceof HTMLElement)) {
+            return;
+          }
+          setEditableElement(event.target, (newValue) => {
+            globalConfig.addQuestion(newValue);
+          });
+        }
+
+        function setTitleEditable() {
+          const element = document.getElementById('event-title');
+          if (!(element instanceof HTMLElement)) {
+            return;
+          }
+          setEditableElement(element, (newValue) => {
+            globalConfig.updateEvent(newValue);
+          });
+        }
+
+        function setOrgEditable() {
+          const element = document.getElementById('org-title');
+          if (!(element instanceof HTMLElement)) {
+            return;
+          }
+          setEditableElement(element, (newValue) => {
+            globalConfig.updateOrg(newValue);
+          });
+        }
+
+        function resetDialogClosed(event: Event) {
+          if (!resetConfigDialog.value?.returnValue) {
+            return;
+          }
+          if (resetConfigDialog.value?.returnValue !== 'reset_please') {
+            console.log(
+              'Not actually resetting, dialog value:',
+              resetConfigDialog.value.returnValue,
+              '\nProbably need to be more polite about it.'
+            );
+            return;
+          }
+          actuallyResetConfig();
+          resetCandidates();
+          M.toast({ html: 'Options Reset!' });
+        }
+        function resetConfig() {
+          if (resetConfigDialog.value) {
+            resetConfigDialog.value.showModal();
+          }
+        }
+
+        function changeMode() {
+          globalConfig.changeMode(globalConfig.mode === 'DEFAULT' ? 'BUDGET' : 'DEFAULT');
+        }
+
+        function logoDialogClosed(event: Event) {
+          if (
+            !logoConfigDialog.value?.returnValue ||
+            logoConfigDialog.value.returnValue === 'cancel'
+          ) {
+            return;
+          }
+          globalConfig.updateLogo(logoConfigDialog.value.returnValue);
+        }
+        function candidatesDialogClosed(event: Event) {
+          if (
+            !candidatesConfigDialog.value?.returnValue ||
+            candidatesConfigDialog.value.returnValue === 'cancel'
+          ) {
+            return;
+          }
+          setCandidates(toCandidates(candidatesConfigDialog.value.returnValue));
+        }
+        function questionsDialogClosed(event: Event) {
+          if (
+            !questionsConfigDialog.value?.returnValue ||
+            questionsConfigDialog.value.returnValue === 'cancel'
+          ) {
+            return;
+          }
+          questionIdx.value = 0;
+          globalConfig.eventInfo.questions = [...tempQuestions.value];
+          saveConfig();
+        }
+
+        function setCandidates(candidateNames: string[]) {
+          globalConfig.eventInfo.candidatesList = candidateNames;
+          resetCandidates();
+        }
 
 
-watch(allCandidates, () => {
-  candidateColumns.value = howManyColumns(visibleCandidates.value.length);
-}, { immediate: true, deep: true });
+        function resetCandidates() {
+          allCandidates.value = globalConfig.eventInfo.candidatesList.map(
+            (name) => new Candidate(name)
+          );
+          allCandidatesUnshuffled.value = [...allCandidates.value];
+        }
 
-watch(currentQuestion, async () => {
-  await questionChanged();
-}, { immediate: true });
+        function howManyColumns(howManyCandidates: number) {
+          switch (true) {
+            case howManyCandidates === 1:
+              return 1;
+            case howManyCandidates % 2 === 0 && howManyCandidates < 5:
+              return 2;
+            default:
+              return 3;
+          }
+        }
 
-watch(immersiveMode, async () => {
-  await questionChanged();
-}, { immediate: true });
+
+        watch(allCandidates, () => {
+          candidateColumns.value = howManyColumns(visibleCandidates.value.length);
+        }, { immediate: true, deep: true });
+
+        watch(currentQuestion, async () => {
+          await questionChanged();
+        }, { immediate: true });
+
+        watch(immersiveMode, async () => {
+          await questionChanged();
+        }, { immediate: true });
 
 
-onMounted(async () => {
-  restoreConfig();
-  resetCandidates();
-  questionChanged();
-  window.addEventListener('resize', () => {
-    questionChanged();
-  });
+        onMounted(async () => {
+          restoreConfig();
+          resetCandidates();
+          questionChanged();
+          window.addEventListener('resize', () => {
+            questionChanged();
+          });
 
-});
+        });
 
 </script>
-<style scoped lang="scss">
+<style scoped
+       lang="scss">
 
       :global(#app) {
         width: 100%;
