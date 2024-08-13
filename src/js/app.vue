@@ -231,7 +231,7 @@
         const allCandidatesUnshuffled = ref<Array<Candidate>>([]);
         const candidateColumns = ref(3);
         const galleryMode = ref(true);
-        const immersiveMode = ref(true);
+        const immersiveMode = ref(false);
         const isShuffling = ref<true | null>(null);
         const isSizing = ref<true | null>(null);
         const questionIdx = ref(0);
@@ -480,7 +480,9 @@
           allCandidates.value = globalConfig.eventInfo.candidatesList.map(
             (name) => {
               const candidate = new Candidate(name);
-              candidate.timer.setTime(timePerCandidate(globalConfig.eventInfo.totalTime, globalConfig.eventInfo.candidatesList.length), 's');
+              if (globalConfig.mode === 'BUDGET') {
+                candidate.timer.setTime(timePerCandidate(globalConfig.eventInfo.totalTime, globalConfig.eventInfo.candidatesList.length), 's');
+              }
               return candidate;
             }
           );
