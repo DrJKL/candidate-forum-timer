@@ -4,8 +4,7 @@ import { TokenManager } from './token_manager';
 export class Candidate {
   public readonly timer: Timer = new Timer();
   public isMinimized = false;
-  private readonly tokens = new TokenManager({ 'rebuttal': 2 });
-
+  readonly tokens = new TokenManager({ 'rebuttal': 2 });
 
   constructor(public readonly name: string) { }
   toggleMinimized() {

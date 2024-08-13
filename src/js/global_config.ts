@@ -16,6 +16,13 @@ const images = import.meta.glob('../assets/*.png', {
 const TIMER_MODES = ['DEFAULT', 'BUDGET'] as const;
 
 export type TimerMode = typeof TIMER_MODES[number];
+export interface EventTime {
+  hours: number;
+  minutes: number;
+  seconds: number;
+  paddingMinutes: number;
+}
+
 
 export declare interface EventInfo {
   logoUrl: string;
@@ -24,6 +31,7 @@ export declare interface EventInfo {
   candidatesList: readonly string[];
   questions: string[];
   mode: TimerMode;
+  totalTime: EventTime;
 }
 
 export class Config {
@@ -59,6 +67,13 @@ export class Config {
       'What steps can the City do in the next 4 years to alleviate the harms of our Housing Crisis?',
     ],
     mode: 'DEFAULT',
+    totalTime: {
+      hours: 1,
+      minutes: 30,
+      seconds: 0,
+      paddingMinutes: 10,
+    }
+
   };
   get candidates() {
     return this.eventInfo.candidatesList.map((name) => new Candidate(name));
@@ -91,6 +106,9 @@ export class Config {
   }
   updateLogo(logoUrl: string) {
     this.updateInfo({ logoUrl });
+  }
+  updateTotalTime(totalTime: EventTime) {
+    this.updateInfo({ totalTime });
   }
 
   updateInfo(newInfo: Partial<EventInfo>) {
@@ -125,4 +143,35 @@ export function saveConfig() {
 export function actuallyResetConfig() {
   localStorage.removeItem(CONFIG_KEY);
   restoreConfig();
+}
+
+function timeToSeconds(time: EventTime) {
+  const { hours, minutes } = time;
+  return (hours * 60 * 60) + (minutes * 60);
+}
+export function secondsToTime(totalSeconds: number): EventTime {
+  totalSeconds = Math.round(totalSeconds);
+  var hours = Math.floor(totalSeconds / (60 * 60));
+
+  var divisor_for_minutes = totalSeconds % (60 * 60);
+  var minutes = Math.floor(divisor_for_minutes / 60);
+
+  var divisor_for_seconds = divisor_for_minutes % 60;
+  var seconds = Math.ceil(divisor_for_seconds);
+
+  return { hours, minutes, seconds, paddingMinutes: 0 };
+}
+export function timeFormatter(time: EventTime, withSeconds = false) {
+  const { hours, minutes, seconds } = time;
+
+  const secondsSegment = withSeconds ? ` ${seconds} seconds` : '';
+
+  return `${hours} Hours ${minutes} minutes${secondsSegment}`;
+}
+
+export function timePerCandidate(totalTimeTmp: EventTime, numberCandidates: number) {
+  const totalTime = timeToSeconds(totalTimeTmp);
+  const paddingTime = totalTimeTmp.paddingMinutes * 60;
+  const timeWithoutPadding = totalTime - paddingTime;
+  return timeWithoutPadding / (numberCandidates ?? 1);
 }

@@ -26,12 +26,18 @@ export default class Timer {
     }
   }
 
-  addTime() {
-    this.timeLeft.add(globalConfig.timeDelta);
+  addTime(aLot?: boolean) {
+    const multiplier = aLot ? 10 : 1;
+    for (let i = 0; i < multiplier; i++) {
+      this.timeLeft.add(globalConfig.timeDelta);
+    }
   }
 
-  removeTime() {
-    this.timeLeft.subtract(globalConfig.timeDelta);
+  removeTime(aLot?: boolean) {
+    const multiplier = aLot ? 10 : 1;
+    for (let i = 0; i < multiplier; i++) {
+      this.timeLeft.subtract(globalConfig.timeDelta);
+    }
   }
 
   setTime(num: DurationInputArg1, unit: DurationInputArg2) {

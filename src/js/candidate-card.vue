@@ -18,15 +18,20 @@
       </div>
       <collapse-transition>
         <div class="time-section">
-          <div class="time-left">
-            {{ candidate.timer.getTimeLeft() }}
-            {{ candidate.timer.isTimeUp ? 'over' : 'remaining' }}
-          </div>
           <div class="progress" :class="{ 'time-up': candidate.timer.isTimeUp }">
-            <div :class="{
+            <div class="time-left">
+              {{ candidate.timer.getTimeLeft() }}
+              {{ candidate.timer.isTimeUp ? 'over' : '' }}
+            </div>
+            <div class="progress-bar" :class="{
               determinate: !candidate.timer.isTimeUp,
               indeterminate: candidate.timer.isTimeUp,
-            }" :style="{ width: `${progressValue}%` }"></div>
+            }" :style="{ width: `${progressValue}%` }">
+            </div>
+            <div class="time-left">
+              {{ candidate.timer.getTimeLeft() }}
+              {{ candidate.timer.isTimeUp ? 'over' : '' }}
+            </div>
           </div>
         </div>
       </collapse-transition>
@@ -40,10 +45,10 @@
         </a>
 
         <div class="inc-dec-buttons">
-          <a href="#" class="btn" role="button" @click.prevent="candidate.timer.addTime()">
-            <i class="material-icons">add</i>
+          <a href="#" class="btn add-button" role="button" @click="event => candidate.timer.addTime(event.shiftKey)">
+            <i class=" material-icons">add</i>
           </a>
-          <a href="#" class="btn" role="button" @click.prevent="candidate.timer.removeTime()">
+          <a href="#" class="btn remove-button" role="button" @click="event => candidate.timer.removeTime(event.shiftKey)">
             <i class="material-icons">remove</i>
           </a>
         </div>
@@ -61,7 +66,7 @@
 <script setup
         lang="ts">
 
-        import { computed } from 'vue';
+        import { computed, ref } from 'vue';
         import { Candidate } from './candidates';
 
         import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
@@ -119,37 +124,44 @@
         --progress-color-sat: 80;
         --progress-color-lit: 50;
         background-color: #607d8b;
+        container-name: candidate-card;
         color: #ffffff;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         outline: 0 solid;
-        transition: all 0.25s linear;
-        transition: outline-color 0.5s linear;
+        position: relative;
+        transition: all 0.25s linear, outline-color 0.5s linear;
         width: 100%;
 
         &.plenty-time {
           border-color: green;
           outline-color: green;
+          --shadow-color: green;
         }
 
         &.running-out {
           border-color: yellow;
           outline-color: yellow;
+          --shadow-color: yellow;
         }
 
         &.almost-done {
           border-color: red;
           outline-color: red;
+          --shadow-color: red;
         }
 
         .card-title {
+          align-items: center;
           display: flex;
-          font-size: 26pt;
+
+          font-size: 2.167rem;
           font-weight: 500;
           min-height: 3rem;
           justify-content: space-between;
           overflow: auto;
+          padding-inline-start: .2rem;
           user-select: none;
           white-space: nowrap;
           word-wrap: normal;
@@ -162,21 +174,34 @@
         .card-content {
           display: flex;
           flex-direction: column;
-          padding-bottom: 0.5rem;
+          padding: 6px;
+          padding-bottom: 2px;
         }
 
         .time-section {
           .time-left {
             user-select: none;
-            font-size: 30pt;
+            font-size: 2.5rem;
+            text-align: center;
+            color: white;
+            z-index: 100;
+            text-shadow: 1px 1px 5px black;
+          }
+
+          .progress-bar {
+            z-index: 75;
           }
 
           .progress {
+            display: grid;
+            grid-template: auto / auto;
             border-radius: 5px;
-            height: 2rem;
-            margin-bottom: 0.5rem;
+            height: 4rem;
+            padding: 0;
+            margin: 0;
 
             .determinate {
+              overflow: hidden;
               // background-color: hsl(
               //   var(--progress-color, 120),
               //   calc(var(--progress-color-sat, 100) * 1%),
@@ -198,6 +223,9 @@
           display: flex;
           flex-direction: row;
           gap: 6px;
+          padding-inline: 0;
+          padding-block-start: 2px;
+          padding-block-end: 6px;
 
           .action-row {
             flex: 1;
@@ -252,10 +280,13 @@
       }
 
       .rebuttals-badge {
-        align-items: end;
+        align-items: baseline;
         display: inline-flex;
         gap: 4px;
         height: 1em;
+        position: absolute;
+        right: 8px;
+        top: 8px;
       }
 
       .list-enter-active,

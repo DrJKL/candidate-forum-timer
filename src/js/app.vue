@@ -4,9 +4,10 @@
     'presentation-mode': !galleryMode,
     'immersive-mode': immersiveMode,
     'budget-mode': mode === 'BUDGET',
-  }" :style="{
-    '--candidate-columns': candidateColumns,
-  }">
+  [`_${visibleCandidates.length}-candidates`]: true,
+}" :style="{
+  '--candidate-columns': candidateColumns,
+}">
     <app-header class="forum-app-header" :focused-candidate="focusManager.focusedCandidate" :number-candidates="numberOfCandidates" :gallery-mode="galleryMode" @update:gallery-mode="galleryMode = $event" :is-shuffling="isShuffling" :candidates-list="allCandidates" @shuffle-candidates="shuffleCandidates()" @reset-timers="resetTimers()" @focus-change="
       focusManager.changeFocus($event, numberOfCandidates - 1)
       "></app-header>
@@ -31,15 +32,21 @@
       </div>
       <div class="forum-app-gallery">
         <div class="forum-app-gallery-wrapper">
+          <!--
           <h3 class="face-area-header">
             <i class="material-icons">star</i> The Stars Of The Show!
             <i class="material-icons">star</i>
           </h3>
+        -->
           <div class="all-faces">
+            <!--
             <div class="face-box z-depth-1">
               <div class="face-box-label z-depth-1">Moderator</div>
             </div>
-            <div class="face-box z-depth-1" v-for="(candidate, index) of visibleCandidatesUnshuffled">
+            -->
+            <div class="face-box z-depth-1" v-for="(candidate, index) of visibleCandidatesUnshuffled" :class="{
+              'focused-candidate': candidate.name === focusedCandidateName,
+            }">
               <div class="face-box-label z-depth-1">
                 {{ candidate.name }}
               </div>
@@ -51,7 +58,7 @@
 
     <footer class="forum-app-footer">
       <div>
-        <span>Set New...</span>
+        <i class="material-icons" title="Event Settings">change_circle</i>
         <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showCandidateDialog">
           Candidates
         </button>
@@ -87,7 +94,7 @@
         <button class="btn-flat" @click.prevent="changeMode">Change Mode</button>
 
         <Transition>
-          <span class="" v-if="isSizing">Resizing text...</span>
+          <span class="sizing-indicator" v-if="isSizing">Resizing text...</span>
         </Transition>
       </div>
       <collapse-transition>
@@ -101,8 +108,8 @@
       </collapse-transition>
 
       <span class="attribution-label">
-        Built by Alex Brown for the
-        <a href="https://mvmha.com">MVMHA</a> (updated 2024)
+        By Alex Brown for the
+        <a href="https://mvmha.com">MVMHA</a> (v2024)
       </span>
     </footer>
     <dialog class="config-dialog" ref="resetConfigDialog" @close="resetDialogClosed">
@@ -214,13 +221,14 @@
           restoreConfig,
           actuallyResetConfig,
           saveConfig,
+          timePerCandidate,
         } from './global_config';
         import { addUniqueItem } from './list_management';
         import M from 'materialize-css';
-        import { ref, watch, computed, onMounted, reactive } from 'vue';
+        import { ref, watch, computed, onMounted, reactive, Ref } from 'vue';
 
-        const allCandidates = ref<Candidate[]>([]);
-        const allCandidatesUnshuffled = ref<Candidate[]>([]);
+        const allCandidates = ref<Array<Candidate>>([]);
+        const allCandidatesUnshuffled = ref<Array<Candidate>>([]);
         const candidateColumns = ref(3);
         const galleryMode = ref(true);
         const immersiveMode = ref(true);
@@ -240,7 +248,7 @@
         const currentQuestionElement = ref<HTMLElement>();
 
         const currentQuestion = computed(() => globalConfig.eventInfo.questions[questionIdx.value]);
-        const visibleCandidates = computed(() => allCandidates.value.filter((candidate) => !candidate.isMinimized));
+        const visibleCandidates = computed<Array<Candidate>>(() => allCandidates.value.filter((candidate) => !candidate.isMinimized));
         const visibleCandidatesUnshuffled = computed(() => allCandidatesUnshuffled.value.filter(
           (candidate) => !candidate.isMinimized
         ));
@@ -249,6 +257,13 @@
         const hasMinimizedCandidates = computed(() => minimizedCandidates.value.length > 0);
         const numberOfQuestions = computed(() => globalConfig.eventInfo.questions.length);
         const mode = computed(() => globalConfig.eventInfo.mode);
+        const noCandidates = computed(() => visibleCandidates.value.length === 0);
+
+        const focusedCandidateName = computed(() => {
+          const focusedIndex = focusManager.focusedCandidate;
+          const focusedCandidate = visibleCandidates.value[focusedIndex];
+          return focusedCandidate?.name ?? '';
+        });
 
         async function questionChanged() {
           console.log('currentQuestionChanged', currentQuestion);
@@ -422,6 +437,7 @@
 
         function changeMode() {
           globalConfig.changeMode(globalConfig.mode === 'DEFAULT' ? 'BUDGET' : 'DEFAULT');
+          saveConfig();
         }
 
         function logoDialogClosed(event: Event) {
@@ -462,7 +478,11 @@
 
         function resetCandidates() {
           allCandidates.value = globalConfig.eventInfo.candidatesList.map(
-            (name) => new Candidate(name)
+            (name) => {
+              const candidate = new Candidate(name);
+              candidate.timer.setTime(timePerCandidate(globalConfig.eventInfo.totalTime, globalConfig.eventInfo.candidatesList.length), 's');
+              return candidate;
+            }
           );
           allCandidatesUnshuffled.value = [...allCandidates.value];
         }
@@ -483,14 +503,9 @@
           candidateColumns.value = howManyColumns(visibleCandidates.value.length);
         }, { immediate: true, deep: true });
 
-        watch(currentQuestion, async () => {
+        watch([currentQuestion, immersiveMode, noCandidates], async () => {
           await questionChanged();
         }, { immediate: true });
-
-        watch(immersiveMode, async () => {
-          await questionChanged();
-        }, { immediate: true });
-
 
         onMounted(async () => {
           restoreConfig();
@@ -519,7 +534,7 @@
         grid-auto-flow: row;
         grid-template-columns: 1fr;
         grid-template-rows:
-          fit-content(5vh) minmax(10em, 1fr) 4fr fit-content(5vh);
+          fit-content(5vh) minmax(10rem, 1fr) minmax(15em, auto) fit-content(5vh);
         height: 100%;
         max-height: 100%;
         overflow: hidden;
@@ -531,6 +546,11 @@
           'forum-app-candidates'
           'forum-app-footer';
 
+        &._0-candidates {
+          grid-template-rows:
+            fit-content(5vh) minmax(10em, 1fr) 0 fit-content(5vh);
+        }
+
         .forum-app-header {
           max-height: min-content;
           grid-area: forum-app-header;
@@ -538,13 +558,14 @@
 
         .question-wrap {
           --question-size-test: 200px;
+          container-type: size;
 
           display: grid;
           grid-area: forum-app-question;
           position: relative;
+          transition: unset;
 
           .forum-app-question {
-            -webkit-text-stroke: 1px black;
             align-items: center;
             display: grid;
             font-size: var(--question-size-test);
@@ -554,6 +575,7 @@
             position: absolute;
             left: 50%;
             top: 50%;
+            transition: unset;
             transform: translateX(-50%) translateY(-50%);
             transform-origin: center;
             text-align: center;
@@ -580,7 +602,7 @@
         .forum-app-candidates {
           grid-area: forum-app-candidates;
 
-          transition: width 1s linear;
+          transition: width .2s linear;
           display: flex;
           flex-direction: row;
           gap: 16px;
@@ -610,7 +632,8 @@
               display: grid;
               grid-template-columns: repeat((var(--candidate-columns)),
                   minmax(0, 1fr));
-              justify-content: space-evenly;
+              height: 100%;
+              align-items: center;
 
               > div,
               > candidate-card {
@@ -622,7 +645,13 @@
             }
           }
 
+          /* Presentation Mode */
           &:not(.gallery-mode) {
+            .candidates-container {
+              display: grid;
+              place-items: center stretch;
+            }
+
             .candidate-card {
               display: none;
 
@@ -634,10 +663,11 @@
 
               &.focused-item {
                 :deep(.card-content .card-title) {
-                  font-size: 6vw;
+                  place-content: center;
+                  font-size: 7.2rem;
                   font-weight: 500;
                   line-height: initial;
-                  -webkit-text-stroke: 1px black;
+                  text-shadow: 1px 1px 3px black;
                 }
               }
 
@@ -668,7 +698,7 @@
           .candidate-card.focused-item {
             :deep(.card-content .card-title) {
               transition: font-size 0.2s ease-in-out;
-              font-size: 30pt;
+              font-size: 2.5rem;
             }
           }
         }
@@ -680,8 +710,8 @@
 
           .forum-app-gallery-wrapper {
             display: grid;
-            grid-template: fit-content(4rem) 1fr / 1fr;
-            position: absolute;
+            grid-template: 1fr / 1fr;
+            position: relative;
             width: 100%;
             height: 100%;
             transform: translateX(0);
@@ -715,6 +745,11 @@
               display: grid;
 
               align-items: flex-end;
+              transition: border-width 500ms ease-in-out;
+
+              &.focused-candidate {
+                border-width: 3px;
+              }
 
               &::before {
                 content: '';
@@ -730,7 +765,7 @@
                 background-color: var(--label-surface, black);
                 color: var(--label-engraving, white);
                 font-family: Garamond, 'Times New Roman', Times, serif;
-                font-size: clamp(10px, 1vw, 22px);
+                font-size: clamp(0.625rem, 1vw, 1.375rem);
                 font-weight: bold;
                 text-align: center;
                 margin: 5px;
@@ -750,7 +785,8 @@
       }
 
       .focused-item {
-        outline: 10px solid;
+        box-shadow: 0px 0px 10px 5px var(--shadow-color, transparent);
+        z-index: 100;
       }
 
       footer {
@@ -865,6 +901,15 @@
         &::backdrop {
           background-color: rgba(5, 0, 0, 0.8);
         }
+      }
+
+      .attribution-label {
+        overflow: hidden;
+      }
+
+      .sizing-indicator {
+        position: absolute;
+        right: 0;
       }
 
       .v-enter-active,

@@ -2,9 +2,9 @@
  * Basically just a counter that counts down for a set of keys.
  */
 export class TokenManager<T extends Record<keyof T, number>> {
-    private readonly usedTokens: Map<keyof T, number> = new Map();
+    readonly usedTokens: Map<keyof T, number> = new Map();
 
-    constructor(private readonly initialTokens: T) { }
+    constructor(readonly initialTokens: T) { }
 
     /**
      * 

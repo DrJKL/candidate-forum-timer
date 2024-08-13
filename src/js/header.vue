@@ -39,7 +39,7 @@
           </div>
           <div v-else class="time-setters-budget">
             <button href="#" class="btn" role="button" @click.prevent="openTimeDialog()">
-              Time Budget
+              Budget
               <i class="material-icons left">timer</i>
             </button>
           </div>
@@ -105,118 +105,76 @@
     </div>
   </dialog>
 </template>
-            <script setup
-                    lang="ts">
-                    import { Candidate } from './candidates';
-                    import { globalConfig, } from './global_config';
-                    import { blurElement } from './common';
-                    import { computed, ref, watch } from 'vue';
+<script setup
+        lang="ts">
+        import { Candidate } from './candidates';
+        import { EventTime, globalConfig, saveConfig, secondsToTime, timeFormatter, timePerCandidate, } from './global_config';
+        import { blurElement } from './common';
+        import { computed, ref, watch } from 'vue';
 
-                    interface Props {
-                      candidatesList?: Candidate[];
-                      galleryMode?: boolean;
-                      isShuffling?: true | null;
-                      focusedCandidate?: number;
-                      numberCandidates?: number;
-                    }
-
-                    import { getCurrentInstance } from 'vue';
-                    const instance = getCurrentInstance();
-
-                    watch(globalConfig, () => {
-                      instance?.proxy?.$forceUpdate();
-                    });
-
-                    const props = defineProps<Props>();
-
-                    const emit = defineEmits(['shuffleCandidates', 'resetTimers', 'focusChange', 'update:galleryMode']);
-
-                    function shuffleCandidates() {
-                      emit('shuffleCandidates');
-                    }
-
-                    function resetTimers() {
-                      emit('resetTimers');
-                    }
-
-                    function focusChange(num: -1 | 1) {
-                      emit('focusChange', num);
-                    }
-
-                    function updateGalleryMode() {
-                      emit('update:galleryMode', !props.galleryMode);
-                    }
-
-                    const timeBudgetDialog = ref<HTMLDialogElement>();
-
-                    const logoUrl = computed(() => globalConfig.eventInfo.logoUrl);
-                    const eventTitle = computed(() => globalConfig.eventInfo.eventTitle);
-                    const orgTitle = computed(() => globalConfig.eventInfo.orgTitle);
-
-                    const currentModeName = computed(() => props.galleryMode ? 'All Candidates' : 'Question Time!');
-                    const currentModeIcon = computed(() => props.galleryMode ? 'groups' : 'person');
-                    const mode = computed(() => globalConfig.mode);
-            
-                    interface EventTime {
-                      hours: number;
-                      minutes: number;
-                      seconds: number;
-                      paddingMinutes: number;
-                    }
-            
-                    const totalTime = ref<EventTime>({
-                      hours: 1,
-                      minutes: 30,
-                      seconds: 0,
-                      paddingMinutes: 10,
-                    });
-                    const totalTimeTmp = ref<EventTime>({ ...totalTime.value });
-            
-                    function rectifyTmpTime() {
-                      const { hours, minutes } = totalTimeTmp.value;
-                      const hoursInMinutes = minutes < 0 ? -1 : Math.floor(minutes / 60);
-            
-                      const remainingMinutes = minutes < 0 ? 59 : minutes % 60;
-                      const newTotalHours = Math.max(0, hours + hoursInMinutes);
-            
-                      totalTimeTmp.value = {
-                        ...totalTimeTmp.value,
-                        hours: newTotalHours,
-                        minutes: remainingMinutes,
-            
-                      };
-                    }
-            
-                    function timeToSeconds(time: EventTime) {
-                      const { hours, minutes } = time;
-                      return (hours * 60 * 60) + (minutes * 60);
-                    }
-        function secondsToTime(totalSeconds: number): EventTime {
-          totalSeconds = Math.round(totalSeconds);
-          var hours = Math.floor(totalSeconds / (60 * 60));
-
-          var divisor_for_minutes = totalSeconds % (60 * 60);
-          var minutes = Math.floor(divisor_for_minutes / 60);
-
-          var divisor_for_seconds = divisor_for_minutes % 60;
-          var seconds = Math.ceil(divisor_for_seconds);
-
-          return { hours, minutes, seconds, paddingMinutes: 0 };
-        }
-        function timeFormatter(time: EventTime, withSeconds = false) {
-          const { hours, minutes, seconds } = time;
-
-          const secondsSegment = withSeconds ? ` ${seconds} seconds` : '';
-
-          return `${hours} Hours ${minutes} minutes${secondsSegment}`;
+        interface Props {
+          candidatesList?: Candidate[];
+          galleryMode?: boolean;
+          isShuffling?: true | null;
+          focusedCandidate?: number;
+          numberCandidates?: number;
         }
 
-        function timePerCandidate(totalTimeTmp: EventTime, numberCandidates: number) {
-          const totalTime = timeToSeconds(totalTimeTmp);
-          const paddingTime = totalTimeTmp.paddingMinutes * 60;
-          const timeWithoutPadding = totalTime - paddingTime;
-          return timeWithoutPadding / (numberCandidates ?? 1);
+        import { getCurrentInstance } from 'vue';
+        const instance = getCurrentInstance();
+
+        watch(globalConfig, () => {
+          instance?.proxy?.$forceUpdate();
+        });
+
+        const props = defineProps<Props>();
+
+        const emit = defineEmits(['shuffleCandidates', 'resetTimers', 'focusChange', 'update:galleryMode']);
+
+        function shuffleCandidates() {
+          emit('shuffleCandidates');
         }
+
+        function resetTimers() {
+          emit('resetTimers');
+        }
+
+        function focusChange(num: -1 | 1) {
+          emit('focusChange', num);
+        }
+
+        function updateGalleryMode() {
+          emit('update:galleryMode', !props.galleryMode);
+        }
+
+        const timeBudgetDialog = ref<HTMLDialogElement>();
+
+        const logoUrl = computed(() => globalConfig.eventInfo.logoUrl);
+        const eventTitle = computed(() => globalConfig.eventInfo.eventTitle);
+        const orgTitle = computed(() => globalConfig.eventInfo.orgTitle);
+
+        const currentModeName = computed(() => props.galleryMode ? 'All Candidates' : 'Question Time!');
+        const currentModeIcon = computed(() => props.galleryMode ? 'groups' : 'person');
+        const mode = computed(() => globalConfig.mode);
+
+        const totalTime = computed(() => globalConfig.eventInfo.totalTime);
+        const totalTimeTmp = ref<EventTime>({ ...totalTime.value });
+
+        function rectifyTmpTime() {
+          const { hours, minutes } = totalTimeTmp.value;
+          const hoursInMinutes = minutes < 0 ? -1 : Math.floor(minutes / 60);
+
+          const remainingMinutes = minutes < 0 ? 59 : minutes % 60;
+          const newTotalHours = Math.max(0, hours + hoursInMinutes);
+
+          totalTimeTmp.value = {
+            ...totalTimeTmp.value,
+            hours: newTotalHours,
+            minutes: remainingMinutes,
+
+          };
+        }
+
 
         function setTime(time: number) {
           props.candidatesList
@@ -237,7 +195,8 @@
           ) {
             return;
           }
-          totalTime.value = { ...totalTimeTmp.value };
+          globalConfig.eventInfo.totalTime = { ...totalTimeTmp.value };
+          saveConfig();
           const newTime = timePerCandidate(totalTime.value, props.numberCandidates ?? 1);
           setTime(newTime);
         }
@@ -291,7 +250,7 @@
 
           .title {
             color: #363636;
-            font-size: clamp(32px, 10vw, 2rem);
+            font-size: clamp(1rem, 3vw, 2rem);
             font-weight: 600;
             margin: 0 0 1.5rem;
           }
@@ -299,7 +258,7 @@
           .subtitle {
             color: #4a4a4a;
             margin: -1.25rem 0 0;
-            font-size: 1.25rem;
+            font-size: clamp(1rem, 1vw, 1.25rem);
             font-weight: 400;
           }
         }
@@ -322,17 +281,17 @@
           grid-template: 1fr / 1fr 2fr 2fr;
 
           .budget-mode & {
-            grid-template: 1fr / 1fr 1fr 2fr;
+            grid-template: auto / 1fr 1fr 1.5fr 2fr;
 
-            grid-template-areas: 'global-actions time-setters-global global-controls'
-              'global-actions time-setters-global candidate-navigation';
+            grid-template-areas: 'global-actions time-setters-global global-controls candidate-navigation';
+            padding: 0;
           }
 
           grid-auto-flow: row;
           grid-template-areas: 'global-actions time-setters-global global-controls'
           'global-actions time-setters-global candidate-navigation';
           padding: 1.25rem 1.25rem 0.5rem;
-          transition: all 1s linear;
+          transition: all .2s ease-in;
           user-select: none;
 
           > div {
@@ -344,6 +303,21 @@
             flex-direction: row-reverse;
             justify-content: space-between;
           }
+
+          .reset-button {
+            .budget-mode & {
+              display: none;
+            }
+          }
+
+          .shuffle-button {
+            .budget-mode & {
+              grid-row: 1 / -1;
+              height: unset;
+              align-items: center;
+            }
+          }
+
 
           .time-setters-global {
             @include header-button-grid;
@@ -359,6 +333,7 @@
 
             > button {
               height: unset;
+              align-items: center;
 
               > i {
                 align-self: center;
@@ -376,6 +351,11 @@
             grid-area: global-actions;
             width: 100%;
             height: 100%;
+
+            .budget-mode & {
+              grid-template: auto / auto;
+            }
+
           }
 
           .candidate-navigation {
