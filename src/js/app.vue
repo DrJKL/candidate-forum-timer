@@ -534,7 +534,7 @@
         grid-auto-flow: row;
         grid-template-columns: 1fr;
         grid-template-rows:
-          fit-content(5vh) minmax(10rem, 1fr) minmax(15em, auto) fit-content(5vh);
+          fit-content(5vh) auto fit-content(65vh) fit-content(5vh);
         height: 100%;
         max-height: 100%;
         overflow: hidden;
@@ -564,6 +564,10 @@
           grid-area: forum-app-question;
           position: relative;
           transition: unset;
+
+          .immersive-mode & {
+            grid-template-columns: auto 100px;
+          }
 
           .forum-app-question {
             align-items: center;
@@ -602,29 +606,34 @@
         .forum-app-candidates {
           grid-area: forum-app-candidates;
 
-          transition: width .2s linear;
-          display: flex;
-          flex-direction: row;
+          display: grid;
+          grid-template-columns: calc(100% - 16px) 0%;
           gap: 16px;
           overflow-y: auto;
+          transition: transform .2s linear, grid-template-columns .2s linear;
 
-          @at-root .app-container.immersive-mode .forum-app-candidates .forum-app-gallery {
-            flex-grow: 0.000001;
-            width: 0;
+          .forum-app-gallery {
+            /* width: 0; */
+            transform: scaleX(0);
             overflow: hidden;
+          }
 
-            .forum-app-gallery-wrapper {
-              transform: translateX(110%);
+          @at-root .app-container.immersive-mode .forum-app-candidates {
+            grid-template-columns: 70% calc(30% - 16px);
+
+            .forum-app-gallery {
+              /* width: 100%; */
+              transform: scaleX(1);
+              overflow: visible;
+
+              /* .forum-app-gallery-wrapper {
+                transform: translateX(110%);
+              } */
             }
           }
 
           .candidates-container {
-            flex: 2;
-          }
-
-          .forum-app-gallery {
-            flex: 1;
-            transition: all 0.5s ease-in;
+            place-content: center stretch;
           }
 
           &.gallery-mode {
@@ -632,7 +641,8 @@
               display: grid;
               grid-template-columns: repeat((var(--candidate-columns)),
                   minmax(0, 1fr));
-              height: 100%;
+              grid-auto-rows: max-content;
+              /* height: 100%; */
               align-items: center;
 
               > div,
@@ -712,10 +722,7 @@
             display: grid;
             grid-template: 1fr / 1fr;
             position: relative;
-            width: 100%;
             height: 100%;
-            transform: translateX(0);
-            transition: transform 0.5s linear;
           }
 
           .face-area-header {
@@ -738,6 +745,7 @@
             gap: 4px;
             grid-auto-flow: row;
             grid-template-columns: repeat(auto-fill, minmax(30%, 1fr));
+            margin-block: auto;
 
             .face-box {
               aspect-ratio: 1 / 1;
@@ -745,7 +753,7 @@
               display: grid;
 
               align-items: flex-end;
-              transition: border-width 500ms ease-in-out;
+              transition: border-width 0.5s ease-in-out;
 
               &.focused-candidate {
                 border-width: 3px;
