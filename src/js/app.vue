@@ -13,20 +13,20 @@
       "></app-header>
     <collapse-transition>
       <div class="all-questions-container">
-        <div v-for="(question, index) in questions" :key="index" ref="allQuestionElements" class="question-wrap" :data-replicated="question">
-          <div class="forum-app-question" :class="{
-            'current-question': index === questionIdx,
-            'next-question': index === (questionIdx + 1) % questions.length,
-            'previous-question': index === ((questionIdx + questions.length) - 1) % questions.length,
-          }" @dblclick="setQuestionEditable" @keydown.esc.prevent="blurElement" @keydown.enter.prevent="blurElement">
-            {{ question }}
+        <div v-for="(question, index) in questions" :key="index" ref="allQuestionElements" class="question-wrap" :class="{
+          'current-question': index === questionIdx,
+          'next-question': index === (questionIdx + 1) % questions.length,
+          'previous-question': index === ((questionIdx + questions.length) - 1) % questions.length,
+        }" :data-replicated="question">
+          <div class="forum-app-question" @dblclick="setQuestionEditable" @keydown.esc.prevent="blurElement" @keydown.enter.prevent="blurElement">
+            {{ question.displayText }}
           </div>
-
-          <!--
-        <div v-show="currentQuestion" class="current-question forum-app-question" @dblclick="setQuestionEditable" @keydown.esc.prevent="blurElement" @keydown.enter.prevent="blurElement">
-          {{ currentQuestion }}
-        </div>
-      -->
+          <div class="topic-label" v-if="question.topic">
+            <!--  <i class="material-icons prefix">topic</i> -->
+            <span>
+              {{ question.topic }}
+            </span>
+          </div>
         </div>
       </div>
     </collapse-transition>
@@ -189,7 +189,7 @@
 
           <ul class="items-list">
             <transition-group name="squish" tag="li" class="transition-container">
-              <li v-for="(question, index) in tempQuestions" :key="question" :value="index" class="question-text list-item">
+              <li v-for="(question, index) in tempQuestions" :key="question.displayText" :value="index" class="question-text list-item">
                 <div class="move-arrows">
                   <i class="material-icons move-item-button" :hidden="index === 0" @click.prevent="moveQuestion(index, -1)">arrow_drop_up
                   </i>
@@ -234,6 +234,7 @@
           actuallyResetConfig,
           saveConfig,
           timePerCandidate,
+          Question,
         } from './global_config';
         import { addUniqueItem } from './list_management';
         import M from 'materialize-css';
@@ -249,15 +250,18 @@
         const questionIdx = ref(0);
         const tempImg = ref('');
         const tempCandidates = ref('');
-        const tempQuestions = ref<string[]>([]);
-        const tempQuestion = ref('');
+        const tempQuestions = ref<Question[]>([]);
+        const tempQuestion = ref<Question>({
+          topic: '',
+          preamble: '',
+          displayText: '',
+        });
         const focusManager = reactive(new FocusManager());
 
         const resetConfigDialog = ref<HTMLDialogElement>();
         const logoConfigDialog = ref<HTMLDialogElement>();
         const candidatesConfigDialog = ref<HTMLDialogElement>();
         const questionsConfigDialog = ref<HTMLDialogElement>();
-        const currentQuestionElement = ref<HTMLElement>();
         const allQuestionElements = ref<HTMLElement[]>();
 
         const questions = computed(() => globalConfig.eventInfo.questions);
@@ -284,10 +288,7 @@
           isSizing.value = true;
           Promise.all((allQuestionElements.value ?? []).map(async (questionElement) => {
             if (questionElement) {
-              const questionDiv = questionElement.firstElementChild;
-              if (questionDiv && questionDiv.scrollHeight < questionElement.clientHeight - 11) {
-                await autosizeText(questionElement, 10);
-              }
+              await autosizeText(questionElement, 10);
               await autosizeText(questionElement, -1);
             }
           }));
@@ -364,7 +365,7 @@
           if (!(event.target instanceof HTMLElement)) {
             return;
           }
-          const newQuestion = event.target.innerText;
+          const newQuestion = { topic: '', preamble: '', displayText: event.target.innerText };
           globalConfig.addQuestion(newQuestion);
         }
 
@@ -383,19 +384,27 @@
           }
         }
         function showQuestionsDialog() {
-          tempQuestion.value = '';
+          tempQuestion.value = {
+            topic: '',
+            preamble: '',
+            displayText: '',
+          };
           tempQuestions.value = [...globalConfig.eventInfo.questions];
           if (questionsConfigDialog.value) {
             questionsConfigDialog.value.showModal();
           }
         }
 
-        function addNewQuestion(newQuestion: string) {
+        function addNewQuestion(newQuestion: Question) {
           tempQuestions.value = addUniqueItem(newQuestion, tempQuestions.value);
-          tempQuestion.value = '';
+          tempQuestion.value = {
+            topic: '',
+            preamble: '',
+            displayText: '',
+          };
         }
 
-        function removeQuestion(index: number, question: string) {
+        function removeQuestion(index: number, question: Question) {
           tempQuestions.value.splice(index, 1);
         }
         function moveQuestion(index: number, dir: -1 | 1) {
@@ -408,7 +417,7 @@
             return;
           }
           setEditableElement(event.target, (newValue) => {
-            globalConfig.addQuestion(newValue);
+            globalConfig.addQuestion({ topic: '', preamble: '', displayText: newValue });
           });
         }
 
@@ -606,32 +615,30 @@
             font-weight: bold;
             grid-area: 1 / 1 / 2 / 2;
             line-height: 1;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transition: transform 1s ease-in-out;
-            transform: translateX(-500%) translateY(-50%);
-            transform-origin: center;
+            /* position: absolute; */
+            /* left: 50%; */
+            /* top: 50%; */
+            transition: transform .5s ease-in-out;
+            /* transform: translateX(-500%) translateY(-50%); */
+            /* transform-origin: center; */
             text-align: center;
             width: calc(100% - 8px);
-            /* height: calc(100% - 8px); */
             user-select: none;
+          }
 
-            &.current-question {
-              /* transform: translateX(-50%) translateY(-50%); */
-              animation: slide-in-left 1s forwards;
-            }
+          .topic-label {
+            font-weight: 700;
+            align-content: center;
+            display: flex;
+          }
 
-            &.next-question {
-              animation: slide-out-left 1s forwards;
-              /* transform: translateX(200%) translateY(-50%); */
-            }
+          &.current-question {
+            animation: slide-in-left 1s forwards;
+          }
 
-            &.previous-question {
-              animation: slide-out-left 1s forwards;
-              /* transform: translateX(-200%) translateY(-50%); */
-            }
-
+          &.next-question,
+          &.previous-question {
+            animation: slide-out-left 1s forwards;
           }
         }
 
@@ -1015,31 +1022,21 @@
 
       @keyframes slide-in-left {
         from {
-          transform: translateX(-200%) translateY(-50%);
+          transform: translateX(-200%);
         }
 
         to {
-          transform: translateX(-50%) translateY(-50%);
+          transform: translateX(0);
         }
       }
 
       @keyframes slide-out-left {
         to {
-          transform: translateX(-200%) translateY(-50%);
+          transform: translateX(-200%);
         }
 
         from {
-          transform: translateX(-50%) translateY(-50%);
-        }
-      }
-
-      @keyframes slide-out-right {
-        to {
-          transform: translateX(200%) translateY(-50%);
-        }
-
-        from {
-          transform: translateX(-50%) translateY(-50%);
+          transform: translateX(0);
         }
       }
 

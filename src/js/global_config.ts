@@ -23,16 +23,39 @@ export interface EventTime {
   paddingMinutes: number;
 }
 
+export interface Question {
+  topic: string;
+  preamble: string;
+  displayText: string;
+}
 
 export declare interface EventInfo {
   logoUrl: string;
   orgTitle: string;
   eventTitle: string;
   candidatesList: readonly string[];
-  questions: string[];
+  questions: Question[];
   mode: TimerMode;
   totalTime: EventTime;
 }
+
+const DEFAULT_QUESTIONS: Question[] = [
+  {
+    topic: 'Fun',
+    preamble: '',
+    displayText: 'What is your favorite color?'
+  },
+  {
+    topic: 'Fun',
+    preamble: '',
+    displayText: 'What is your favorite animal?'
+  },
+  {
+    topic: 'Housing',
+    preamble: '',
+    displayText: 'What steps can the City do in the next 4 years to alleviate the harms of our Housing Crisis?'
+  },
+];
 
 export class Config {
   timeLimitTotal = moment.duration(90, 's');
@@ -47,8 +70,7 @@ export class Config {
     // "the League of Women Voters",
     //
     eventTitle: `<span>2024</span>
-            <span>Mountain View</span>
-            <span>City Council</span>
+            <span>MVCC</span>
             <span>Candidate Forum</span>`,
     candidatesList: [
       'Chris Clark',
@@ -62,9 +84,7 @@ export class Config {
       'Pat Showalter',
     ],
     questions: [
-      'What is your favorite color?',
-      'What is your favorite animal?',
-      'What steps can the City do in the next 4 years to alleviate the harms of our Housing Crisis?',
+      ...DEFAULT_QUESTIONS
     ],
     mode: 'DEFAULT',
     totalTime: {
@@ -90,7 +110,7 @@ export class Config {
     saveConfig();
   }
 
-  addQuestion(newQuestion: string) {
+  addQuestion(newQuestion: Question) {
     const uniqueQuestions = addUniqueItem(
       newQuestion,
       this.eventInfo.questions

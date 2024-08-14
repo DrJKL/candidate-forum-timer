@@ -82,7 +82,9 @@ const test = base.extend<Fixtures>({
 
         // Fix size of question.
         const questionHandle = page.locator('.question-wrap');
-        await questionHandle?.evaluate(questionWrapper => questionWrapper.style.setProperty('--question-size-test', '165px'));
+        for (const question of await questionHandle.all()) {
+            await question?.evaluate(questionWrapper => questionWrapper.style.setProperty('--question-size-test', '165px'));
+        }
         await expect(questionHandle).toHaveCSS('--question-size-test', '165px');
 
         await use(forumTimerPage);
