@@ -12,9 +12,21 @@
       focusManager.changeFocus($event, numberOfCandidates - 1)
       "></app-header>
     <collapse-transition>
-      <div ref="currentQuestionElement" class="question-wrap" :data-replicated="currentQuestion">
+      <div class="all-questions-container">
+        <div v-for="(question, index) in questions" :key="index" ref="allQuestionElements" class="question-wrap" :data-replicated="question">
+          <div class="forum-app-question" :class="{
+            'current-question': index === questionIdx,
+            'next-question': index === (questionIdx + 1) % questions.length,
+            'previous-question': index === ((questionIdx + questions.length) - 1) % questions.length,
+          }" @dblclick="setQuestionEditable" @keydown.esc.prevent="blurElement" @keydown.enter.prevent="blurElement">
+            {{ question }}
+          </div>
+
+          <!--
         <div v-show="currentQuestion" class="current-question forum-app-question" @dblclick="setQuestionEditable" @keydown.esc.prevent="blurElement" @keydown.enter.prevent="blurElement">
           {{ currentQuestion }}
+        </div>
+      -->
         </div>
       </div>
     </collapse-transition>
@@ -246,8 +258,10 @@
         const candidatesConfigDialog = ref<HTMLDialogElement>();
         const questionsConfigDialog = ref<HTMLDialogElement>();
         const currentQuestionElement = ref<HTMLElement>();
+        const allQuestionElements = ref<HTMLElement[]>();
 
-        const currentQuestion = computed(() => globalConfig.eventInfo.questions[questionIdx.value]);
+        const questions = computed(() => globalConfig.eventInfo.questions);
+        const currentQuestion = computed(() => questions.value[questionIdx.value]);
         const visibleCandidates = computed<Array<Candidate>>(() => allCandidates.value.filter((candidate) => !candidate.isMinimized));
         const visibleCandidatesUnshuffled = computed(() => allCandidatesUnshuffled.value.filter(
           (candidate) => !candidate.isMinimized
@@ -268,10 +282,15 @@
         async function questionChanged() {
           console.log('currentQuestionChanged', currentQuestion);
           isSizing.value = true;
-          if (currentQuestionElement.value) {
-            await autosizeText(currentQuestionElement.value, 10);
-            await autosizeText(currentQuestionElement.value, -1);
-          }
+          Promise.all((allQuestionElements.value ?? []).map(async (questionElement) => {
+            if (questionElement) {
+              const questionDiv = questionElement.firstElementChild;
+              if (questionDiv && questionDiv.scrollHeight < questionElement.clientHeight - 11) {
+                await autosizeText(questionElement, 10);
+              }
+              await autosizeText(questionElement, -1);
+            }
+          }));
           isSizing.value = null;
         }
 
@@ -505,7 +524,7 @@
           candidateColumns.value = howManyColumns(visibleCandidates.value.length);
         }, { immediate: true, deep: true });
 
-        watch([currentQuestion, immersiveMode, noCandidates], async () => {
+        watch([immersiveMode, noCandidates], async () => {
           await questionChanged();
         }, { immediate: true });
 
@@ -558,12 +577,21 @@
           grid-area: forum-app-header;
         }
 
+        .all-questions-container {
+          grid-area: forum-app-question;
+          display: grid;
+          place-content: stretch;
+          grid-template: auto / auto;
+
+        }
+
         .question-wrap {
           --question-size-test: 200px;
           container-type: size;
 
           display: grid;
-          grid-area: forum-app-question;
+          grid-area: 1 / 1 / -1 / -1;
+          grid-template: auto / auto;
           position: relative;
           transition: unset;
 
@@ -581,15 +609,32 @@
             position: absolute;
             left: 50%;
             top: 50%;
-            transition: unset;
-            transform: translateX(-50%) translateY(-50%);
+            transition: transform 1s ease-in-out;
+            transform: translateX(-500%) translateY(-50%);
             transform-origin: center;
             text-align: center;
             width: calc(100% - 8px);
-            height: calc(100% - 8px);
+            /* height: calc(100% - 8px); */
             user-select: none;
+
+            &.current-question {
+              /* transform: translateX(-50%) translateY(-50%); */
+              animation: slide-in-left 1s forwards;
+            }
+
+            &.next-question {
+              animation: slide-out-left 1s forwards;
+              /* transform: translateX(200%) translateY(-50%); */
+            }
+
+            &.previous-question {
+              animation: slide-out-left 1s forwards;
+              /* transform: translateX(-200%) translateY(-50%); */
+            }
+
           }
         }
+
 
         .time-out-container-container {
           transition: transform 0.5s ease-in;
@@ -967,4 +1012,35 @@
       .slide-leave-to {
         opacity: 0;
       }
+
+      @keyframes slide-in-left {
+        from {
+          transform: translateX(-200%) translateY(-50%);
+        }
+
+        to {
+          transform: translateX(-50%) translateY(-50%);
+        }
+      }
+
+      @keyframes slide-out-left {
+        to {
+          transform: translateX(-200%) translateY(-50%);
+        }
+
+        from {
+          transform: translateX(-50%) translateY(-50%);
+        }
+      }
+
+      @keyframes slide-out-right {
+        to {
+          transform: translateX(200%) translateY(-50%);
+        }
+
+        from {
+          transform: translateX(-50%) translateY(-50%);
+        }
+      }
+
     </style>
