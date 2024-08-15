@@ -291,6 +291,7 @@
               await autosizeText(questionElement, 10);
               await autosizeText(questionElement, -1);
             }
+            return;
           }));
           isSizing.value = null;
         }
