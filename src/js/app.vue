@@ -13,7 +13,7 @@
       "></app-header>
     <collapse-transition>
       <div class="all-questions-container">
-        <div v-for="(question, index) in questions" :key="index" ref="allQuestionElements" class="question-wrap" :class="{
+        <div v-for="(question, index) in questions" :key="index" ref="allQuestionElements" @click.shift="flipQuestion" class="question-wrap show-preamble" :class="{
           'current-question': index === questionIdx,
           'next-question': index === (questionIdx + 1) % questions.length,
           'previous-question': index === ((questionIdx + questions.length) - 1) % questions.length,
@@ -21,7 +21,8 @@
           <div class="forum-app-question" @dblclick="setQuestionEditable" @keydown.esc.prevent="blurElement" @keydown.enter.prevent="blurElement">
             {{ question.displayText }}
           </div>
-          <div class="topic-label" v-if="question.topic">
+          <div class="forum-app-question forum-app-question-preamble">{{ question.preamble }}</div>
+          <div class="topic-label" v-if="question.topic !== ''">
             <!--  <i class="material-icons prefix">topic</i> -->
             <span>
               {{ question.topic }}
@@ -183,7 +184,9 @@
         <div class="card-content">
           <p>Setup Questions in advance</p>
           <div class="input-field">
-            <input type="text" id="new-questions-input" form="questions-form" placeholder="How much wood would a woodchuck chuck...?" v-model="tempQuestion" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
+            <input type="text" id="new-questions-input-topic" form="questions-form" placeholder="Zoology" v-model="tempQuestion.topic" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
+            <input type="text" id="new-questions-input-preamble" form="questions-form" placeholder="A woodchuck is a type of animal..." v-model="tempQuestion.preamble" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
+            <input type="text" id="new-questions-input" form="questions-form" placeholder="How much wood would a woodchuck chuck...?" v-model="tempQuestion.displayText" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
             <i class="material-icons prefix add-item-button" @click.prevent="addNewQuestion(tempQuestion)">add_circle</i>
           </div>
 
@@ -265,7 +268,6 @@
         const allQuestionElements = ref<HTMLElement[]>();
 
         const questions = computed(() => globalConfig.eventInfo.questions);
-        const currentQuestion = computed(() => questions.value[questionIdx.value]);
         const visibleCandidates = computed<Array<Candidate>>(() => allCandidates.value.filter((candidate) => !candidate.isMinimized));
         const visibleCandidatesUnshuffled = computed(() => allCandidatesUnshuffled.value.filter(
           (candidate) => !candidate.isMinimized
@@ -273,7 +275,7 @@
         const minimizedCandidates = computed(() => allCandidates.value.filter((candidate) => candidate.isMinimized));
         const numberOfCandidates = computed(() => visibleCandidates.value.length);
         const hasMinimizedCandidates = computed(() => minimizedCandidates.value.length > 0);
-        const numberOfQuestions = computed(() => globalConfig.eventInfo.questions.length);
+        const numberOfQuestions = computed(() => questions.value.length);
         const mode = computed(() => globalConfig.eventInfo.mode);
         const noCandidates = computed(() => visibleCandidates.value.length === 0);
 
@@ -284,7 +286,6 @@
         });
 
         async function questionChanged() {
-          console.log('currentQuestionChanged', currentQuestion);
           isSizing.value = true;
           Promise.all((allQuestionElements.value ?? []).map(async (questionElement) => {
             if (questionElement) {
@@ -350,14 +351,14 @@
         }
 
         function incrementQuestion(dir = 1) {
-          const numQuestions = globalConfig.eventInfo.questions.length;
+          const numQuestions = numberOfQuestions.value;
           questionIdx.value += dir + numQuestions;
           questionIdx.value = questionIdx.value % numQuestions;
           console.log('increment', dir, numQuestions, questionIdx);
         }
 
         function dumpQuestions() {
-          const questionsString = globalConfig.eventInfo.questions.join('\n');
+          const questionsString = questions.value.join('\n');
           console.log(questionsString);
           M.toast({ html: questionsString });
         }
@@ -390,7 +391,7 @@
             preamble: '',
             displayText: '',
           };
-          tempQuestions.value = [...globalConfig.eventInfo.questions];
+          tempQuestions.value = [...questions.value];
           if (questionsConfigDialog.value) {
             questionsConfigDialog.value.showModal();
           }
@@ -412,6 +413,16 @@
           const [question] = tempQuestions.value.splice(index, 1);
           tempQuestions.value.splice(index + dir, 0, question);
         }
+
+        function flipQuestion(event: MouseEvent) {
+          const { currentTarget } = event;
+          if (!(currentTarget instanceof HTMLElement)) {
+            return;
+          }
+          console.log('!!!');
+          currentTarget.classList.toggle('show-preamble');
+        }
+
 
         function setQuestionEditable(event: MouseEvent) {
           if (!(event.target instanceof HTMLElement)) {
@@ -534,7 +545,7 @@
           candidateColumns.value = howManyColumns(visibleCandidates.value.length);
         }, { immediate: true, deep: true });
 
-        watch([immersiveMode, noCandidates], async () => {
+        watch([immersiveMode, noCandidates, questions], async () => {
           await questionChanged();
         }, { immediate: true });
 
@@ -619,12 +630,31 @@
             /* position: absolute; */
             /* left: 50%; */
             /* top: 50%; */
-            transition: transform .5s ease-in-out;
+            transition: transform .5s ease-in-out, opacity .5s ease-in-out;
             /* transform: translateX(-500%) translateY(-50%); */
             /* transform-origin: center; */
             text-align: center;
             width: calc(100% - 8px);
             user-select: none;
+
+            &.forum-app-question-preamble {
+              opacity: var(--preamble-scale, 0);
+              transform: scaleY(var(--preamble-scale, -1));
+            }
+
+            &:not(.forum-app-question-preamble) {
+              opacity: var(--question-scale, 0);
+              transform: scaleY(var(--question-scale, -1));
+            }
+
+          }
+
+          --preamble-scale: initial;
+          --question-scale: 1;
+
+          &.show-preamble {
+            --preamble-scale: 1;
+            --question-scale: initial;
           }
 
           .topic-label {
@@ -638,8 +668,13 @@
           }
 
           &.next-question,
-          &.previous-question {
+          &.previous-question,
+          &:not(.current-question) {
             animation: slide-out-left 1s forwards;
+          }
+
+          &.show-preamble {
+            /* color: red; */
           }
         }
 

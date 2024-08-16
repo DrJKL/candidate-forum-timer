@@ -57,53 +57,54 @@
         </div>
       </div>
     </div>
-  </header>
-  <dialog class="config-dialog" ref="timeBudgetDialog" @close="timeDialogClosed">
-    <div class="card content-wrapper">
-      <h1 class="header">Time Budgeting</h1>
-      <div class="card-content">
-        <div class="time-budget-instructions">
-          <p>Set Time Budget for Candidates</p>
-        </div>
-        <div>Number of Candidates: {{ numberCandidates }}</div>
-        <form class="time-granular">
-          <fieldset>
-            <legend>Total Event Time</legend>
+    <dialog class="config-dialog" ref="timeBudgetDialog" @close="timeDialogClosed">
+      <div class="card content-wrapper">
+        <h1 class="header">Time Budgeting</h1>
+        <div class="card-content">
+          <div class="time-budget-instructions">
+            <p>Set Time Budget for Candidates</p>
+          </div>
+          <div>Number of Candidates: {{ numberCandidates }}</div>
+          <form class="time-granular">
+            <fieldset>
+              <legend>Total Event Time</legend>
 
-            <label for="hour-time-input">
-              <input type="number" id="hour-time-input" form="time-budget-form" min="0" max="24" v-model="totalTimeTmp.hours" @keydown.enter.prevent="blurElement" @blur="_ => rectifyTmpTime()" />
-              <span>Hours</span>
-            </label>
-            <label for="minute-time-input">
-              <input type="number" id="minute-time-input" form="time-budget-form" min="-1" max="60" v-model="totalTimeTmp.minutes" @keydown.enter.prevent="blurElement" @blur="_ => rectifyTmpTime()" @input="event => (totalTimeTmp.minutes >= 60 || totalTimeTmp.minutes < 0) && rectifyTmpTime()" />
-              <span>Minutes</span>
-            </label>
-          </fieldset>
-          <fieldset>
-            <legend>Extra time for intro/transitions</legend>
-            <label for="padding-minute-time-input">
-              <input type="number" id="padding-minute-time-input" form="time-budget-form" min="0" max="60" v-model="totalTimeTmp.paddingMinutes" />
-              <span>Padding Minutes</span>
-            </label>
-          </fieldset>
+              <label for="hour-time-input">
+                <input type="number" id="hour-time-input" form="time-budget-form" min="0" max="24" v-model="totalTimeTmp.hours" @keydown.enter.prevent="blurElement" @blur="_ => rectifyTmpTime()" />
+                <span>Hours</span>
+              </label>
+              <label for="minute-time-input">
+                <input type="number" id="minute-time-input" form="time-budget-form" min="-1" max="60" v-model="totalTimeTmp.minutes" @keydown.enter.prevent="blurElement" @blur="_ => rectifyTmpTime()" @input="event => (totalTimeTmp.minutes >= 60 || totalTimeTmp.minutes < 0) && rectifyTmpTime()" />
+                <span>Minutes</span>
+              </label>
+            </fieldset>
+            <fieldset>
+              <legend>Extra time for intro/transitions</legend>
+              <label for="padding-minute-time-input">
+                <input type="number" id="padding-minute-time-input" form="time-budget-form" min="0" max="60" v-model="totalTimeTmp.paddingMinutes" />
+                <span>Padding Minutes</span>
+              </label>
+            </fieldset>
+          </form>
+
+          <div class="time-calculated-area">
+            <div class="total-time-label">Total time: </div>
+            <div class="total-time-value">{{ timeFormatter(totalTimeTmp) }}</div>
+            <div class="time-per-candidate-label">Time per candidate: </div>
+            <div class="time-per-candidate-value">{{ timeFormatter(secondsToTime(timePerCandidate(totalTimeTmp, numberCandidates ?? 1)), true) }}</div>
+          </div>
+
+        </div>
+        <form id="time-budget-form" method="dialog" class="card-action">
+          <button class="btn blue darken-4 z-depth-2 please-button" type="submit" value="please">
+            Allocate Time Budget for Candidates
+          </button>
+          <button class="btn" type="submit" value="cancel">Cancel</button>
         </form>
-
-        <div class="time-calculated-area">
-          <div class="total-time-label">Total time: </div>
-          <div class="total-time-value">{{ timeFormatter(totalTimeTmp) }}</div>
-          <div class="time-per-candidate-label">Time per candidate: </div>
-          <div class="time-per-candidate-value">{{ timeFormatter(secondsToTime(timePerCandidate(totalTimeTmp, numberCandidates ?? 1)), true) }}</div>
-        </div>
-
       </div>
-      <form id="time-budget-form" method="dialog" class="card-action">
-        <button class="btn blue darken-4 z-depth-2 please-button" type="submit" value="please">
-          Allocate Time Budget for Candidates
-        </button>
-        <button class="btn" type="submit" value="cancel">Cancel</button>
-      </form>
-    </div>
-  </dialog>
+    </dialog>
+  </header>
+
 </template>
 <script setup
         lang="ts">
@@ -406,6 +407,10 @@
         border-radius: 10px;
         padding: 0;
         box-shadow: 0px 0px 20px 10px rgba(200, 255, 200, 0.5);
+
+        #time-budget-form {
+          gap: 4px;
+        }
 
         > .content-wrapper {
           margin: 0;

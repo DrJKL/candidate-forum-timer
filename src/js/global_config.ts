@@ -41,18 +41,18 @@ export declare interface EventInfo {
 
 const DEFAULT_QUESTIONS: Question[] = [
   {
-    topic: 'Fun',
-    preamble: '',
+    topic: 'Fun - Color',
+    preamble: 'You know the rainbow? With all the different stripes?',
     displayText: 'What is your favorite color?'
   },
   {
-    topic: 'Fun',
-    preamble: '',
+    topic: 'Fun - Biology',
+    preamble: 'Plants and Fungi are cool and all, but...',
     displayText: 'What is your favorite animal?'
   },
   {
     topic: 'Housing',
-    preamble: '',
+    preamble: 'The rent is too damn high.',
     displayText: 'What steps can the City do in the next 4 years to alleviate the harms of our Housing Crisis?'
   },
 ];
