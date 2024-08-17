@@ -4,6 +4,7 @@
     'presentation-mode': !galleryMode,
     'immersive-mode': immersiveMode,
     'budget-mode': mode === 'BUDGET',
+  'hide-all-candidates': hideAllCandidates,
   [`_${visibleCandidates.length}-candidates`]: true,
 }" :style="{
   '--candidate-columns': candidateColumns,
@@ -120,6 +121,13 @@
         </div>
       </collapse-transition>
 
+      <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="hideAllCandidates = !hideAllCandidates" title="Hide Candidates">
+        <i class="material-icons">crop_free</i>
+      </button>
+      <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="questionChanged" title="Force resize question">
+        <i class="material-icons">resize</i>
+      </button>
+
       <span class="attribution-label">
         By Alex Brown for the
         <a href="https://mvmha.com">MVMHA</a> (v2024)
@@ -185,8 +193,8 @@
           <p>Setup Questions in advance</p>
           <div class="input-field">
             <input type="text" id="new-questions-input-topic" form="questions-form" placeholder="Zoology" v-model="tempQuestion.topic" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
-            <input type="text" id="new-questions-input-preamble" form="questions-form" placeholder="A woodchuck is a type of animal..." v-model="tempQuestion.preamble" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
-            <input type="text" id="new-questions-input" form="questions-form" placeholder="How much wood would a woodchuck chuck...?" v-model="tempQuestion.displayText" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
+            <textarea type="text" rows="4" class="questions-form-textarea" id="new-questions-input-preamble" form="questions-form" placeholder="A woodchuck is a type of animal..." v-model="tempQuestion.preamble" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
+            <textarea type="text" rows="2" class="questions-form-textarea" id="new-questions-input" form="questions-form" placeholder="How much wood would a woodchuck chuck...?" v-model="tempQuestion.displayText" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
             <i class="material-icons prefix add-item-button" @click.prevent="addNewQuestion(tempQuestion)">add_circle</i>
           </div>
 
@@ -200,7 +208,10 @@
                     arrow_drop_down
                   </i>
                 </div>
-                {{ question }}
+                <span>
+                  {{ question.displayText }}
+                  <i class="preamble-hover material-icons" :title="question.preamble">info</i>
+                </span>
                 <i class="material-icons remove-item-button" @click.prevent="removeQuestion(index, question)">
                   remove_circle_outline
                 </i>
@@ -209,9 +220,12 @@
           </ul>
         </div>
         <form id="questions-form" method="dialog" class="card-action">
+          <input type="file" accept="application/json, text/plain" id="question-file-input" ref="questionFileInput" class="hide" @change="questionInputChanged">
           <button class="btn blue darken-4 z-depth-2 please-button" type="submit" value="new_questions_please">
             Set New Questions List
           </button>
+          <button class="btn blue darken-2 z-depth-2" @click.prevent="loadQuestions()">Load Questions from File</button>
+          <button class="btn blue darken-2 z-depth-2" @click.prevent="downloadQuestions(tempQuestions)">Save Questions to File</button>
           <button class="btn" type="submit" value="cancel">Cancel</button>
         </form>
       </div>
@@ -238,16 +252,20 @@
           saveConfig,
           timePerCandidate,
           Question,
+          downloadQuestions,
+          Questions,
         } from './global_config';
         import { addUniqueItem } from './list_management';
         import M from 'materialize-css';
         import { ref, watch, computed, onMounted, reactive, Ref } from 'vue';
+        import { z } from 'zod';
 
         const allCandidates = ref<Array<Candidate>>([]);
         const allCandidatesUnshuffled = ref<Array<Candidate>>([]);
         const candidateColumns = ref(3);
         const galleryMode = ref(true);
         const immersiveMode = ref(false);
+        const hideAllCandidates = ref(false);
         const isShuffling = ref<true | null>(null);
         const isSizing = ref<true | null>(null);
         const questionIdx = ref(0);
@@ -266,6 +284,7 @@
         const candidatesConfigDialog = ref<HTMLDialogElement>();
         const questionsConfigDialog = ref<HTMLDialogElement>();
         const allQuestionElements = ref<HTMLElement[]>();
+        const questionFileInput = ref<HTMLInputElement>();
 
         const questions = computed(() => globalConfig.eventInfo.questions);
         const visibleCandidates = computed<Array<Candidate>>(() => allCandidates.value.filter((candidate) => !candidate.isMinimized));
@@ -426,6 +445,7 @@
 
         function setQuestionEditable(event: MouseEvent) {
           if (!(event.target instanceof HTMLElement)) {
+            console.log('......', event);
             return;
           }
           setEditableElement(event.target, (newValue) => {
@@ -510,6 +530,51 @@
           saveConfig();
         }
 
+        function loadQuestions() {
+          if (!questionFileInput.value) {
+            console.error('No File input to click...');
+            return;
+          }
+          questionFileInput.value.click();
+        }
+
+        function questionInputChanged() {
+          const file = questionFileInput.value?.files?.[0];
+          if (!file) {
+            console.log('No file to try to load');
+            return;
+          }
+          if (file.type !== 'application/json') {
+            console.error(`Has to be a JSON file, was ${file.type}`);
+            return;
+          }
+          if (file.size > 1_000_000_000) {
+            console.error(`That's too big ${file.size}`);
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            console.log('Reading file...', e);
+            const questionsText = e.target?.result;
+            if (!questionsText || typeof questionsText !== 'string') {
+              console.error('Failed to read questions File');
+              return;
+            }
+            const parsedQuestionsMaybe = Questions.safeParse(JSON.parse(questionsText));
+            if (!parsedQuestionsMaybe.success) {
+              console.error('Failed to parse questions', parsedQuestionsMaybe);
+              return;
+            }
+            const { data } = parsedQuestionsMaybe;
+            console.log('Got these questions...', data);
+
+            tempQuestions.value = data;
+
+          };
+          reader.readAsText(file);
+        }
+
         function setCandidates(candidateNames: string[]) {
           globalConfig.eventInfo.candidatesList = candidateNames;
           resetCandidates();
@@ -518,7 +583,7 @@
 
         function resetCandidates() {
           allCandidates.value = globalConfig.eventInfo.candidatesList.map(
-            (name) => {
+            (name): Candidate => {
               const candidate = new Candidate(name);
               if (globalConfig.mode === 'BUDGET') {
                 candidate.timer.setTime(timePerCandidate(globalConfig.eventInfo.totalTime, globalConfig.eventInfo.candidatesList.length), 's');
@@ -545,9 +610,34 @@
           candidateColumns.value = howManyColumns(visibleCandidates.value.length);
         }, { immediate: true, deep: true });
 
-        watch([immersiveMode, noCandidates, questions], async () => {
-          await questionChanged();
-        }, { immediate: true });
+        watch([immersiveMode, noCandidates, questions, hideAllCandidates], async () => {
+          // await questionChanged();
+        }, { immediate: false });
+
+
+        const resizeObserver = new ResizeObserver((entries) => {
+          requestAnimationFrame(async () => {
+            for (const entry of entries) {
+              if (entry.target instanceof HTMLElement) {
+                // entry.target.style.width = entry.contentBoxSize[0].inlineSize + 10 + "px";
+                await autosizeText(entry.target, 10);
+                await autosizeText(entry.target, -1);
+              }
+            }
+          });
+        });
+        watch(allQuestionElements, (newValue, oldValue, onCleanup) => {
+          resizeObserver.disconnect();
+          if (newValue) {
+            for (const question of newValue) {
+              resizeObserver.observe(question);
+            }
+          }
+          onCleanup(() => {
+            resizeObserver.disconnect();
+          });
+        });
+
 
         onMounted(async () => {
           restoreConfig();
@@ -581,6 +671,7 @@
         max-height: 100%;
         overflow: hidden;
         padding: 0 16px;
+        /* transition: grid-template-rows 0.2s ease-in; */
 
         grid-template-areas:
           'forum-app-header'
@@ -588,9 +679,10 @@
           'forum-app-candidates'
           'forum-app-footer';
 
-        &._0-candidates {
+        &._0-candidates,
+        &.hide-all-candidates {
           grid-template-rows:
-            fit-content(5vh) minmax(10em, 1fr) 0 fit-content(5vh);
+            fit-content(5vh) auto 0vh fit-content(5vh);
         }
 
         .forum-app-header {
@@ -635,9 +727,11 @@
             /* transform-origin: center; */
             text-align: center;
             width: calc(100% - 8px);
+            white-space: pre-wrap;
             user-select: none;
 
             &.forum-app-question-preamble {
+              text-align: left;
               opacity: var(--preamble-scale, 0);
               transform: scaleY(var(--preamble-scale, -1));
             }
@@ -661,14 +755,14 @@
             font-weight: 700;
             align-content: center;
             display: flex;
+            grid-area: 1 / 1 / -1 / -1;
+            place-self: end start;
           }
 
           &.current-question {
             animation: slide-in-left 1s forwards;
           }
 
-          &.next-question,
-          &.previous-question,
           &:not(.current-question) {
             animation: slide-out-left 1s forwards;
           }
@@ -951,6 +1045,7 @@
           .card-action {
             display: flex;
             justify-content: space-between;
+            gap: 4px;
           }
 
           .please-button {
@@ -987,11 +1082,11 @@
 
           .items-list {
             .list-item {
-              align-items: center;
-              display: grid;
-              grid-auto-flow: column;
+              align-items: flex-start;
+              display: flex;
               gap: 8px;
               justify-content: space-between;
+              border-bottom: 1px dashed black;
             }
           }
         }
@@ -999,6 +1094,10 @@
         &::backdrop {
           background-color: rgba(5, 0, 0, 0.8);
         }
+      }
+
+      .questions-form-textarea {
+        resize: vertical;
       }
 
       .attribution-label {

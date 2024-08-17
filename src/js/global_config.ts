@@ -2,6 +2,7 @@ import { Candidate } from './candidates';
 import moment from 'moment';
 import { addUniqueItem } from './list_management';
 import { reactive } from 'vue';
+import { z } from 'zod';
 
 const images = import.meta.glob('../assets/*.png', {
   import: 'default',
@@ -23,11 +24,14 @@ export interface EventTime {
   paddingMinutes: number;
 }
 
-export interface Question {
-  topic: string;
-  preamble: string;
-  displayText: string;
-}
+
+export const Question = z.object({
+  topic: z.string(),
+  preamble: z.string(),
+  displayText: z.string(),
+});
+export type Question = z.infer<typeof Question>;
+export const Questions = z.array(Question);
 
 export declare interface EventInfo {
   logoUrl: string;
@@ -194,4 +198,22 @@ export function timePerCandidate(totalTimeTmp: EventTime, numberCandidates: numb
   const paddingTime = totalTimeTmp.paddingMinutes * 60;
   const timeWithoutPadding = totalTime - paddingTime;
   return timeWithoutPadding / (numberCandidates ?? 1);
+}
+
+export function questionsToJSON(questions: Question[]): string {
+  const stringForm = JSON.stringify(questions, null, 2);
+  return stringForm;
+}
+
+export function downloadQuestions(questions: Question[]) {
+  const questionsJson = questionsToJSON(questions);
+  download(questionsJson, 'questions.json', 'application/json');
+}
+
+function download(content: string, fileName: string, contentType: string) {
+  var a = document.createElement("a");
+  var file = new Blob([content], { type: contentType });
+  a.href = URL.createObjectURL(file);
+  a.download = fileName;
+  a.click();
 }
