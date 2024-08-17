@@ -7,7 +7,7 @@
         </span>
         <span class="rebuttals-badge" :title="`${candidate.rebuttalsLeft()} Rebuttal${candidate.rebuttalsLeft() == 1 ? '' : 's'} Left`">
           <TransitionGroup name="list">
-            <button class="btn-floating btn-small token-button" v-for="n in candidate.rebuttalsLeft()" :key="n" @click="candidate.useRebuttal()">
+            <button class="btn-floating btn-small token-button" v-for="n in candidate.rebuttalsLeft()" :key="n" @click="rebuttalClicked(candidate)">
               <i class="material-icons">forum</i>
             </button>
           </TransitionGroup>
@@ -66,7 +66,7 @@
 <script setup
         lang="ts">
 
-        import { computed, ref } from 'vue';
+        import { computed } from 'vue';
         import { Candidate } from './candidates';
 
         import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
@@ -77,7 +77,7 @@
             required: true,
           }
         });
-        const emit = defineEmits(['minimizeCandidate', 'clickCandidateName']);
+        const emit = defineEmits(['minimizeCandidate', 'clickCandidateName', 'useRebuttal']);
 
         function minimizeCandidate() {
           emit('minimizeCandidate');
@@ -85,6 +85,10 @@
 
         function clickCandidateName(double: boolean) {
           emit('clickCandidateName', double);
+        }
+
+        function rebuttalClicked(candidate: Candidate) {
+          emit('useRebuttal', candidate);
         }
 
         const progressPercent = computed(() => {

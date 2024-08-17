@@ -12,10 +12,12 @@ export function addUniqueItem(
 }
 
 function preProcessQuestion(question: Question): Question | undefined {
-  const { displayText } = question;
   if (!question) {
     return undefined;
   }
+  const { displayText, preamble, topic } = question;
   const trimmedText = displayText.replaceAll(/\\n/g, '\n').trim();
-  return { ...question, displayText: trimmedText };
+  const trimmedPreamble = preamble.replaceAll(/\\n/g, '\n').trim();
+  const trimmedTopic = topic.replaceAll(/\\n/g, '\n').trim();
+  return { topic: trimmedTopic, preamble: trimmedPreamble, displayText: trimmedText };
 }
