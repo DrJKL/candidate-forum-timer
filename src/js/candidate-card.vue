@@ -5,7 +5,7 @@
         <span @dblclick.prevent="clickCandidateName(true)" @click.prevent="clickCandidateName(false)" @click.shift="candidate.restoreRebuttal()" @click.ctrl="minimizeCandidate()">
           {{ candidate.name }}
         </span>
-        <span class="rebuttals-badge" :title="`${candidate.rebuttalsLeft()} Rebuttal${candidate.rebuttalsLeft() == 1 ? '' : 's'} Left`">
+        <span class="rebuttals-badge hide" :title="`${candidate.rebuttalsLeft()} Rebuttal${candidate.rebuttalsLeft() == 1 ? '' : 's'} Left`">
           <TransitionGroup name="list">
             <button class="btn-floating btn-small token-button" v-for="n in candidate.rebuttalsLeft()" :key="n" @click="rebuttalClicked(candidate)">
               <i class="material-icons">forum</i>
@@ -45,10 +45,10 @@
         </a>
 
         <div class="inc-dec-buttons">
-          <a href="#" class="btn add-button" role="button" @click="event => candidate.timer.addTime(event.shiftKey)">
+          <a href="#" class="btn add-button" role="button" @click.prevent="event => candidate.timer.addTime(event.shiftKey)">
             <i class=" material-icons">add</i>
           </a>
-          <a href="#" class="btn remove-button" role="button" @click="event => candidate.timer.removeTime(event.shiftKey)">
+          <a href="#" class="btn remove-button" role="button" @click.prevent="event => candidate.timer.removeTime(event.shiftKey)">
             <i class="material-icons">remove</i>
           </a>
         </div>
@@ -63,115 +63,114 @@
   </div>
 </template>
 
-<script setup
-        lang="ts">
+<script setup lang="ts">
 
-        import { computed } from 'vue';
-        import { Candidate } from './candidates';
+import { computed } from 'vue';
+import { Candidate } from './candidates';
 
-        import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
+import CollapseTransition from '@ivanv/vue-collapse-transition/src/CollapseTransition.vue';
 
-        const props = defineProps({
-          candidate: {
-            type: Candidate,
-            required: true,
-          }
-        });
-        const emit = defineEmits(['minimizeCandidate', 'clickCandidateName', 'useRebuttal']);
+const props = defineProps({
+  candidate: {
+    type: Candidate,
+    required: true,
+  }
+});
+const emit = defineEmits(['minimizeCandidate', 'clickCandidateName', 'useRebuttal']);
 
-        function minimizeCandidate() {
-          emit('minimizeCandidate');
-        }
+function minimizeCandidate() {
+  emit('minimizeCandidate');
+}
 
-        function clickCandidateName(double: boolean) {
-          emit('clickCandidateName', double);
-        }
+function clickCandidateName(double: boolean) {
+  emit('clickCandidateName', double);
+}
 
-        function rebuttalClicked(candidate: Candidate) {
-          emit('useRebuttal', candidate);
-        }
+function rebuttalClicked(candidate: Candidate) {
+  emit('useRebuttal', candidate);
+}
 
-        const progressPercent = computed(() => {
-          return props.candidate.timer.progressPercent;
-        });
+const progressPercent = computed(() => {
+  return props.candidate.timer.progressPercent;
+});
 
-        const progressValue = computed(() => {
-          if (props.candidate.timer.isTimeUp) {
-            return props.candidate.timer.isRunning() ? undefined : 100;
-          }
-          return progressPercent.value;
-        });
+const progressValue = computed(() => {
+  if (props.candidate.timer.isTimeUp) {
+    return props.candidate.timer.isRunning() ? undefined : 100;
+  }
+  return progressPercent.value;
+});
 
-        const timeClass = computed(() => {
-          const percent = progressPercent.value;
-          return {
-            'plenty-time': percent >= 50,
-            'running-out': percent < 50 && percent >= 25,
-            'almost-done': percent < 25,
-          };
-        });
+const timeClass = computed(() => {
+  const percent = progressPercent.value;
+  return {
+    'plenty-time': percent >= 50,
+    'running-out': percent < 50 && percent >= 25,
+    'almost-done': percent < 25,
+  };
+});
 
-        const timeColorHue = computed(() => {
-          return Math.round(lerp(0, 120, progressPercent.value / 100));
-        });
+const timeColorHue = computed(() => {
+  return Math.round(lerp(0, 120, progressPercent.value / 100));
+});
 
-        function lerp(min: number, max: number, progress: number) {
-          return (1 - progress) * min + progress * max;
-        }
+function lerp(min: number, max: number, progress: number) {
+  return (1 - progress) * min + progress * max;
+}
 
 </script>
 
-<style lang="scss"
-       scoped>
-      .candidate-card {
-        --progress-color-hue: 120;
-        --progress-color-sat: 80;
-        --progress-color-lit: 50;
-        background-color: #607d8b;
-        container-name: candidate-card;
-        color: #ffffff;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        outline: 0 solid;
-        position: relative;
-        transition: all 0.25s linear, outline-color 0.5s linear;
-        width: 100%;
+<style lang="scss" scoped>
+.candidate-card {
+  --progress-color-hue: 120;
+  --progress-color-sat: 80;
+  --progress-color-lit: 50;
+  background-color: #607d8b;
+  container-name: candidate-card;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  outline: 0 solid;
+  position: relative;
+  transition: all 0.25s linear, outline-color 0.5s linear;
+  width: 100%;
 
-        &.plenty-time {
-          border-color: green;
-          outline-color: green;
-          --shadow-color: green;
-        }
+  &.plenty-time {
+    border-color: green;
+    outline-color: green;
+    --shadow-color: green;
+  }
 
-        &.running-out {
-          border-color: yellow;
-          outline-color: yellow;
-          --shadow-color: yellow;
-        }
+  &.running-out {
+    border-color: yellow;
+    outline-color: yellow;
+    --shadow-color: yellow;
+  }
 
-        &.almost-done {
-          border-color: red;
-          outline-color: red;
-          --shadow-color: red;
-        }
+  &.almost-done {
+    border-color: red;
+    outline-color: red;
+    --shadow-color: red;
+  }
 
-        .card-title {
-          align-items: center;
-          display: flex;
+  .card-title {
+    align-items: center;
+    display: flex;
 
-          font-size: 2.167rem;
-          font-weight: 500;
-          min-height: 3rem;
-          justify-content: space-between;
-          overflow: auto;
-          padding-inline-start: .2rem;
-          user-select: none;
-          white-space: nowrap;
-          word-wrap: normal;
+    font-size: 2.167rem;
+    font-weight: 500;
+    min-height: 3rem;
+    justify-content: space-between;
+    overflow: auto;
+    padding-inline-start: .2rem;
+    user-select: none;
+    white-space: nowrap;
+    word-wrap: normal;
 
-          > * {
-            flex: 0 1 auto;
+    > * {
+      flex: 0 1 auto;
+      // overflow: hidden;
           }
         }
 
@@ -303,4 +302,5 @@
         opacity: 0;
         width: 0;
       }
-    </style>
+    
+</style>

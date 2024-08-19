@@ -61,7 +61,7 @@
             -->
             <div class="face-box z-depth-1" v-for="(candidate, index) of visibleCandidatesUnshuffled" :class="{
               'focused-candidate': candidate.name === focusedCandidateName,
-            }">
+}">
               <div class="face-box-label z-depth-1">
                 {{ candidate.name }}
               </div>
@@ -98,7 +98,7 @@
         <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="incrementQuestion(1)" title="Next Question">
           <i class="material-icons">navigate_next</i>
         </button>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="immersiveMode = !immersiveMode" title="Next Question">
+        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="toggleImmersive" title="Next Question">
           Immersive?
         </button>
 
@@ -273,11 +273,11 @@ const allCandidates = ref<Array<Candidate>>([]);
 const allCandidatesUnshuffled = ref<Array<Candidate>>([]);
 const candidateColumns = ref(3);
 const galleryMode = ref(true);
-const immersiveMode = ref(false);
+const immersiveMode = computed(() => globalConfig.eventInfo.immersiveOn);
 const hideAllCandidates = ref(false);
 const isShuffling = ref<true | null>(null);
 const isSizing = ref<true | null>(null);
-const questionIdx = ref(0);
+const questionIdx = computed(() => globalConfig.eventInfo.questionIdx);
 const tempImg = ref('');
 const tempCandidates = ref('');
 const tempQuestions = ref<Question[]>([]);
@@ -316,6 +316,10 @@ const focusedCandidateName = computed(() => {
 
 async function hideCandidates() {
   hideAllCandidates.value = !hideAllCandidates.value;
+}
+
+function toggleImmersive() {
+  globalConfig.updateInfo({ immersiveOn: !immersiveMode.value });
 }
 
 async function questionChanged() {
@@ -403,8 +407,9 @@ function reorderCandidate(candidate: Candidate) {
 
 function incrementQuestion(dir = 1) {
   const numQuestions = numberOfQuestions.value;
-  questionIdx.value += dir + numQuestions;
-  questionIdx.value = questionIdx.value % numQuestions;
+
+  const newIdx = (questionIdx.value + dir + numQuestions) % numQuestions;
+  globalConfig.updateInfo({ questionIdx: newIdx });
   console.log('increment', dir, numQuestions, questionIdx);
 }
 
@@ -566,7 +571,7 @@ function questionsDialogClosed(event: Event) {
   ) {
     return;
   }
-  questionIdx.value = 0;
+  globalConfig.updateInfo({ questionIdx: 0 });
   globalConfig.eventInfo.questions = [...tempQuestions.value];
   saveConfig();
 }
@@ -772,7 +777,7 @@ onMounted(async () => {
       font-weight: bold;
       grid-area: 1 / 1 / -1 / -1;
       line-height: 1;
-      padding-bottom: 1rem;
+      padding-bottom: 2rem;
       /* padding: .2rem; */
       text-align: left;
       transition: transform .5s ease-in-out, opacity .5s ease-in-out, z-index .5s ease-in-out;
@@ -818,6 +823,10 @@ onMounted(async () => {
       border-radius: 5px;
       padding-inline: 2px;
       box-shadow: -3px 3px 10px 0px black;
+      // position: absolute;
+      // left: -5px;
+      // bottom: -10px;
+      // transform: translateX(-.25rem) translateY(.5rem);
     }
 
     &.current-question {
@@ -854,7 +863,7 @@ onMounted(async () => {
     display: grid;
     grid-template-columns: calc(100% - 16px) 0%;
     gap: 16px;
-    overflow-y: auto;
+    // overflow-y: auto;
     transition: transform .2s linear, grid-template-columns .2s linear;
 
     .forum-app-gallery {
@@ -878,7 +887,9 @@ onMounted(async () => {
     }
 
     .candidates-container {
-      place-content: center stretch;
+      // place-content: center stretch;
+      place-items: stretch;
+      align-content: baseline;
     }
 
     &.gallery-mode {

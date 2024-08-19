@@ -24,6 +24,7 @@ export async function autosizeText(el: HTMLElement, direction: number, which = '
         (startingSize <= 12 && direction < 0) ||
         (startingSize >= 300 && direction > 0)
       ) {
+        // console.log(direction, which, startingSize, el.scrollHeight, el.offsetHeight)
         el.classList.remove('auto-sizing');
         resolve();
         return;

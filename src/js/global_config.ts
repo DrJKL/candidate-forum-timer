@@ -40,6 +40,8 @@ export declare interface EventInfo {
   candidatesList: readonly string[];
   questions: Question[];
   mode: TimerMode;
+  immersiveOn: boolean;
+  questionIdx: number;
   totalTime: EventTime;
 }
 
@@ -91,6 +93,8 @@ export class Config {
       ...DEFAULT_QUESTIONS
     ],
     mode: 'DEFAULT',
+    immersiveOn: false,
+    questionIdx: 0,
     totalTime: {
       hours: 1,
       minutes: 30,
