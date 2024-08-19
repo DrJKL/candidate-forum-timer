@@ -1,7 +1,7 @@
 import { test as base, expect, type Page, type Locator } from '@playwright/test';
 
 class ForumTimerPage {
-    
+
     private readonly startStopButtons: Locator;
     private readonly macroModeToggle: Locator;
     private readonly nextCandidateButton: Locator;
@@ -11,14 +11,18 @@ class ForumTimerPage {
     private readonly nextQuestionButton: Locator;
     private readonly prevQuestionButton: Locator;
 
+    private readonly candidateCards: Locator;
+
     constructor(public readonly page: Page) {
-        this.startStopButtons = page.getByRole('button', {name: /^(start|stop)$/i });
+        this.startStopButtons = page.getByRole('button', { name: /^(start|stop)$/i });
         this.macroModeToggle = page.getByText(/All Candidates|Question Time/i);
-        this.nextCandidateButton = page.getByRole('button', {name: /^Next/});
-        this.prevCandidateButton = page.getByRole('button', {name: /Prev$/i});
+        this.nextCandidateButton = page.getByRole('button', { name: /^Next/ });
+        this.prevCandidateButton = page.getByRole('button', { name: /Prev$/i });
         this.resizeIndicator = page.getByText('Resizing text');
-        this.nextQuestionButton = page.getByRole('button', {name: 'navigate_before', exact: true});
-        this.prevQuestionButton = page.getByRole('button', {name: 'navigate_after', exact: true});
+        this.nextQuestionButton = page.getByRole('button', { name: 'navigate_before', exact: true });
+        this.prevQuestionButton = page.getByRole('button', { name: 'navigate_after', exact: true });
+
+        this.candidateCards = page.locator('.candidate-card');
     }
     async goto() {
         await this.page.goto('');
@@ -29,6 +33,42 @@ class ForumTimerPage {
 
     async toggleNthTimer(n: number) {
         await this.startStopButtons.nth(n).click();
+    }
+
+    async namedCandidatecard(name: string) {
+        const card = this.candidateCards.filter({
+            has: this.page.getByText(name)
+        });
+        return card;
+    }
+
+    async useNamedCandidateToken(name: string) {
+        const tokens = await this.namedCandidateTokens(name);
+        await tokens.first().click();
+    }
+
+    async namedCandidateTokens(name: string) {
+        const card = await this.namedCandidatecard(name);
+        return card.locator('.token-button');
+    }
+
+    async nthCandidateNamed(n: number, name: string) {
+        const nthCard = this.candidateCards.nth(n);
+        await expect(nthCard).toContainText(name);
+        return nthCard;
+    }
+
+    async useNthCandidateToken(n: number) {
+        const tokenButtons = await this.nthCandidateTokenButtons(n);
+        await tokenButtons.first().click();
+    }
+    async nthCandidateTokenButtons(n: number) {
+        const nthCard = this.candidateCards.nth(n);
+        const buttons = nthCard.locator('.token-button');
+        return buttons;
+    }
+    async restoreNthCandidateToken(n: number) {
+        await this.candidateCards.nth(n).locator('.card-title > span:first-of-type').click({ modifiers: ["Shift"] });
     }
 
     async toggleMode() {
@@ -61,13 +101,28 @@ type Fixtures = {
     forumTimerPage: ForumTimerPage;
 };
 const test = base.extend<Fixtures>({
-    forumTimerPage: async ({page}, use) => {
+    forumTimerPage: async ({ page }, use) => {
         const forumTimerPage = new ForumTimerPage(page);
         await forumTimerPage.goto();
         await forumTimerPage.doneResizing();
+
+        // Fix size of question.
+        const questionHandle = page.locator('.question-wrap');
+        for (const question of await questionHandle.all()) {
+            await question.evaluate(questionWrapper => {
+                questionWrapper.style.setProperty('--question-size-test', '76px');
+                questionWrapper.style.setProperty('--preamble-size-test', '76px');
+            });
+        }
+        await forumTimerPage.doneResizing();
+        for (const question of await questionHandle.all()) {
+            await expect(question).toHaveCSS('--question-size-test', '76px');
+            await expect(question).toHaveCSS('--preamble-size-test', '76px');
+        }
+
         await use(forumTimerPage);
     }
-})
+});
 
 test('initial screenshot', async ({ page, forumTimerPage }) => {
     await expect(page).toHaveTitle('Candidate Timer');
@@ -80,10 +135,10 @@ test('time stuff?', async ({ page, forumTimerPage }) => {
     await expect(page).toHaveScreenshot('3_seconds_before.png');
     await forumTimerPage.advanceClock(3_000);
     await expect(page).toHaveScreenshot('3_seconds_later.png');
-    
+
     await forumTimerPage.toggleNthTimer(0);
     await expect(page).toHaveScreenshot('3_seconds_later_stopped.png');
-    
+
     await forumTimerPage.toggleNthTimer(1);
     await forumTimerPage.advanceClock(3_000);
     await expect(page).toHaveScreenshot('6_seconds_later.png');
@@ -98,12 +153,12 @@ test('time stuff?', async ({ page, forumTimerPage }) => {
     page.clock.resume();
 });
 
-test('Switching modes', async ({ page, forumTimerPage  }) => {
+test('Switching modes', async ({ page, forumTimerPage }) => {
     await forumTimerPage.toggleMode();
     await expect(page).toHaveScreenshot('focus_mode.png');
 });
 
-test('Changing Candidates', async ({page, forumTimerPage}) => {
+test('Changing Candidates', async ({ page, forumTimerPage }) => {
     await forumTimerPage.nextCandidate();
     await expect(page).toHaveScreenshot('switching_1.png');
     await forumTimerPage.nextCandidate();
@@ -112,14 +167,33 @@ test('Changing Candidates', async ({page, forumTimerPage}) => {
     await expect(page).toHaveScreenshot('switching_3.png');
     await forumTimerPage.nextCandidate();
     await expect(page).toHaveScreenshot('switching_4.png');
-})
+});
 
-test('Changing questions', async ({page, forumTimerPage}) => {
+test('Changing questions', async ({ page, forumTimerPage }) => {
     await forumTimerPage.nextQuestion();
     await expect(page).toHaveScreenshot('switching_question_1.png');
     await forumTimerPage.nextQuestion();
     await expect(page).toHaveScreenshot('switching_question_2.png');
     await forumTimerPage.nextQuestion();
     await expect(page).toHaveScreenshot('switching_question_3.png');
+});
 
+test('Tokens', async ({ page, forumTimerPage }) => {
+    await forumTimerPage.nthCandidateNamed(4, 'IdaRose Sylvester');
+    await forumTimerPage.useNamedCandidateToken('IdaRose Sylvester');
+    await forumTimerPage.nthCandidateNamed(1, 'IdaRose Sylvester');
+    await expect(await forumTimerPage.nthCandidateTokenButtons(0)).toHaveCount(2);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(1)).toHaveCount(1);
+    await forumTimerPage.useNthCandidateToken(5);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(0)).toHaveCount(2);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(1)).toHaveCount(1);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(2)).toHaveCount(1);
+    await forumTimerPage.useNthCandidateToken(2);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(1)).toHaveCount(0);
+    await expect(page).toHaveScreenshot('tokens_used.png');
+
+    // Restore token
+    await forumTimerPage.restoreNthCandidateToken(2);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(2)).toHaveCount(2);
+    await expect(page).toHaveScreenshot('tokens_used_2.png');
 });

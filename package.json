@@ -4,7 +4,7 @@
   "description": "A Simple Timer for our Candidate Forum.",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "playwright": "npx playwright test",
     "playwright:ui": "pnpm playwright --ui",
     "start": "vite",
@@ -32,7 +32,8 @@
     "@vue/runtime-dom": "^3.4.31",
     "materialize-css": "^1.0.0",
     "moment": "^2.30.1",
-    "vue": "^3.4.31"
+    "vue": "^3.4.31",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@playwright/test": "^1.45.3",
