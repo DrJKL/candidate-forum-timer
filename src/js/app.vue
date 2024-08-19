@@ -108,9 +108,7 @@
 
         <button class="btn-flat" @click.prevent="changeMode">Change Mode</button>
 
-        <Transition>
-          <span class="sizing-indicator" v-if="isSizing">Resizing text...</span>
-        </Transition>
+        <span class="sizing-indicator">Resizing text...</span>
       </div>
       <collapse-transition>
         <div class="time-out-container-container" :class="{ 'has-minimized': hasMinimizedCandidates }">
@@ -324,19 +322,21 @@ function toggleImmersive() {
 
 async function questionChanged() {
   if (isSizing.value) {
+    console.log('Already Resizing');
     return;
   }
   isSizing.value = true;
-  Promise.all((allQuestionElements.value ?? []).map(async (questionElement) => {
-    if (questionElement) {
-      await autosizeText(questionElement, 10);
-      await autosizeText(questionElement, -1);
-      await autosizeText(questionElement, 10, 'preamble');
-      await autosizeText(questionElement, -1, 'preamble');
-    }
-    return;
-  }));
-  isSizing.value = null;
+  requestAnimationFrame(async () => {
+    await Promise.all((allQuestionElements.value ?? []).map(async (questionElement) => {
+      if (questionElement) {
+        await autosizeText(questionElement, 10);
+        await autosizeText(questionElement, -1);
+        await autosizeText(questionElement, 10, 'preamble');
+        await autosizeText(questionElement, -1, 'preamble');
+      }
+    }));
+    isSizing.value = null;
+  });
 }
 
 function getCardClasses(index: number) {
@@ -1045,6 +1045,7 @@ onMounted(async () => {
   .forum-app-footer {
     max-height: min-content;
     grid-area: forum-app-footer;
+    position: relative;
   }
 }
 
@@ -1177,8 +1178,18 @@ dialog.config-dialog {
 }
 
 .sizing-indicator {
+  visibility: hidden;
+
+  .running-autosizer & {
+    visibility: visible;
+  }
+
   position: absolute;
   right: 0;
+  border-radius: 5px;
+  color:white;
+  background: black;
+  padding-inline: 5px;
 }
 
 .v-enter-active,

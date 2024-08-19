@@ -5,7 +5,7 @@
         <span @dblclick.prevent="clickCandidateName(true)" @click.prevent="clickCandidateName(false)" @click.shift="candidate.restoreRebuttal()" @click.ctrl="minimizeCandidate()">
           {{ candidate.name }}
         </span>
-        <span class="rebuttals-badge hide" :title="`${candidate.rebuttalsLeft()} Rebuttal${candidate.rebuttalsLeft() == 1 ? '' : 's'} Left`">
+        <span class="rebuttals-badge" :title="`${candidate.rebuttalsLeft()} Rebuttal${candidate.rebuttalsLeft() == 1 ? '' : 's'} Left`">
           <TransitionGroup name="list">
             <button class="btn-floating btn-small token-button" v-for="n in candidate.rebuttalsLeft()" :key="n" @click="rebuttalClicked(candidate)">
               <i class="material-icons">forum</i>

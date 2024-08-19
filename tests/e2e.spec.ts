@@ -34,15 +34,41 @@ class ForumTimerPage {
     async toggleNthTimer(n: number) {
         await this.startStopButtons.nth(n).click();
     }
+
+    async namedCandidatecard(name: string) {
+        const card = this.candidateCards.filter({
+            has: this.page.getByText(name)
+        });
+        return card;
+    }
+
+    async useNamedCandidateToken(name: string) {
+        const tokens = await this.namedCandidateTokens(name);
+        await tokens.first().click();
+    }
+
+    async namedCandidateTokens(name: string) {
+        const card = await this.namedCandidatecard(name);
+        return card.locator('.token-button');
+    }
+
+    async nthCandidateNamed(n: number, name: string) {
+        const nthCard = this.candidateCards.nth(n);
+        await expect(nthCard).toContainText(name);
+        return nthCard;
+    }
+
     async useNthCandidateToken(n: number) {
         const tokenButtons = await this.nthCandidateTokenButtons(n);
         await tokenButtons.first().click();
     }
     async nthCandidateTokenButtons(n: number) {
-        return this.candidateCards.nth(n).locator('.token-button');
+        const nthCard = this.candidateCards.nth(n);
+        const buttons = nthCard.locator('.token-button');
+        return buttons;
     }
     async restoreNthCandidateToken(n: number) {
-        this.candidateCards.nth(n).locator('.card-title > span:first-of-type').click({ modifiers: ["Shift"] });
+        await this.candidateCards.nth(n).locator('.card-title > span:first-of-type').click({ modifiers: ["Shift"] });
     }
 
     async toggleMode() {
@@ -83,10 +109,15 @@ const test = base.extend<Fixtures>({
         // Fix size of question.
         const questionHandle = page.locator('.question-wrap');
         for (const question of await questionHandle.all()) {
-            await question.evaluate(questionWrapper => questionWrapper.style.setProperty('--question-size-test', '112px'));
+            await question.evaluate(questionWrapper => {
+                questionWrapper.style.setProperty('--question-size-test', '76px');
+                questionWrapper.style.setProperty('--preamble-size-test', '76px');
+            });
         }
+        await forumTimerPage.doneResizing();
         for (const question of await questionHandle.all()) {
-            await expect(question).toHaveCSS('--question-size-test', '112px');
+            await expect(question).toHaveCSS('--question-size-test', '76px');
+            await expect(question).toHaveCSS('--preamble-size-test', '76px');
         }
 
         await use(forumTimerPage);
@@ -148,16 +179,21 @@ test('Changing questions', async ({ page, forumTimerPage }) => {
 });
 
 test('Tokens', async ({ page, forumTimerPage }) => {
-    await forumTimerPage.useNthCandidateToken(1);
-    expect(await forumTimerPage.nthCandidateTokenButtons(1)).toHaveCount(1);
+    await forumTimerPage.nthCandidateNamed(4, 'IdaRose Sylvester');
+    await forumTimerPage.useNamedCandidateToken('IdaRose Sylvester');
+    await forumTimerPage.nthCandidateNamed(1, 'IdaRose Sylvester');
+    await expect(await forumTimerPage.nthCandidateTokenButtons(0)).toHaveCount(2);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(1)).toHaveCount(1);
+    await forumTimerPage.useNthCandidateToken(5);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(0)).toHaveCount(2);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(1)).toHaveCount(1);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(2)).toHaveCount(1);
     await forumTimerPage.useNthCandidateToken(2);
-    expect(await forumTimerPage.nthCandidateTokenButtons(2)).toHaveCount(1);
-    await forumTimerPage.useNthCandidateToken(2);
-    expect(await forumTimerPage.nthCandidateTokenButtons(2)).toHaveCount(0);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(1)).toHaveCount(0);
     await expect(page).toHaveScreenshot('tokens_used.png');
 
     // Restore token
     await forumTimerPage.restoreNthCandidateToken(2);
-    expect(await forumTimerPage.nthCandidateTokenButtons(2)).toHaveCount(1);
+    await expect(await forumTimerPage.nthCandidateTokenButtons(2)).toHaveCount(2);
     await expect(page).toHaveScreenshot('tokens_used_2.png');
 });
