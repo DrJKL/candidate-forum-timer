@@ -217,11 +217,16 @@
                 Question
               </label>
             </div>
-            <i class="material-icons prefix add-item-button" @click.prevent="addNewQuestion(tempQuestion)">add_circle</i>
+            <button class="add-item-button btn" @click.prevent="addNewQuestion(tempQuestion)">
+              <i class="material-icons left">add</i>
+              Add Question
+            </button>
           </div>
 
-          <ul class="items-list">
-            <transition-group name="squish" tag="li" class="transition-container">
+          <ul class="items-list questions-items-list">
+            <li>
+              <div></div>
+            </li>
             <transition-group name="squish">
               <li v-for="(question, index) in tempQuestions" :key="question.displayText" :value="index" class="question-text list-item">
                 <div class="move-arrows">
@@ -1209,7 +1214,7 @@ dialog.config-dialog {
     }
 
     .questions-list-item-content {
-      display: inline-flex;
+      display: contents;
       flex: 1;
       justify-content: space-between;
       gap: 2ch;
@@ -1251,9 +1256,26 @@ dialog.config-dialog {
       overflow: auto;
       padding-right: 2ch;
 
+      &.questions-items-list {
+        display: grid;
+        grid-template-columns: repeat(2, min-content) 1fr repeat(3, min-content);
+        grid-auto-flow: row;
+
+        .list-item {
+          display: grid;
+          grid-column: span 6;
+          grid-template-columns: subgrid;
+          gap: 8px;
+          justify-content: space-between;
+          border-bottom: 1px dashed black;
+        }
+
+      }
+
       .list-item {
         align-items: flex-start;
-        display: flex;
+        display: grid;
+        grid-template-columns: subgrid;
         gap: 8px;
         justify-content: space-between;
         border-bottom: 1px dashed black;
