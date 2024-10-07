@@ -224,7 +224,12 @@
           </div>
 
           <ul class="items-list questions-items-list">
-            <li>
+            <li class="header-labels list-item">
+              <div></div>
+              <div>Topic</div>
+              <div>Question</div>
+              <div></div>
+              <div></div>
               <div></div>
             </li>
             <transition-group name="squish">
@@ -237,13 +242,13 @@
                   </i>
                 </div>
                 <span class="questions-list-item-content">
-                  <span class="question-list-item-content-topic">{{ question.topic }}: </span>
+                  <span class="question-list-item-content-topic">{{ question.topic }}</span>
                   <span class="question-list-item-content-display" style="white-space: pre-wrap;">
                     {{ question.displayText }}
                   </span>
                   <i class="preamble-hover material-icons" :title="question.preamble">info</i>
                 </span>
-                <i class="material-icons remove-item-button" @click.prevent="editQuestion(index, question)">
+                <i class="material-icons edit-item-button" @click.prevent="editQuestion(index, question)">
                   edit
                 </i>
                 <i class="material-icons remove-item-button" @click.prevent="removeQuestion(index, question)">
@@ -298,6 +303,7 @@ const allCandidatesUnshuffled = ref<Array<Candidate>>([]);
 const candidateColumns = ref(3);
 const galleryMode = ref(true);
 const immersiveMode = computed(() => globalConfig.eventInfo.immersiveOn);
+const editMode = ref(false);
 const hideAllCandidates = ref(false);
 const slowDownIndicator = ref(false);
 const isShuffling = ref<true | null>(null);
@@ -518,6 +524,9 @@ function flipQuestion(event: MouseEvent) {
 
 
 function setQuestionEditable(event: MouseEvent, question: Question, settingPreamble = false) {
+  if (!editMode) {
+    return;
+  }
   if (!(event.target instanceof HTMLElement)) {
     console.log('......', event);
     return;
@@ -1229,6 +1238,7 @@ dialog.config-dialog {
     }
 
     .remove-item-button,
+    .edit-item-button,
     .add-item-button,
     .move-item-button {
       cursor: pointer;
@@ -1237,6 +1247,10 @@ dialog.config-dialog {
 
     .remove-item-button:hover {
       text-shadow: 1px 1px 5px red;
+    }
+
+    .edit-item-button:hover {
+      text-shadow: 1px 1px 5px purple;
     }
 
     .add-item-button:hover {
@@ -1261,6 +1275,9 @@ dialog.config-dialog {
         grid-template-columns: repeat(2, min-content) 1fr repeat(3, min-content);
         grid-auto-flow: row;
 
+        .header-labels {
+          font-weight: bold;
+        }
         .list-item {
           display: grid;
           grid-column: span 6;
