@@ -13,6 +13,11 @@
     <app-header class="forum-app-header" :focused-candidate="focusManager.focusedCandidate" :number-candidates="numberOfCandidates" :gallery-mode="galleryMode" @update:gallery-mode="galleryMode = $event" :is-shuffling="isShuffling" :candidates-list="allCandidates" @shuffle-candidates="shuffleCandidates()" @reset-timers="resetTimers()" @focus-change="
       focusManager.changeFocus($event, numberOfCandidates - 1)
       "></app-header>
+    <div class="slow-down-indicator" :class="{ 'show-indicator': slowDownIndicator }">
+      <img class="double-snail" src="../assets/double_snail.png" alt="A snail calmly riding another, larger, snail" />
+      SLOW DOWN
+      <img class="slurtle" src="../assets/slurtle.png" alt="A sloth turtle demonstrating patience" />
+    </div>
     <collapse-transition>
       <div class="all-questions-container" ref="allQuestionsContainer">
         <div v-for="(question, index) in questions" :key="index" ref="allQuestionElements" @click.shift="flipQuestion" class="question-wrap show-preamble" :class="{
@@ -61,7 +66,7 @@
             -->
             <div class="face-box z-depth-1" v-for="(candidate, index) of visibleCandidatesUnshuffled" :class="{
               'focused-candidate': candidate.name === focusedCandidateName,
-}">
+            }">
               <div class="face-box-label z-depth-1">
                 {{ candidate.name }}
               </div>
@@ -73,7 +78,6 @@
 
     <footer class="forum-app-footer">
       <div>
-        <i class="material-icons" title="Event Settings">change_circle</i>
         <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showCandidateDialog">
           Candidates
         </button>
@@ -120,6 +124,9 @@
         </div>
       </collapse-transition>
 
+      <button class="waves-effect waves-teal btn-flat" :disabled="slowDownIndicator" role="button" @click.prevent="slowDownPlease" title="SLOW DOWN PLEASE">
+        <i class="material-symbols-outlined">relax</i>
+      </button>
       <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="hideCandidates" title="Hide Candidates">
         <i class="material-icons">crop_free</i>
       </button>
@@ -130,7 +137,7 @@
       <span>{{ questionIdx + 1 }} / {{ numberOfQuestions }}</span>
 
       <span class="attribution-label">
-        By Alex Brown for the
+        <img class="copyleft-icon" src="../assets/Copyleft.svg" alt="Copyleft icon"> Alex Brown for the
         <a href="https://mvmha.com">MVMHA</a> (v2024)
       </span>
     </footer>
@@ -191,16 +198,31 @@
       <div class="card content-wrapper">
         <h1 class="header">Set New Questions</h1>
         <div class="card-content">
-          <p>Setup Questions in advance</p>
-          <div class="input-field">
-            <input type="text" id="new-questions-input-topic" form="questions-form" placeholder="Zoology" v-model="tempQuestion.topic" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
-            <textarea type="text" rows="4" class="questions-form-textarea" id="new-questions-input-preamble" form="questions-form" placeholder="A woodchuck is a type of animal..." v-model="tempQuestion.preamble" @keydown.exact.enter.prevent="addNewQuestion(tempQuestion)" />
-            <textarea type="text" rows="2" class="questions-form-textarea" id="new-questions-input" form="questions-form" placeholder="How much wood would a woodchuck chuck...?" v-model="tempQuestion.displayText" @keydown.exact.enter.prevent="addNewQuestion(tempQuestion)" />
+          <div>
+            <div class="input-field">
+              <input type="text" id="new-questions-input-topic" name="new-questions-input-topic" form="questions-form" placeholder="Zoology" v-model="tempQuestion.topic" @keydown.enter.prevent="addNewQuestion(tempQuestion)" />
+              <label for="new-questions-input-topic">
+                Topic
+              </label>
+            </div>
+            <div class="input-field">
+              <textarea type="text" rows="4" class="questions-form-textarea materialize-textarea" id="new-questions-input-preamble" name="new-questions-input-preamble" form="questions-form" placeholder="A woodchuck is a type of animal..." v-model="tempQuestion.preamble" @keydown.exact.enter.prevent="addNewQuestion(tempQuestion)" />
+              <label for="new-questions-input-preamble">
+                Preamble
+              </label>
+            </div>
+            <div class="input-field">
+              <textarea type="text" rows="2" class="questions-form-textarea materialize-textarea" id="new-questions-input" form="questions-form" placeholder="How much wood would a woodchuck chuck...?" v-model="tempQuestion.displayText" @keydown.exact.enter.prevent="addNewQuestion(tempQuestion)" />
+              <label for="new-questions-input">
+                Question
+              </label>
+            </div>
             <i class="material-icons prefix add-item-button" @click.prevent="addNewQuestion(tempQuestion)">add_circle</i>
           </div>
 
           <ul class="items-list">
             <transition-group name="squish" tag="li" class="transition-container">
+            <transition-group name="squish">
               <li v-for="(question, index) in tempQuestions" :key="question.displayText" :value="index" class="question-text list-item">
                 <div class="move-arrows">
                   <i class="material-icons move-item-button" :hidden="index === 0" @click.prevent="moveQuestion(index, -1)">arrow_drop_up
@@ -209,10 +231,9 @@
                     arrow_drop_down
                   </i>
                 </div>
-                <span style="flex: 1; display:inline-flex; justify-content: space-between;">
-                  <span>{{ question.topic }}: </span>
-                  <span style="flex-grow:1;"></span>
-                  <span style="white-space: pre-wrap;">
+                <span class="questions-list-item-content">
+                  <span class="question-list-item-content-topic">{{ question.topic }}: </span>
+                  <span class="question-list-item-content-display" style="white-space: pre-wrap;">
                     {{ question.displayText }}
                   </span>
                   <i class="preamble-hover material-icons" :title="question.preamble">info</i>
@@ -273,6 +294,7 @@ const candidateColumns = ref(3);
 const galleryMode = ref(true);
 const immersiveMode = computed(() => globalConfig.eventInfo.immersiveOn);
 const hideAllCandidates = ref(false);
+const slowDownIndicator = ref(false);
 const isShuffling = ref<true | null>(null);
 const isSizing = ref<true | null>(null);
 const questionIdx = computed(() => globalConfig.eventInfo.questionIdx);
@@ -311,6 +333,13 @@ const focusedCandidateName = computed(() => {
   const focusedCandidate = visibleCandidates.value[focusedIndex];
   return focusedCandidate?.name ?? '';
 });
+
+async function slowDownPlease() {
+  slowDownIndicator.value = true;
+  setTimeout(() => {
+    slowDownIndicator.value = false;
+  }, 3_000);
+}
 
 async function hideCandidates() {
   hideAllCandidates.value = !hideAllCandidates.value;
@@ -657,7 +686,9 @@ watch(allCandidates, () => {
 }, { immediate: true, deep: true });
 
 watch([noCandidates, questions, hideAllCandidates], async () => {
-  // await questionChanged();
+  requestAnimationFrame(async () => {
+    await questionChanged();
+  });
 }, { immediate: true, flush: 'post' });
 
 const resizeTimeout = ref<number>();
@@ -717,7 +748,6 @@ onMounted(async () => {
   height: 100%;
   max-height: 100%;
   overflow: hidden;
-  padding: 0 16px;
   transition: grid-template-rows 0.5s ease-in;
 
   grid-template-areas:
@@ -735,6 +765,8 @@ onMounted(async () => {
   .forum-app-header {
     max-height: min-content;
     grid-area: forum-app-header;
+    box-shadow: 0 1px 6px 7px rgba(0, 0, 0, 0.1);
+    padding-inline: 16px;
   }
 
   .all-questions-container {
@@ -742,6 +774,8 @@ onMounted(async () => {
     display: grid;
     place-content: stretch;
     grid-template: auto / auto;
+    padding-inline: 16px;
+
 
   }
 
@@ -778,6 +812,7 @@ onMounted(async () => {
       grid-area: 1 / 1 / -1 / -1;
       line-height: 1;
       padding-bottom: 2rem;
+      padding-inline: 16px;
       /* padding: .2rem; */
       text-align: left;
       transition: transform .5s ease-in-out, opacity .5s ease-in-out, z-index .5s ease-in-out;
@@ -863,6 +898,7 @@ onMounted(async () => {
     display: grid;
     grid-template-columns: calc(100% - 16px) 0%;
     gap: 16px;
+    padding-inline: 16px;
     // overflow-y: auto;
     transition: transform .2s linear, grid-template-columns .2s linear;
 
@@ -1046,12 +1082,45 @@ onMounted(async () => {
     max-height: min-content;
     grid-area: forum-app-footer;
     position: relative;
+    z-index: 1000;
+    background-color: white;
+    padding-inline: 16px;
+    box-shadow: 0 -1px 3px 2px rgba(0, 0, 0, 0.1);
   }
 }
 
 .focused-item {
   box-shadow: 0px 0px 10px 5px var(--shadow-color, transparent);
   z-index: 100;
+}
+
+.slow-down-indicator {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 0, 0, 0.6);
+  border-radius: 1ch;
+  font-size: 8rem;
+  left: 50%;
+  opacity: 0;
+  padding-inline: 1ch;
+  position: fixed;
+  pointer-events: none;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transition: opacity 1s ease-in;
+  width: max-content;
+  z-index: 1001;
+
+  &.show-indicator {
+    opacity: 1;
+    transition: opacity 1s ease-out;
+  }
+
+  .slurtle,
+  .double-snail {
+    height: auto;
+    width: 1em;
+  }
 }
 
 footer {
@@ -1105,20 +1174,30 @@ dialog.config-dialog {
   > .content-wrapper {
     margin: 0;
     padding: 1.5rem;
+    height: max(500px, 90vh);
+    width: max(500px, 70vw);
+    display: flex;
+    flex-direction: column;
 
     > .header {
       font-variant: small-caps;
       margin-top: 0;
+      flex: 0 1 auto;
     }
 
     .card-content {
-      margin: 24px;
+      padding: 2rem;
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .card-action {
       display: flex;
       justify-content: space-between;
       gap: 4px;
+      flex: 0 1 auto;
     }
 
     .please-button {
@@ -1127,6 +1206,21 @@ dialog.config-dialog {
 
     .question-text {
       user-select: none;
+    }
+
+    .questions-list-item-content {
+      display: inline-flex;
+      flex: 1;
+      justify-content: space-between;
+      gap: 2ch;
+
+      .question-list-item-content-display {
+        flex: 1;
+      }
+
+      .question-list-item-content-topic {
+        flex: 0 1 auto;
+      }
     }
 
     .remove-item-button,
@@ -1154,6 +1248,9 @@ dialog.config-dialog {
     }
 
     .items-list {
+      overflow: auto;
+      padding-right: 2ch;
+
       .list-item {
         align-items: flex-start;
         display: flex;
@@ -1175,6 +1272,12 @@ dialog.config-dialog {
 
 .attribution-label {
   overflow: hidden;
+
+  .copyleft-icon {
+    width: auto;
+    height: 1em;
+    vertical-align: middle;
+  }
 }
 
 .sizing-indicator {
