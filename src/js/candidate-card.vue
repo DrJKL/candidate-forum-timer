@@ -293,7 +293,7 @@ function lerp(min: number, max: number, progress: number) {
               right: 8px;
               top: 8px;
               // Unset this if you want to use the rebuttals / tokens
-              display: none;
+              // display: none;
       }
 
       .list-enter-active,
