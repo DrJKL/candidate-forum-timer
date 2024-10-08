@@ -272,24 +272,28 @@ function lerp(min: number, max: number, progress: number) {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            display: none; // These should be unnecessary for normal use.
-
-            a {
-              flex: 1 1 calc(50% - 8px);
-              width: calc(50% - 8px);
+            // Unset this if you want to use the individual candidate time setting
+              // These should be unnecessary for normal use.
+              display: none;
+            
+              a {
+                flex: 1 1 calc(50% - 8px);
+                width: calc(50% - 8px);
+              }
             }
-          }
-        }
-      }
-
-      .rebuttals-badge {
-        align-items: baseline;
-        display: inline-flex;
-        gap: 4px;
-        height: 1em;
-        position: absolute;
-        right: 8px;
-        top: 8px;
+            }
+            }
+            
+            .rebuttals-badge {
+              align-items: baseline;
+              display: inline-flex;
+              gap: 4px;
+              height: 1em;
+              position: absolute;
+              right: 8px;
+              top: 8px;
+              // Unset this if you want to use the rebuttals / tokens
+              // display: none;
       }
 
       .list-enter-active,
