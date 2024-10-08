@@ -295,7 +295,7 @@ import {
 } from './global_config';
 import { addUniqueItem } from './list_management';
 import M from 'materialize-css';
-import { ref, watch, computed, onMounted, reactive, Ref } from 'vue';
+import { ref, watch, computed, onMounted, onUnmounted, reactive, Ref } from 'vue';
 import { z } from 'zod';
 
 const allCandidates = ref<Array<Candidate>>([]);
@@ -344,6 +344,13 @@ const focusedCandidateName = computed(() => {
   const focusedCandidate = visibleCandidates.value[focusedIndex];
   return focusedCandidate?.name ?? '';
 });
+
+function handleAppKeydown(event: KeyboardEvent) {
+  if (event.key === 'S') {
+    slowDownPlease();
+    return;
+  }
+}
 
 async function slowDownPlease() {
   slowDownIndicator.value = true;
@@ -741,6 +748,12 @@ onMounted(async () => {
     questionChanged();
   });
 
+  window.addEventListener('keydown', handleAppKeydown);
+
+});
+
+onUnmounted(async () => {
+  window.removeEventListener('keydown', handleAppKeydown);
 });
 
 </script>
@@ -821,7 +834,7 @@ onMounted(async () => {
       border-radius: 5px;
       border: 1px solid black;
       display: grid;
-      font-size: var(--question-size-test);
+      font-size: min(var(--question-size-test), 128px);
       font-weight: bold;
       grid-area: 1 / 1 / -1 / -1;
       line-height: 1;
@@ -835,7 +848,7 @@ onMounted(async () => {
 
       &.forum-app-question-preamble {
         // text-align: left;
-        font-size: var(--preamble-size-test);
+        font-size: min(var(--preamble-size-test), 128px);
         z-index: var(--preamble-z, 8);
         /* opacity: var(--preamble-scale, 0); */
         transform: scaleY(var(--preamble-scale, -1));
@@ -898,7 +911,7 @@ onMounted(async () => {
     grid-area: forum-app-time-out;
 
     &.has-minimized {
-      transform: scaleY(1);
+      transform: scale(.5);
     }
 
     .minimized-candidate {
@@ -1278,6 +1291,7 @@ dialog.config-dialog {
         .header-labels {
           font-weight: bold;
         }
+
         .list-item {
           display: grid;
           grid-column: span 6;
@@ -1305,6 +1319,19 @@ dialog.config-dialog {
   }
 }
 
+.logo-instructions {
+  position: relative;
+
+  height: 100%;
+
+  > img {
+    display: block;
+    margin: auto;
+    max-height: 50%;
+    max-width: 50%;
+    object-fit: contain;
+  }
+}
 .questions-form-textarea {
   resize: vertical;
 }
