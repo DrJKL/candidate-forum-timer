@@ -279,21 +279,22 @@
           border-radius: 6px;
           box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.15),
             0 0px 0 1px rgba(10, 10, 10, 0.02);
-          grid-template: 1fr / 1fr 2fr 2fr;
-
-          .budget-mode & {
-            grid-template: auto / 1fr 1fr 1.5fr 2fr;
-
-            grid-template-areas: 'global-actions time-setters-global global-controls candidate-navigation';
-            padding: 0;
-          }
-
+          grid-template-rows: 1fr;
+          grid-template-columns: 1fr 2fr 2fr;
           grid-auto-flow: row;
           grid-template-areas: 'global-actions time-setters-global global-controls'
-          'global-actions time-setters-global candidate-navigation';
-          padding: 1.25rem 1.25rem 0.5rem;
-          transition: all .2s ease-in;
+            'global-actions time-setters-global candidate-navigation';
+          // padding: 1.25rem 1.25rem 0.5rem;
+          transition: all 2s ease-in;
           user-select: none;
+
+          .budget-mode & {
+            grid-template-columns: 1fr 1fr 1.5fr 2fr;
+
+            grid-template-areas: 'global-actions time-setters-global global-controls candidate-navigation';
+          }
+
+
 
           > div {
             width: 100%;
@@ -318,7 +319,6 @@
               align-items: center;
             }
           }
-
 
           .time-setters-global {
             @include header-button-grid;

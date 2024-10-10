@@ -12,18 +12,19 @@ const images = import.meta.glob('../assets/*.png', {
 
 /**
  * DEFAULT: Set the time for everyone at once
- * BUDGET: Set a total time and keep a running clock per person.
+ *  BUDGET: Set a total time and keep a running clock per person.
  */
 const TIMER_MODES = ['DEFAULT', 'BUDGET'] as const;
+const TimerMode = z.enum(TIMER_MODES);
+export type TimerMode = z.infer<typeof TimerMode>;
 
-export type TimerMode = typeof TIMER_MODES[number];
-export interface EventTime {
-  hours: number;
-  minutes: number;
-  seconds: number;
-  paddingMinutes: number;
-}
-
+const EventTime = z.object({
+  hours: z.number(),
+  minutes: z.number(),
+  seconds: z.number(),
+  paddingMinutes: z.number(),
+})
+export type EventTime = z.infer<typeof EventTime>;
 
 export const Question = z.object({
   topic: z.string(),
@@ -33,17 +34,19 @@ export const Question = z.object({
 export type Question = z.infer<typeof Question>;
 export const Questions = z.array(Question);
 
-export declare interface EventInfo {
-  logoUrl: string;
-  orgTitle: string;
-  eventTitle: string;
-  candidatesList: readonly string[];
-  questions: Question[];
-  mode: TimerMode;
-  immersiveOn: boolean;
-  questionIdx: number;
-  totalTime: EventTime;
-}
+export const EventInfo = z.object({
+  logoUrl: z.string(),
+  orgTitle: z.string(),
+  eventTitle: z.string(),
+  candidatesList: z.array(z.string()),
+  questions: Questions,
+  mode: TimerMode,
+  immersiveOn: z.boolean(),
+  questionIdx: z.number(),
+  totalTime: EventTime,
+
+});
+export declare type EventInfo = z.infer<typeof EventInfo>;
 
 const DEFAULT_QUESTIONS: Question[] = [
   {
@@ -74,6 +77,7 @@ export class Config {
     //
     orgTitle: 'Mountain View Mobile Home Alliance',
     // "the League of Women Voters",
+    // "Day Worker Center & Mountain View Tenants Coalition"
     //
     eventTitle: `<span>2024</span>
             <span>MVCC</span>
@@ -158,10 +162,15 @@ export function restoreConfig() {
     console.log('Info', globalConfig.eventInfo);
     return;
   }
-  const parsedConfig = JSON.parse(savedConfig);
-  console.log(parsedConfig);
-  Object.assign(globalConfig.eventInfo, parsedConfig);
-  console.log(globalConfig.eventInfo);
+    const parsedConfig = EventInfo.safeParse(JSON.parse(savedConfig));
+    console.log(parsedConfig);
+    if (parsedConfig.success) {
+      Object.assign(globalConfig.eventInfo, parsedConfig.data);
+      console.log(globalConfig.eventInfo);
+      return;
+    }
+    console.error('Failed to parse config...', parsedConfig.error)
+
 }
 export function saveConfig() {
   console.log('saving');
@@ -209,9 +218,19 @@ export function questionsToJSON(questions: Question[]): string {
   return stringForm;
 }
 
+export function infoToJSON(eventInfo: EventInfo): string {
+  const stringForm = JSON.stringify(eventInfo, null, 2);
+  return stringForm;
+}
+
 export function downloadQuestions(questions: Question[]) {
   const questionsJson = questionsToJSON(questions);
   download(questionsJson, 'questions.json', 'application/json');
+}
+
+export function downloadEventInfo(eventInfo: EventInfo) {
+  const info = infoToJSON(eventInfo);
+  download(info, 'event_info.json', 'application/json');
 }
 
 function download(content: string, fileName: string, contentType: string) {

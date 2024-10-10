@@ -3,7 +3,8 @@
     'gallery-mode': galleryMode,
     'presentation-mode': !galleryMode,
     'immersive-mode': immersiveMode,
-    'budget-mode': mode === 'BUDGET',
+  'budget-mode': inBudgetMode(),
+  'edit-mode': editMode,
   'hide-all-candidates': hideAllCandidates,
   'running-autosizer': !!isSizing,
   [`_${visibleCandidates.length}-candidates`]: true,
@@ -77,43 +78,55 @@
     </main>
 
     <footer class="forum-app-footer">
-      <div>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showCandidateDialog">
-          Candidates
-        </button>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showLogoDialog">
-          Logo
-        </button>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="setTitleEditable">
-          Title
-        </button>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="setOrgEditable">
-          Org
-        </button>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="dumpQuestions" title="See Current Questions">
-          <i class="material-icons">question_mark</i>
-        </button>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="showQuestionsDialog" title="Edit Questions">
-          <i class="material-icons">quiz</i>
-        </button>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="incrementQuestion(-1)" title="Previous Question">
+      <div class="navigation-buttons">
+        <button class=" btn-flat" role="button" @click.prevent="incrementQuestion(-1)" title="Previous Question">
           <i class="material-icons">navigate_before</i>
         </button>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="incrementQuestion(1)" title="Next Question">
+        <button class=" btn-flat" role="button" @click.prevent="incrementQuestion(1)" title="Next Question">
           <i class="material-icons">navigate_next</i>
         </button>
-        <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="toggleImmersive" title="Next Question">
-          Immersive?
+      </div>
+      <button class=" btn-flat" @click.prevent="clickToggleEditMode" title="Edit Event">
+        Edit Event
+        <i class="material-icons right">edit</i>
+      </button>
+      <div class="global-edit-controls">
+        <button class=" btn-flat" role="button" @click.prevent="showCandidateDialog">
+          Candidates
         </button>
 
-        <button class="waves-effect waves-teal btn-flat red-text" role="button" @click.prevent="resetConfig">
+        <button class=" btn-flat" role="button" @click.prevent="showLogoDialog">
+          Logo
+        </button>
+
+        <button class=" btn-flat" role="button" @click.prevent="setTitleEditable">
+          Title
+        </button>
+
+        <button class=" btn-flat" role="button" @click.prevent="setOrgEditable">
+          Org
+        </button>
+
+        <button class=" btn-flat" role="button" @click.prevent="showQuestionsDialog">
+          Questions
+        </button>
+
+        <button class=" btn-flat save-button" role="button" @click.prevent="downloadEventInfo(globalConfig.eventInfo)">
+          Save
+        </button>
+
+        <button class=" btn-flat save-button" role="button" @click.prevent="loadConfig()">
+          Load
+        </button>
+
+        <button class=" btn-flat red-text reset-button" role="button" @click.prevent="resetConfig">
           Reset All
         </button>
 
-        <button class="btn-flat" @click.prevent="changeMode">Change Mode</button>
+        <input type="file" accept="application/json, text/plain" id="config-file-input" ref="configFileInput" class="hide" @change="configInputChanged">
 
-        <span class="sizing-indicator">Resizing text...</span>
       </div>
+      <span class="sizing-indicator">Resizing text...</span>
       <collapse-transition>
         <div class="time-out-container-container" :class="{ 'has-minimized': hasMinimizedCandidates }">
           <div class="time-out-container">
@@ -124,22 +137,55 @@
         </div>
       </collapse-transition>
 
-      <button class="waves-effect waves-teal btn-flat" :disabled="slowDownIndicator" role="button" @click.prevent="slowDownPlease" title="SLOW DOWN PLEASE">
-        <i class="material-symbols-outlined">relax</i>
-      </button>
-      <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="hideCandidates" title="Hide Candidates">
-        <i class="material-icons">crop_free</i>
-      </button>
-      <button class="waves-effect waves-teal btn-flat" role="button" @click.prevent="questionChanged" title="Force resize question">
-        <i class="material-icons">sync</i>
-      </button>
+      <div class="action-buttons">
+        <button class=" btn-flat" @click.prevent="slowDownPlease" :disabled="slowDownIndicator" title="SLOW DOWN PLEASE">
+          Slow Down
+          <i class="material-symbols-outlined right">relax</i>
+        </button>
 
-      <span>{{ questionIdx + 1 }} / {{ numberOfQuestions }}</span>
+        <button class=" btn-flat" @click.prevent="questionChanged" title="Force resize question">
+          Fix Sizing
+          <i class="material-icons right">sync</i>
+        </button>
+      </div>
 
-      <span class="attribution-label">
-        <img class="copyleft-icon" src="../assets/Copyleft.svg" alt="Copyleft icon"> Alex Brown for the
-        <a href="https://mvmha.com">MVMHA</a> (v2024)
-      </span>
+      <div class="config-toggles">
+        <button class=" btn-flat" @click.prevent="changeMode">
+          Time Mode
+          <i class="flipping-symbol right">
+            <Transition name="slide-up">
+              <i class="material-symbols-outlined" v-if="inBudgetMode()">hourglass</i>
+              <i class="material-symbols-outlined" v-else>timer</i>
+            </Transition>
+          </i>
+        </button>
+
+        <button class=" btn-flat" @click.prevent="toggleImmersive" title="Next Question">
+          Immersive?
+          <i class="material-icons right">grid_on</i>
+        </button>
+
+        <button class=" btn-flat" @click.prevent="hideCandidates" title="Hide Candidates">
+          Question Only
+          <i class="material-icons right">crop_free</i>
+        </button>
+
+      </div>
+
+      <div>
+        <span class="question-index">{{ questionIdx + 1 }} / {{ numberOfQuestions }}</span>
+      </div>
+
+      <div>
+        <span class="attribution-label">
+          <a href="https://github.com/DrJKL/candidate-forum-timer/blob/main/LICENSE" target="_blank">
+            <img class="copyleft-icon" src="../assets/Copyleft.svg" alt="Copyleft icon">
+          </a>
+          Alex&nbsp;Brown for the
+          <a href="https://mvmha.com">MVMHA</a> (v2024)
+        </span>
+      </div>
+
     </footer>
     <dialog class="config-dialog" ref="resetConfigDialog" @close="resetDialogClosed">
       <div class="card content-wrapper">
@@ -292,11 +338,12 @@ import {
   Question,
   downloadQuestions,
   Questions,
+  downloadEventInfo,
+  EventInfo,
 } from './global_config';
 import { addUniqueItem } from './list_management';
 import M from 'materialize-css';
 import { ref, watch, computed, onMounted, onUnmounted, reactive, Ref } from 'vue';
-import { z } from 'zod';
 
 const allCandidates = ref<Array<Candidate>>([]);
 const allCandidatesUnshuffled = ref<Array<Candidate>>([]);
@@ -304,6 +351,7 @@ const candidateColumns = ref(3);
 const galleryMode = ref(true);
 const immersiveMode = computed(() => globalConfig.eventInfo.immersiveOn);
 const editMode = ref(false);
+const accessibleButtons = ref(true);
 const hideAllCandidates = ref(false);
 const slowDownIndicator = ref(false);
 const isShuffling = ref<true | null>(null);
@@ -326,6 +374,7 @@ const questionsConfigDialog = ref<HTMLDialogElement>();
 const allQuestionElements = ref<HTMLElement[]>();
 const allQuestionsContainer = ref<HTMLElement>();
 const questionFileInput = ref<HTMLInputElement>();
+const configFileInput = ref<HTMLInputElement>();
 
 const questions = computed(() => globalConfig.eventInfo.questions);
 const visibleCandidates = computed<Array<Candidate>>(() => allCandidates.value.filter((candidate) => !candidate.isMinimized));
@@ -346,10 +395,19 @@ const focusedCandidateName = computed(() => {
 });
 
 function handleAppKeydown(event: KeyboardEvent) {
+  editMode.value = event.shiftKey && event.ctrlKey;
   if (event.key === 'S') {
     slowDownPlease();
     return;
   }
+}
+
+function handleAppKeyup(event: KeyboardEvent) {
+  editMode.value = event.shiftKey && event.ctrlKey;
+}
+
+function clickToggleEditMode(event: MouseEvent) {
+  editMode.value = !editMode.value;
 }
 
 async function slowDownPlease() {
@@ -522,6 +580,9 @@ function moveQuestion(index: number, dir: -1 | 1) {
 }
 
 function flipQuestion(event: MouseEvent) {
+  if (event.ctrlKey) {
+    return;
+  }
   const { currentTarget } = event;
   if (!(currentTarget instanceof HTMLElement)) {
     return;
@@ -531,7 +592,7 @@ function flipQuestion(event: MouseEvent) {
 
 
 function setQuestionEditable(event: MouseEvent, question: Question, settingPreamble = false) {
-  if (!editMode) {
+  if (!editMode.value) {
     return;
   }
   if (!(event.target instanceof HTMLElement)) {
@@ -594,6 +655,10 @@ function resetConfig() {
 function changeMode() {
   globalConfig.changeMode(globalConfig.mode === 'DEFAULT' ? 'BUDGET' : 'DEFAULT');
   saveConfig();
+}
+
+function inBudgetMode() {
+  return globalConfig.mode === 'BUDGET';
 }
 
 function logoDialogClosed(event: Event) {
@@ -671,6 +736,52 @@ function questionInputChanged() {
   reader.readAsText(file);
 }
 
+function loadConfig() {
+  if (!configFileInput.value) {
+    console.error('No File input to click...');
+    return;
+  }
+  configFileInput.value.click();
+}
+
+function configInputChanged() {
+  const file = configFileInput.value?.files?.[0];
+  if (!file) {
+    console.log('No file to try to load');
+    return;
+  }
+  if (file.type !== 'application/json') {
+    console.error(`Has to be a JSON file, was ${file.type}`);
+    return;
+  }
+  if (file.size > 1_000_000_000) {
+    console.error(`That's too big ${file.size}`);
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    console.log('Reading file...', e);
+    const configText = e.target?.result;
+    if (!configText || typeof configText !== 'string') {
+      console.error('Failed to read event config File');
+      return;
+    }
+    const parsedConfigMaybe = EventInfo.safeParse(JSON.parse(configText));
+    if (!parsedConfigMaybe.success) {
+      console.error('Failed to parse event config', parsedConfigMaybe);
+      return;
+    }
+    const { data } = parsedConfigMaybe;
+    console.log('Got this Config data...', data);
+
+    globalConfig.updateInfo(data);
+
+
+  };
+  reader.readAsText(file);
+}
+
 function setCandidates(candidateNames: string[]) {
   globalConfig.eventInfo.candidatesList = candidateNames;
   resetCandidates();
@@ -681,7 +792,7 @@ function resetCandidates() {
   allCandidates.value = globalConfig.eventInfo.candidatesList.map(
     (name): Candidate => {
       const candidate = new Candidate(name);
-      if (globalConfig.mode === 'BUDGET') {
+      if (inBudgetMode()) {
         candidate.timer.setTime(timePerCandidate(globalConfig.eventInfo.totalTime, globalConfig.eventInfo.candidatesList.length), 's');
       }
       return candidate;
@@ -749,11 +860,13 @@ onMounted(async () => {
   });
 
   window.addEventListener('keydown', handleAppKeydown);
+  window.addEventListener('keyup', handleAppKeyup);
 
 });
 
 onUnmounted(async () => {
   window.removeEventListener('keydown', handleAppKeydown);
+  window.removeEventListener('keyup', handleAppKeyup);
 });
 
 </script>
@@ -1116,6 +1229,18 @@ onUnmounted(async () => {
   }
 }
 
+.flipping-symbol {
+  position: relative;
+  width: 19.5px;
+  height: 36px;
+  text-align: left;
+  margin-left: 15px;
+
+  i {
+    position: absolute;
+  }
+}
+
 .focused-item {
   box-shadow: 0px 0px 10px 5px var(--shadow-color, transparent);
   z-index: 100;
@@ -1156,13 +1281,16 @@ footer {
   justify-content: space-between;
   width: 100%;
 
-  > a {
+  > a,
+  > button {
     flex: 0 1 auto;
   }
 
   > div {
     align-items: center;
+    place-content: center;
     display: flex;
+    flex: 1 1 auto;
 
     > span {
       flex: 0 1 auto;
@@ -1174,6 +1302,31 @@ footer {
 
       &.red-text {
         color: #f44336;
+      }
+    }
+
+    &.navigation-buttons {
+      flex: 0 1 auto;
+    }
+
+
+    &.global-edit-controls {
+      flex: 0;
+      padding-inline: 0;
+      overflow: hidden;
+      transition: all .2s ease-in-out;
+
+      > button {
+        padding-inline: .5rem;
+
+        &:not(:last-child) {
+          box-shadow: 1px 0px 1px -1px black;
+        }
+      }
+
+      .edit-mode & {
+        flex: 1 1 30em;
+        padding-inline: 16px;
       }
     }
   }
@@ -1332,8 +1485,13 @@ dialog.config-dialog {
     object-fit: contain;
   }
 }
+
 .questions-form-textarea {
   resize: vertical;
+}
+
+.question-index {
+  padding-inline: 1ch;
 }
 
 .attribution-label {
@@ -1405,6 +1563,21 @@ dialog.config-dialog {
 .slide-enter-from,
 .slide-leave-to {
   opacity: 0;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.25s ease-out;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
 }
 
 @keyframes slide-in-left {
