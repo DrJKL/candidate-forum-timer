@@ -115,7 +115,7 @@
           Save
         </button>
 
-        <button class=" btn-flat save-button" role="button" @click.prevent="loadConfig()">
+        <button class=" btn-flat save-button" role="button" @click.prevent="loadConfig">
           Load
         </button>
 
@@ -178,8 +178,8 @@
 
       <div>
         <span class="attribution-label">
-          <a href="https://github.com/DrJKL/candidate-forum-timer/blob/main/LICENSE" target="_blank">
-            <img class="copyleft-icon" src="../assets/Copyleft.svg" alt="Copyleft icon">
+          <a class="copyleft-icon" href="https://github.com/DrJKL/candidate-forum-timer/blob/main/LICENSE" target="_blank">
+            <img src="../assets/Copyleft.svg" alt="Copyleft icon">
           </a>
           Alex&nbsp;Brown for the
           <a href="https://mvmha.com">MVMHA</a> (v2024)
@@ -187,7 +187,7 @@
       </div>
 
     </footer>
-    <dialog class="config-dialog" ref="resetConfigDialog" @close="resetDialogClosed">
+    <dialog class="config-dialog reset-dialog" ref="resetConfigDialog" @close="resetDialogClosed">
       <div class="card content-wrapper">
         <h1 class="header">Resetting Config!</h1>
         <p class="card-content">
@@ -202,7 +202,7 @@
         </form>
       </div>
     </dialog>
-    <dialog class="config-dialog" ref="logoConfigDialog" @close="logoDialogClosed">
+    <dialog class="config-dialog logo-dialog" ref="logoConfigDialog" @close="logoDialogClosed">
       <div class="card content-wrapper">
         <h1 class="header">Set New Logo</h1>
         <div class="card-content">
@@ -220,7 +220,7 @@
         </form>
       </div>
     </dialog>
-    <dialog class="config-dialog" ref="candidatesConfigDialog" @close="candidatesDialogClosed">
+    <dialog class="config-dialog candidates-dialog" ref="candidatesConfigDialog" @close="candidatesDialogClosed">
       <div class="card content-wrapper">
         <h1 class="header">Set New Candidates</h1>
         <div class="card-content">
@@ -240,7 +240,7 @@
         </form>
       </div>
     </dialog>
-    <dialog class="config-dialog" ref="questionsConfigDialog" @close="questionsDialogClosed">
+    <dialog class="config-dialog questions-dialog" ref="questionsConfigDialog" @close="questionsDialogClosed">
       <div class="card content-wrapper">
         <h1 class="header">Set New Questions</h1>
         <div class="card-content">
@@ -1351,11 +1351,20 @@ dialog.config-dialog {
   padding: 0;
   box-shadow: 0px 0px 20px 10px rgba(200, 255, 200, 0.5);
 
+
+  &.questions-dialog > .content-wrapper {
+    height: max(500px, 90vh);
+    width: max(500px, 70vw);
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
   > .content-wrapper {
     margin: 0;
     padding: 1.5rem;
-    height: max(500px, 90vh);
-    width: max(500px, 70vw);
     display: flex;
     flex-direction: column;
 
@@ -1369,8 +1378,6 @@ dialog.config-dialog {
       padding: 2rem;
       flex: 1;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
 
     .card-action {
@@ -1492,15 +1499,22 @@ dialog.config-dialog {
 
 .question-index {
   padding-inline: 1ch;
+  white-space: nowrap;
 }
 
 .attribution-label {
   overflow: hidden;
+  white-space: nowrap;
 
   .copyleft-icon {
     width: auto;
     height: 1em;
+    position: relative;
     vertical-align: middle;
+
+    img {
+      height: inherit;
+    }
   }
 }
 
